@@ -1,5 +1,6 @@
 package com.tincery.starter.tool;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tincery.starter.annotation.ExcelData;
 import com.tincery.starter.annotation.ExcelField;
 import com.tincery.starter.convert.Converter;
@@ -77,23 +78,26 @@ public class ExcelExportExecutor {
         ExcelInfo excelInfo = analysisExportRule(clazz);
         List<Rule> rules = excelInfo.getRules();
         XSSFSheet sheet = workbook.getSheetAt(0);
-        return analysis(sheet, rules);
+        return analysis(sheet, rules,clazz);
     }
 
 
-    private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules) {
+    private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules,Class<T> clazz) {
         List<T> result = new ArrayList<>();
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
+            JSONObject jsonObject = new JSONObject();
             for (short cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
                 Rule cellRule = rules.get(cellIndex);
                 Cell cell = row.getCell(cellIndex);
                 try {
-                    result.add((T) cellRule.getConverter().reconvert(cell.getStringCellValue(), cellRule.getFieldType()));
+                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(), cellRule.getFieldType());
+                    jsonObject.put(cellRule.getFieldName(),value);
                 } catch (Exception e) {
                     throw new ExcelConverterException(rowIndex+1, cellRule.errorMessage,cellIndex+1,cell.getStringCellValue());
                 }
             }
+            result.add(jsonObject.toJavaObject(clazz));
         }
         return result;
     }
