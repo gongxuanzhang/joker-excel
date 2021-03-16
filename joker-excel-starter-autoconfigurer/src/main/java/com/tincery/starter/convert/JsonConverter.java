@@ -9,6 +9,9 @@ public class JsonConverter implements Converter<Object> {
 
     @Override
     public String convert(Object value) {
+        if(value == null){
+            return "";
+        }
         return JSONObject.toJSONString(value);
     }
 

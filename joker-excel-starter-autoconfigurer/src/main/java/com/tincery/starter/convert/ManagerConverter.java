@@ -38,7 +38,8 @@ public class ManagerConverter implements Converter<Object> {
 
     @Override
     public String convert(Object value) {
-        Converter orDefault = converterCache.getOrDefault(value.getClass(), jsonConverter);
+        Class<?> clazz = value==null?String.class:value.getClass();
+        Converter orDefault = converterCache.getOrDefault(clazz, jsonConverter);
         return orDefault.convert(value);
     }
 
