@@ -22,11 +22,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-      <!--  <dependency>
+        <dependency>
             <groupId>com.gxz</groupId>
             <artifactId>joker-excel-starter</artifactId>
             <version>1.0.0</version>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
