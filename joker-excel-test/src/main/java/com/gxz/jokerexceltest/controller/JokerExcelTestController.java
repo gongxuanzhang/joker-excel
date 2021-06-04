@@ -27,7 +27,11 @@ public class JokerExcelTestController {
 
     @Export("导出的名字")
     @GetMapping("/export")
-    public List<User> export(HttpServletResponse httpServletResponse) {
+    public List<User> export() {
+       return data();
+    }
+
+    private List<User> data(){
         List<User> exportData = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             User user = new User();

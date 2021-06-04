@@ -25,6 +25,7 @@ public class ManagerConverter implements Converter<Object> {
         IntegerConverter integerConverter = new IntegerConverter();
         LocalDateTimeConverter localDateTimeConverter = new LocalDateTimeConverter();
         converterCache.put(Boolean.class, booleanConverter);
+        converterCache.put(String.class, new StringConverter());
         converterCache.put(boolean.class, booleanConverter);
         converterCache.put(Integer.class, integerConverter);
         converterCache.put(int.class, integerConverter);
