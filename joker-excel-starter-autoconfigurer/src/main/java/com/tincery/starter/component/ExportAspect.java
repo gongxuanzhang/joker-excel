@@ -10,13 +10,20 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -40,12 +47,16 @@ public class ExportAspect {
         List<?> result = (List<?>) pjp.proceed();
         Method method = sig.getMethod();
         Export export = method.getAnnotation(Export.class);
-        HttpServletResponse httpServletResponse = getArgsResponse(pjp);
+        HttpServletResponse response =
+                ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
+        if(Objects.isNull(response)){
+            throw new IllegalStateException("拿不到response");
+        }
         Workbook workbook = ExcelExportExecutor.writeWorkBook(result);
         Class<?> beanClass = result.get(0).getClass();
         String excelName = getExcelName(export, beanClass, pjp.getArgs(), method);
         workbook.setSheetName(0, export.sheetName());
-        ExportUtils.downLoadExcel(excelName, httpServletResponse, workbook);
+        ExportUtils.downLoadExcel(excelName, response, workbook);
         return null;
     }
 
@@ -83,7 +94,7 @@ public class ExportAspect {
         if (factoryCache == null) {
             synchronized (this) {
                 if (factoryCache == null) {
-                    factoryCache = new ConcurrentHashMap<>();
+                    factoryCache = new ConcurrentHashMap<>(16);
                 }
             }
         }

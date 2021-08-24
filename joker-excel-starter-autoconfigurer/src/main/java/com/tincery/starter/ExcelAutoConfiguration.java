@@ -2,7 +2,7 @@ package com.tincery.starter;
 
 
 import com.tincery.starter.component.ExportAspect;
-import com.tincery.starter.component.UploadArgumentProcessor;
+import com.tincery.starter.component.UploadMethodArgumentProcessor;
 import com.tincery.starter.component.UploadAnalysis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,8 +29,8 @@ public class ExcelAutoConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public UploadArgumentProcessor uploadArgumentProcessor(){
-        return new UploadArgumentProcessor();
+    public UploadMethodArgumentProcessor uploadArgumentProcessor(){
+        return new UploadMethodArgumentProcessor();
     }
 
     @Override

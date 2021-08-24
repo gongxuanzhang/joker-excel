@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartRequest;
  * 为了防止springmvc的参数解析把upload的参数混乱 自定义参数解析器直接把参数置为空集合
  **/
 @Slf4j
-public class UploadArgumentProcessor implements HandlerMethodArgumentResolver {
+public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResolver {
 
 
     @Autowired

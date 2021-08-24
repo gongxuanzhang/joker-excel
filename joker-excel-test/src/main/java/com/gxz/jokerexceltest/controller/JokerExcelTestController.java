@@ -5,13 +5,18 @@ import com.tincery.starter.annotation.Upload;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -45,11 +50,15 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public String upload(@Upload List<User> users){
+    public Map<String,Object> upload(@Upload List<User> users){
         for (User user : users) {
             System.out.println(user);
         }
-        return "a";
+        Map<String,Object> result = new HashMap<>();
+        result.put("data",users);
+        result.put("code",0);
+        result.put("msg","");
+        return result;
     }
 
 }
