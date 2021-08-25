@@ -11,12 +11,12 @@ public class IntegerConverter implements Converter<Integer> {
 
     @Override
     public String convert(Integer value) {
-        return Objects.toString(value,null);
+        return Objects.toString(value, null);
     }
 
     @Override
     public Integer reconvert(String cellValue, Class<? extends Integer> clazz) throws Exception {
-        if(StringUtils.hasText(cellValue)){
+        if (StringUtils.hasText(cellValue)) {
             return Integer.valueOf(cellValue);
         }
         return null;

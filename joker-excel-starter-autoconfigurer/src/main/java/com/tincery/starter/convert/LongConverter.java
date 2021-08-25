@@ -11,12 +11,12 @@ public class LongConverter implements Converter<Long> {
 
     @Override
     public String convert(Long value) {
-        return Objects.toString(value,null);
+        return Objects.toString(value, null);
     }
 
     @Override
     public Long reconvert(String cellValue, Class<? extends Long> clazz) throws Exception {
-        if(StringUtils.hasText(cellValue)){
+        if (StringUtils.hasText(cellValue)) {
             return Long.valueOf(cellValue);
         }
         return null;

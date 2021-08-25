@@ -49,7 +49,7 @@ public class ExportAspect {
         Export export = method.getAnnotation(Export.class);
         HttpServletResponse response =
                 ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
-        if(Objects.isNull(response)){
+        if (Objects.isNull(response)) {
             throw new IllegalStateException("拿不到response");
         }
         Workbook workbook = ExcelExportExecutor.writeWorkBook(result);
@@ -61,14 +61,11 @@ public class ExportAspect {
     }
 
 
-
-
-
     /**
      * 通过注解导出文件名称
      *
      * @param export 方法上面的Export注解信息
-     * @param args 切入点的参数
+     * @param args   切入点的参数
      * @param method 切入点方法
      * @return 返回导出的excel名称
      **/
@@ -109,7 +106,6 @@ public class ExportAspect {
         Assert.notNull(instance, message);
         return instance;
     }
-
 
 
 }

@@ -13,7 +13,7 @@ public class User {
 
 
     private String name;
-    @ExcelField(select = {"男","女"})
+    @ExcelField(select = {"男", "女"})
     private String sex;
     @ExcelField(errorMessage = "第r%行 第c%列 错了 生日解析错误  这个值是v%")
     private LocalDateTime birthday;

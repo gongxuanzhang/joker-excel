@@ -19,17 +19,17 @@ import java.util.List;
 public class ExcelAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
-    public ExportAspect exportAspect(){
+    public ExportAspect exportAspect() {
         return new ExportAspect();
     }
 
     @Bean
-    public UploadAnalysis updateAspect(){
+    public UploadAnalysis updateAspect() {
         return new UploadAnalysis();
     }
 
     @Bean
-    public UploadMethodArgumentProcessor uploadArgumentProcessor(){
+    public UploadMethodArgumentProcessor uploadArgumentProcessor() {
         return new UploadMethodArgumentProcessor();
     }
 

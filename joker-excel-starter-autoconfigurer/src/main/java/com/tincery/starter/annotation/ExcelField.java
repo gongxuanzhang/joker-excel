@@ -28,7 +28,7 @@ public @interface ExcelField {
 
 
     /**
-     *  顺序
+     * 顺序
      **/
     int order() default Integer.MAX_VALUE;
 
@@ -48,7 +48,6 @@ public @interface ExcelField {
     String[] select() default {};
 
 
-
     /**
      * 如果遇到异常报错 抛出异常消息内容。
      * 支持通配符解析
@@ -58,7 +57,6 @@ public @interface ExcelField {
      * v% 解析错误的excel内容
      **/
     String errorMessage() default "";
-
 
 
 }

@@ -78,11 +78,11 @@ public class ExcelExportExecutor {
         ExcelInfo excelInfo = analysisExportRule(clazz);
         List<Rule> rules = excelInfo.getRules();
         XSSFSheet sheet = workbook.getSheetAt(0);
-        return analysis(sheet, rules,clazz);
+        return analysis(sheet, rules, clazz);
     }
 
 
-    private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules,Class<T> clazz) {
+    private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules, Class<T> clazz) {
         List<T> result = new ArrayList<>();
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
@@ -91,10 +91,12 @@ public class ExcelExportExecutor {
                 Rule cellRule = rules.get(cellIndex);
                 Cell cell = row.getCell(cellIndex);
                 try {
-                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(), cellRule.getFieldType());
-                    jsonObject.put(cellRule.getFieldName(),value);
+                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
+                            cellRule.getFieldType());
+                    jsonObject.put(cellRule.getFieldName(), value);
                 } catch (Exception e) {
-                    throw new ExcelConverterException(rowIndex+1, cellRule.errorMessage,cellIndex+1,cell.getStringCellValue());
+                    throw new ExcelConverterException(rowIndex + 1, cellRule.errorMessage, cellIndex + 1,
+                            cell.getStringCellValue());
                 }
             }
             result.add(jsonObject.toJavaObject(clazz));

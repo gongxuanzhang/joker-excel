@@ -11,12 +11,12 @@ public class DoubleConverter implements Converter<Double> {
 
     @Override
     public String convert(Double value) {
-        return Objects.toString(value,null);
+        return Objects.toString(value, null);
     }
 
     @Override
     public Double reconvert(String cellValue, Class<? extends Double> clazz) throws Exception {
-        if(StringUtils.hasText(cellValue)){
+        if (StringUtils.hasText(cellValue)) {
             return Double.valueOf(cellValue);
         }
         return null;

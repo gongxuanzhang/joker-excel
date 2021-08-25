@@ -26,16 +26,16 @@ public class ConverterRegistry {
     }
 
 
-    public Converter<?> getConverterByType(Type type){
+    public Converter<?> getConverterByType(Type type) {
         Converter<?> defaultConvert = defaultConverterMap.getOrDefault(type, null);
-        if(defaultConvert!=null){
+        if (defaultConvert != null) {
             return defaultConvert;
         }
 
-        if(customConverterMap == null){
+        if (customConverterMap == null) {
             return null;
         }
-        return customConverterMap.getOrDefault(type,null);
+        return customConverterMap.getOrDefault(type, null);
     }
 
 
@@ -68,11 +68,6 @@ public class ConverterRegistry {
         this.customConverterMap.put(type, converter);
         return this;
     }
-
-
-
-
-
 
 
 }

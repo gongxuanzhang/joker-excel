@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 
-@Target({ElementType.PARAMETER,ElementType.METHOD})
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Upload {
 

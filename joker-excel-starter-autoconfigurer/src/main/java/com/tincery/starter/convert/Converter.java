@@ -17,7 +17,7 @@ public interface Converter<T> {
 
     /**
      * @param cellValue 单元格内容
-     * @param clazz 需要映射的类型
+     * @param clazz     需要映射的类型
      * @return 一个单元格映射成一个字段 或者一个实体
      **/
     public T reconvert(String cellValue, Class<? extends T> clazz) throws Exception;

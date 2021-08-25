@@ -39,7 +39,7 @@ public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResol
             return null;
         }
         MultipartFile file = nativeRequest.getFile("file");
-        return uploadAnalysis.analysisData(file,parameter);
+        return uploadAnalysis.analysisData(file, parameter);
     }
 
 

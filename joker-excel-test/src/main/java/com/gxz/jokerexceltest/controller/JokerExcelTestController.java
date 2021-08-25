@@ -33,10 +33,10 @@ public class JokerExcelTestController {
     @Export("导出的名字")
     @GetMapping("/export")
     public List<User> export() {
-       return data();
+        return data();
     }
 
-    private List<User> data(){
+    private List<User> data() {
         List<User> exportData = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             User user = new User();
@@ -50,14 +50,14 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String,Object> upload(@Upload List<User> users){
+    public Map<String, Object> upload(@Upload List<User> users) {
         for (User user : users) {
             System.out.println(user);
         }
-        Map<String,Object> result = new HashMap<>();
-        result.put("data",users);
-        result.put("code",0);
-        result.put("msg","");
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", users);
+        result.put("code", 0);
+        result.put("msg", "");
         return result;
     }
 
