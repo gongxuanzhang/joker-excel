@@ -110,15 +110,6 @@ public class ExportAspect {
         return instance;
     }
 
-    private HttpServletResponse getArgsResponse(ProceedingJoinPoint pjp) {
-        Object[] args = pjp.getArgs();
-        for (Object arg : args) {
-            if (arg instanceof HttpServletResponse) {
-                return (HttpServletResponse) arg;
-            }
-        }
-        throw new IllegalArgumentException("方法参数必须提供HttpServletResponse");
-    }
 
 
 }
