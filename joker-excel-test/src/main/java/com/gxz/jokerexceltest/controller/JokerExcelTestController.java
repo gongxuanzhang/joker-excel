@@ -1,17 +1,13 @@
 package com.gxz.jokerexceltest.controller;
 
-import com.tincery.starter.annotation.Export;
-import com.tincery.starter.annotation.Upload;
+import org.gxz.joker.starter.annotation.Export;
+import org.gxz.joker.starter.annotation.Upload;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +26,49 @@ public class JokerExcelTestController {
         return new ModelAndView("test.html");
     }
 
-    @Export("导出的名字")
+
+
+
+    @Export(value = "配置了sheetName的导出",sheetName = "这是sheet的名字")
+    @GetMapping("/export/1")
+    public List<User> exportSheetName() {
+        return data();
+    }
+
+    @Export(value = "没有name",ignore = "age")
+    @GetMapping("/export/2")
+    public List<User> exportWithExportConfigurationAnnotation() {
+        return data();
+    }
+
+    @Export(value = "只有name",include = "name")
+    @GetMapping("/export/3")
+    public List<User> export3() {
+        return data();
+    }
+
+    @Export(value = "只有name",include = "name",nameFactory = MyNameFactory.class)
+    @GetMapping("/export/4")
+    public List<User> export4() {
+        return data();
+    }
+
+
+    @Export(configurationClass = IocJokerConfiguration.class)
+    @GetMapping("/export/configuration/ioc")
+    public List<User> exportWithExportAndSpringIoc() {
+        return data();
+    }
+
+
+    @Export("张三")
+    @GetMapping("/export/configuration/aaa")
+    public List<User> aaa() {
+        return data();
+    }
+
+
+    @Export(value = "正常导出",nameFactory = MyNameFactory.class)
     @GetMapping("/export")
     public List<User> export() {
         return data();

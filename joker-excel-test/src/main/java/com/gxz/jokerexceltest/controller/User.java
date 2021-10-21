@@ -1,7 +1,7 @@
 package com.gxz.jokerexceltest.controller;
 
-import com.tincery.starter.annotation.ExcelData;
-import com.tincery.starter.annotation.ExcelField;
+import org.gxz.joker.starter.annotation.ExcelData;
+import org.gxz.joker.starter.annotation.ExcelField;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class User {
 
 
+    @ExcelField(name = "姓名")
     private String name;
     @ExcelField(select = {"男", "女"})
     private String sex;

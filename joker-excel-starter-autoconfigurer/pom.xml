@@ -13,7 +13,7 @@
 
     <groupId>com.gxz</groupId>
     <artifactId>joker-excel-starter-autoConfigurer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <java.version>1.8</java.version>
