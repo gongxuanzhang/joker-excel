@@ -1,6 +1,9 @@
 package org.gxz.joker.starter.config;
 
 
+import org.apache.poi.ss.usermodel.Row;
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +47,28 @@ public class JokerCallBackCombination {
         successCallBack.add(callBack);
     }
 
+    public static void uploadRowError(Row row, Throwable t){
+        if(!CollectionUtils.isEmpty(errorCallBack)){
+            for (UploadErrorRowCallBack callBack : errorCallBack) {
+                callBack.onRowError(row,t);
+            }
+        }
+    }
+
+    public static void uploadFinish(List<?> data){
+        if(!CollectionUtils.isEmpty(finishCallBack)){
+            for (UploadFinishCallBack callBack : finishCallBack) {
+                callBack.onFinish(data);
+            }
+        }
+    }
+
+    public static void uploadSuccess(List<?> data){
+        if(!CollectionUtils.isEmpty(successCallBack)){
+            for (UploadSuccessCallBack callBack : successCallBack) {
+                callBack.onSuccess(data);
+            }
+        }
+    }
 
 }

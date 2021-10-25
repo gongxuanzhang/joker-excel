@@ -3,6 +3,7 @@ package org.gxz.joker.starter.tool;
 import com.alibaba.fastjson.JSONObject;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
+import org.gxz.joker.starter.config.JokerCallBackCombination;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
 import org.gxz.joker.starter.element.ExcelDescription;
@@ -81,13 +82,13 @@ public class ExcelExportExecutor {
 
 
     /**
-     *
      * 这个方法支持列序改变
      **/
     private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules, Class<T> clazz) {
         List<T> result = new ArrayList<>();
-        Map<String,Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
-        Map<Integer,Rule> orderRule = new HashMap<>();
+        Map<String, Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
+        Map<Integer, Rule> orderRule = new HashMap<>();
+        boolean haveError = false;
         XSSFRow headRow = sheet.getRow(0);
         for (int i = 0; i < headRow.getLastCellNum(); i++) {
             XSSFCell cell = headRow.getCell(i);
@@ -99,23 +100,34 @@ public class ExcelExportExecutor {
 
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
-            JSONObject jsonObject = new JSONObject();
-            for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
-                Rule cellRule = orderRule.get(cellIndex);
-                if(cellRule == null){
-                    continue;
+            try {
+                JSONObject jsonObject = new JSONObject();
+                for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
+                    Rule cellRule = orderRule.get(cellIndex);
+                    if (cellRule == null) {
+                        continue;
+                    }
+                    Cell cell = row.getCell(cellIndex);
+                    try {
+                        Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
+                                cellRule.getFieldType());
+                        jsonObject.put(cellRule.getFieldName(), value);
+                    } catch (Exception e) {
+                        throw new ExcelConverterException(rowIndex + 1, cellRule.errorMessage, cellIndex + 1,
+                                cell.getStringCellValue());
+                    }
                 }
-                Cell cell = row.getCell(cellIndex);
-                try {
-                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
-                            cellRule.getFieldType());
-                    jsonObject.put(cellRule.getFieldName(), value);
-                } catch (Exception e) {
-                    throw new ExcelConverterException(rowIndex + 1, cellRule.errorMessage, cellIndex + 1,
-                            cell.getStringCellValue());
-                }
+                result.add(jsonObject.toJavaObject(clazz));
+            } catch (Exception e) {
+                haveError = true;
+                JokerCallBackCombination.uploadRowError(row, e);
+                continue;
             }
-            result.add(jsonObject.toJavaObject(clazz));
+        }
+        if (haveError) {
+            JokerCallBackCombination.uploadFinish(result);
+        } else {
+            JokerCallBackCombination.uploadSuccess(result);
         }
         return result;
     }
