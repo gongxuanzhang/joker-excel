@@ -19,6 +19,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -49,6 +52,9 @@ public class ExportAspect implements ApplicationContextAware {
             throw new IllegalAccessException("返回值必须是list");
         }
         List<?> result = (List<?>) pjp.proceed();
+       if(CollectionUtils.isEmpty(result)){
+           throw new NullPointerException("无法解析出数据");
+       }
         Method method = sig.getMethod();
         Export export = method.getAnnotation(Export.class);
         ExcelDescription excelDescription = new ExcelDescription();
