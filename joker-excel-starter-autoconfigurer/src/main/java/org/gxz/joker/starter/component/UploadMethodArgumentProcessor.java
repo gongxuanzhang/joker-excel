@@ -20,8 +20,11 @@ import org.springframework.web.multipart.MultipartRequest;
 public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResolver {
 
 
-    @Autowired
-    UploadAnalysis uploadAnalysis;
+    private final UploadAnalysis uploadAnalysis;
+
+    public UploadMethodArgumentProcessor(UploadAnalysis uploadAnalysis) {
+        this.uploadAnalysis = uploadAnalysis;
+    }
 
 
     @Override

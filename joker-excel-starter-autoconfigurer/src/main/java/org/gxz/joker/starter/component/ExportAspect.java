@@ -1,9 +1,9 @@
 package org.gxz.joker.starter.component;
 
 import org.gxz.joker.starter.annotation.Export;
+import org.gxz.joker.starter.config.JokerGlobalConfig;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.service.ExcelNameFactory;
-import org.gxz.joker.starter.service.DefaultSupport;
 import org.gxz.joker.starter.tool.ExcelExportExecutor;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.wrapper.BeanClassWrapper;
@@ -16,20 +16,17 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.gxz.joker.starter.wrapper.ExportSheetWrapper;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -41,7 +38,8 @@ public class ExportAspect implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-
+    @Autowired(required = false)
+    private JokerGlobalConfig jokerGlobalConfig;
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
     public Object logJournal(ProceedingJoinPoint pjp) throws Throwable {
