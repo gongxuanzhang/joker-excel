@@ -16,7 +16,7 @@ public class JsonConverter implements Converter<Object> {
     }
 
     @Override
-    public Object reconvert(String cellValue, Class<? extends Object> clazz) throws Exception {
+    public Object reconvert(String cellValue, Class<? extends Object> clazz){
         if (cellValue.isEmpty()) {
             return null;
         }

@@ -1,36 +1,42 @@
-package org.gxz.joker.starter.service;
+package org.gxz.joker.starter.exception;
 
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 /**
+ * 导入导出过程中出现的问题
  * @author gxz gongxuanzhang@foxmail.com
- * 抛出这个异常说明在excel解析的过程中出现了问题
+ *
+ *
  **/
 @Getter
-public class ExcelConverterException extends RuntimeException {
+public class ExcelException extends RuntimeException {
 
     /**
      * 解析错误的行数 注意是从第1行开始的
      **/
-    private final int rowCount;
+    private int rowCount;
 
 
     /**
      * 解析错误的列位置
      **/
-    private final int colCount;
+    private int colCount;
 
     /**
      * 解析错误的单元格内容
      **/
-    private final String cellValue;
+    private String cellValue;
 
-    public ExcelConverterException(int rowCount, String errorMessage, int colCount, String cellValue) {
+    public ExcelException(int rowCount, String errorMessage, int colCount, String cellValue) {
         super(errorMessageAnalysis(errorMessage, rowCount, colCount, cellValue));
         this.rowCount = rowCount;
         this.colCount = colCount;
         this.cellValue = cellValue;
+    }
+
+    public ExcelException(String message) {
+        super(message);
     }
 
 

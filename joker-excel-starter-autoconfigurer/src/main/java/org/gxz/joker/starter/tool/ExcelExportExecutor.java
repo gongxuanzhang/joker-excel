@@ -6,9 +6,11 @@ import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.config.JokerCallBackCombination;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
+import org.gxz.joker.starter.convert.UniqueConverter;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.element.FieldHolder;
-import org.gxz.joker.starter.service.ExcelConverterException;
+import org.gxz.joker.starter.exception.ConvertException;
+import org.gxz.joker.starter.exception.ExcelException;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.poi.ss.usermodel.*;
@@ -51,7 +53,11 @@ public class ExcelExportExecutor {
         // 设置内容
         for (int i = 0; i < lists.size(); i++) {
             Row row = sheet.createRow(i + 1);
-            setRow(row, lists.get(i), rules);
+            try {
+                setRow(row, lists.get(i), rules);
+            } catch (ConvertException e) {
+                // TODO: 2021/10/25  这里是导出回调
+            }
         }
 
         // 设置长度和下拉框
@@ -100,29 +106,36 @@ public class ExcelExportExecutor {
 
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
-            try {
-                JSONObject jsonObject = new JSONObject();
-                for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
-                    Rule cellRule = orderRule.get(cellIndex);
-                    if (cellRule == null) {
-                        continue;
-                    }
-                    Cell cell = row.getCell(cellIndex);
-                    try {
-                        Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
-                                cellRule.getFieldType());
-                        jsonObject.put(cellRule.getFieldName(), value);
-                    } catch (Exception e) {
-                        throw new ExcelConverterException(rowIndex + 1, cellRule.errorMessage, cellIndex + 1,
-                                cell.getStringCellValue());
-                    }
+            JSONObject jsonObject = new JSONObject();
+            boolean cellError = false;
+            for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
+                Rule cellRule = orderRule.get(cellIndex);
+                if (cellRule == null) {
+                    continue;
                 }
-                result.add(jsonObject.toJavaObject(clazz));
-            } catch (Exception e) {
-                haveError = true;
-                JokerCallBackCombination.uploadRowError(row, e);
-                continue;
+                Cell cell = row.getCell(cellIndex);
+                try {
+                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
+                            cellRule.getFieldType());
+                    jsonObject.put(cellRule.getFieldName(), value);
+                } catch (ExcelException e) {
+                    cellError = true;
+                    haveError = true;
+                    JokerCallBackCombination.uploadRowError(row, e);
+                    break;
+                } catch (Exception e) {
+                    cellError = true;
+                    haveError = true;
+                    JokerCallBackCombination.uploadRowError(row, new ExcelException(rowIndex + 1,
+                            cellRule.errorMessage, cellIndex + 1,
+                            cell.getStringCellValue()));
+                    break;
+                }
             }
+            if (!cellError) {
+                result.add(jsonObject.toJavaObject(clazz));
+            }
+
         }
         if (haveError) {
             JokerCallBackCombination.uploadFinish(result);
@@ -132,7 +145,7 @@ public class ExcelExportExecutor {
         return result;
     }
 
-    private static void setRow(Row row, Object object, List<Rule> rules) {
+    private static void setRow(Row row, Object object, List<Rule> rules) throws ConvertException {
         for (int i = 0; i < rules.size(); i++) {
             Rule rule = rules.get(i);
             Cell cell = row.createCell(i);
@@ -141,7 +154,7 @@ public class ExcelExportExecutor {
         }
     }
 
-    private static String getValueByRule(Class<?> clazz, Object object, Rule rule) {
+    private static String getValueByRule(Class<?> clazz, Object object, Rule rule) throws ConvertException {
         Field field;
         try {
             field = clazz.getDeclaredField(rule.getFieldName());
@@ -151,6 +164,8 @@ public class ExcelExportExecutor {
             return converter.convert(value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
+        } catch (ConvertException e) {
+            throw e;
         }
         return "";
     }
@@ -241,6 +256,8 @@ public class ExcelExportExecutor {
 
         Class<?> fieldType;
 
+        boolean unique;
+
         String errorMessage;
 
         private void init(ExcelField excelField, Class<?> fieldType) {
@@ -257,10 +274,15 @@ public class ExcelExportExecutor {
                 }
             }
             this.converter = converterRegistry.getConverterByType(converterClass);
+            this.unique = excelField.unique();
+            if (this.unique) {
+                this.converter = new UniqueConverter(this.converter);
+            }
             this.width = excelField.width();
             this.select = excelField.select();
             this.fieldType = fieldType;
-            errorMessage = excelField.errorMessage();
+
+            this.errorMessage = excelField.errorMessage();
         }
 
         private void init(Class<?> fieldType) {

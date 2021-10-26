@@ -39,11 +39,16 @@ public @interface ExcelField {
      **/
     int width() default 4000;
 
-    /****
+    /**
      * 下拉框内容
      **/
     String[] select() default {};
 
+    /**
+     *
+     * 是否唯一
+     **/
+    boolean unique() default false;
 
     /**
      * 如果遇到异常报错 抛出异常消息内容。

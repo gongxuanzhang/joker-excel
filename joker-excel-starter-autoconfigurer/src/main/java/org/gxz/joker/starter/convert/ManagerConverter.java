@@ -1,6 +1,8 @@
 package org.gxz.joker.starter.convert;
 
 
+import org.gxz.joker.starter.exception.ConvertException;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -38,7 +40,7 @@ public class ManagerConverter implements Converter<Object> {
     }
 
     @Override
-    public String convert(Object value) {
+    public String convert(Object value) throws ConvertException {
         Class<?> clazz = value == null ? String.class : value.getClass();
         Converter orDefault = converterCache.getOrDefault(clazz, jsonConverter);
         return orDefault.convert(value);
@@ -46,7 +48,7 @@ public class ManagerConverter implements Converter<Object> {
 
 
     @Override
-    public Object reconvert(String cellValue, Class<? extends Object> clazz) throws Exception {
+    public Object reconvert(String cellValue, Class<? extends Object> clazz) throws ConvertException {
         Converter orDefault = converterCache.getOrDefault(clazz, jsonConverter);
         return orDefault.reconvert(cellValue, clazz);
     }

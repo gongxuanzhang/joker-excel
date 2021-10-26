@@ -84,6 +84,7 @@ public class JokerExcelTestController {
             user.setSex(i % 2 == 0 ? "男" : "女");
             exportData.add(user);
         }
+        exportData.add(new User().setName("张1"));
         return exportData;
     }
 
