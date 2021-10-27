@@ -3,6 +3,7 @@ package org.gxz.joker.starter.tool;
 import com.alibaba.fastjson.JSONObject;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
+import org.gxz.joker.starter.component.AnalysisDataHolder;
 import org.gxz.joker.starter.config.JokerCallBackCombination;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
@@ -79,7 +80,7 @@ public class ExcelExportExecutor {
     }
 
 
-    public static <T> List<T> readWorkBook(XSSFWorkbook workbook, Class<T> clazz) {
+    public static <T> AnalysisDataHolder<T> readWorkBook(XSSFWorkbook workbook, Class<T> clazz) {
         ExcelInfo excelInfo = analysisExportRule(clazz, null);
         List<Rule> rules = excelInfo.getRules();
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -88,16 +89,17 @@ public class ExcelExportExecutor {
 
 
     /**
-     * 这个方法支持列序改变
+     * 这个方法在列改变顺序的情况下仍然能正确解析
      **/
-    private static <T> List<T> analysis(XSSFSheet sheet, List<Rule> rules, Class<T> clazz) {
-        List<T> result = new ArrayList<>();
+    private static <T> AnalysisDataHolder<T> analysis(XSSFSheet sheet, List<Rule> rules, Class<T> clazz) {
+        List<T> data = new ArrayList<>();
+        List<Row> errorRows = new ArrayList<>();
         Map<String, Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
         Map<Integer, Rule> orderRule = new HashMap<>();
         boolean haveError = false;
-        XSSFRow headRow = sheet.getRow(0);
+        Row headRow = sheet.getRow(0);
         for (int i = 0; i < headRow.getLastCellNum(); i++) {
-            XSSFCell cell = headRow.getCell(i);
+            Cell cell = headRow.getCell(i);
             String headString = cell.getStringCellValue();
             if (ruleMap.containsKey(headString)) {
                 orderRule.put(i, ruleMap.get(headString));
@@ -119,11 +121,13 @@ public class ExcelExportExecutor {
                             cellRule.getFieldType());
                     jsonObject.put(cellRule.getFieldName(), value);
                 } catch (ExcelException e) {
+                    errorRows.add(row);
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, e);
                     break;
                 } catch (Exception e) {
+                    errorRows.add(row);
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, new ExcelException(rowIndex + 1,
@@ -133,17 +137,19 @@ public class ExcelExportExecutor {
                 }
             }
             if (!cellError) {
-                result.add(jsonObject.toJavaObject(clazz));
+                data.add(jsonObject.toJavaObject(clazz));
             }
 
         }
         if (haveError) {
-            JokerCallBackCombination.uploadFinish(result);
+            JokerCallBackCombination.uploadFinish(data);
         } else {
-            JokerCallBackCombination.uploadSuccess(result);
+            JokerCallBackCombination.uploadSuccess(data);
         }
-        return result;
+        return new AnalysisDataHolder<>(data,errorRows,headRow);
     }
+
+
 
     private static void setRow(Row row, Object object, List<Rule> rules) throws ConvertException {
         for (int i = 0; i < rules.size(); i++) {

@@ -1,13 +1,20 @@
 package com.gxz.jokerexceltest.controller;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.gxz.joker.starter.annotation.ErrorRows;
 import org.gxz.joker.starter.annotation.Export;
 import org.gxz.joker.starter.annotation.Upload;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +81,18 @@ public class JokerExcelTestController {
         return data();
     }
 
+
+    @PostMapping("/t")
+    public String test(User user,BindingResult bindingResult){
+        return "asdf";
+    }
+
+    @PostMapping("/tt")
+    public String testt(@Valid User user,BindingResult bindingResult){
+        return "asdf";
+    }
+
+
     private List<User> data() {
         List<User> exportData = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -89,7 +108,8 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@Upload List<User> users) {
+    public Map<String, Object> upload(@Upload List<User> users,@ErrorRows Workbook workbook) throws IOException {
+        workbook.write(new FileOutputStream("aaa.xlsx"));
         for (User user : users) {
             System.out.println(user);
         }

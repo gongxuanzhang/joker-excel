@@ -25,6 +25,11 @@
         <i class="layui-icon">&#xe67c;</i>导入excel
     </button>
 
+    <button type="button" class="layui-btn" id="test2">测试参数</button>
+    <button type="button" class="layui-btn" id="test3">测试参数有注解</button>
+
+
+
 </div>
 
 <table id="aaa">
@@ -42,13 +47,26 @@
         height: 315 //设置高度
     })
 
+    $("#test2").click(function(){
+            $.post("/t",{age:1}).then(data=>{
+                alert(data)
+            })
+    })
+
+
+    $("#test3").click(function(){
+        $.post("/tt",{age:1}).then(data=>{
+            alert(data)
+        })
+    })
+
 
     layui.use('upload', function () {
         var upload = layui.upload;
         //执行实例
         var uploadInst = upload.render({
             elem: '#test1'
-            , url: '/upload'
+            , url: '/upload?name=aaa'
             , method: 'post'
             , accept: 'file'
             , done: function (res) {

@@ -17,7 +17,7 @@ import java.util.List;
 public class UploadAnalysis {
 
 
-    public List<?> analysisData(MultipartFile file, MethodParameter parameter) {
+    public AnalysisDataHolder<?> analysisData(MultipartFile file, MethodParameter parameter) {
         ParameterizedType parameterizedType = (ParameterizedType) parameter.getParameter().getParameterizedType();
         Class<?> genericClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
         Assert.notNull(file, "找不到上传的文件");

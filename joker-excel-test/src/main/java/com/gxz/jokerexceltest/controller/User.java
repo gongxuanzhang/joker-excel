@@ -3,6 +3,7 @@ package com.gxz.jokerexceltest.controller;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 /**
@@ -13,6 +14,7 @@ public class User {
 
 
     @ExcelField(name = "姓名",unique = true)
+    @NotBlank(message = "用户名不能为空")
     private String name;
     @ExcelField(select = {"男", "女"})
     private String sex;
