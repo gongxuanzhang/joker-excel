@@ -32,11 +32,11 @@ import java.util.stream.Stream;
 public class ExcelExportExecutor {
 
 
-    public static <T> Workbook writeWorkBook(List<T> lists, ExcelDescription excelDescription) {
-        if (lists == null || lists.isEmpty()) {
+    public static <T> Workbook writeWorkBook(List<T> list, ExcelDescription excelDescription) {
+        if (list == null || list.isEmpty()) {
             throw new NullPointerException("实体内容为空");
         }
-        Class<?> clazz = lists.get(0).getClass();
+        Class<?> clazz = list.get(0).getClass();
 
         ExcelInfo excelInfo = analysisExportRule(clazz, excelDescription);
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -52,16 +52,19 @@ public class ExcelExportExecutor {
         }
         List<Rule> rules = excelInfo.getRules();
 
-        // 设置内容
-        for (int i = 0; i < lists.size(); i++) {
-            Row row = sheet.createRow(i + 1);
+        int rowNum = 1;
+        for (T data : list) {
+            Row row = sheet.createRow(rowNum);
             try {
-                setRow(row, lists.get(i), rules);
+                setRow(row, data, rules);
+                rowNum++;
             } catch (ConvertException e) {
                 sheet.removeRow(row);
                 // TODO: 2021/10/25  这里是导出回调
             }
+
         }
+
 
         // 设置长度和下拉框
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);

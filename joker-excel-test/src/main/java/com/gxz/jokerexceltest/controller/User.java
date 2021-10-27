@@ -2,6 +2,8 @@ package com.gxz.jokerexceltest.controller;
 
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
+import org.gxz.joker.starter.element.Checkable;
+import org.gxz.joker.starter.exception.ConvertException;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @ExcelData
-public class User {
+public class User implements Checkable<User> {
 
 
     @ExcelField(name = "姓名", unique = true)
@@ -66,5 +68,12 @@ public class User {
                 ", birthday=" + birthday +
                 ", age=" + age +
                 '}';
+    }
+
+    @Override
+    public void check() throws ConvertException {
+        if(this.name.contains("1")){
+            throw new ConvertException("a");
+        }
     }
 }
