@@ -47,11 +47,11 @@ public class JokerConfigurationDelegate {
             return;
         }
 
-        if (head.getPrefix() != null) {
+        if (head.getSuffix() != null) {
             suffixSupplier = (d) -> head.getSuffix();
             return;
         }
-        if (head.getPrefixSupplier() != null) {
+        if (head.getSuffixSupplier() != null) {
             suffixSupplier = head.getSuffixSupplier();
         }
         if (suffixSupplier == null) {

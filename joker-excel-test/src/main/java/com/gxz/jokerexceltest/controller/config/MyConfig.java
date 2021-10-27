@@ -19,7 +19,7 @@ public class MyConfig implements JokerGlobalConfig {
                 .successCallBack((data) -> System.out.println("导入成功"))
                 .errorCallBack((row, error) -> System.out.println("失败的行"))
                 .finishCallBack((data) -> System.out.println("完成的行数"))
-                .and().head();
+                .and().head().suffix("这是后缀");
 
     }
 }
