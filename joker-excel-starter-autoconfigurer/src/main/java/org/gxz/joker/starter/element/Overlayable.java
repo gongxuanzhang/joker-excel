@@ -6,12 +6,14 @@ import java.util.Comparator;
 /**
  * 实现这个接口的子类 会获得可以和同样实现此接口的子类合并，
  * 合并之后有优先级，且会覆盖默认值
+ *
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public interface Overlayable<T> extends Comparable<Overlayable<T>> {
 
     /**
      * 优先级
+     *
      * @return 返回数字越大 优先级越小
      **/
     int getOrder();
@@ -29,6 +31,6 @@ public interface Overlayable<T> extends Comparable<Overlayable<T>> {
 
     @Override
     default int compareTo(Overlayable<T> o) {
-        return Integer.compare(getOrder(),o.getOrder());
+        return Integer.compare(getOrder(), o.getOrder());
     }
 }

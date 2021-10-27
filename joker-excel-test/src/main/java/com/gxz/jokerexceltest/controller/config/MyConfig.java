@@ -1,7 +1,7 @@
 package com.gxz.jokerexceltest.controller.config;
 
 import org.gxz.joker.starter.component.ExportAspect;
-import org.gxz.joker.starter.config.JokerBuilder;
+import org.gxz.joker.starter.config.build.JokerBuilder;
 import org.gxz.joker.starter.config.JokerGlobalConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +18,8 @@ public class MyConfig implements JokerGlobalConfig {
         builder.upload()
                 .successCallBack((data) -> System.out.println("导入成功"))
                 .errorCallBack((row, error) -> System.out.println("失败的行"))
-                .finishCallBack((data) -> System.out.println("完成的行数"));
+                .finishCallBack((data) -> System.out.println("完成的行数"))
+                .and().head();
 
     }
 }

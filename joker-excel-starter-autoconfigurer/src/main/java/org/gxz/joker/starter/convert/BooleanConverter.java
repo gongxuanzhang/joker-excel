@@ -14,7 +14,7 @@ public class BooleanConverter implements Converter<Boolean> {
     }
 
     @Override
-    public Boolean reconvert(String cellValue, Class<? extends Boolean> clazz)  {
+    public Boolean reconvert(String cellValue, Class<? extends Boolean> clazz) {
         if (cellValue.isEmpty()) {
             return null;
         }

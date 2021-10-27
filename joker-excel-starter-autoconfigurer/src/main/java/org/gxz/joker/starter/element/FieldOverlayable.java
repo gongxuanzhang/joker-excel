@@ -3,7 +3,7 @@ package org.gxz.joker.starter.element;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public interface FieldOverlayable extends Overlayable<FieldHolder>{
+public interface FieldOverlayable extends Overlayable<FieldHolder> {
 
 
     @Override

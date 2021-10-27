@@ -9,12 +9,12 @@ import org.apache.poi.ss.usermodel.Row;
  **/
 public class RowUtils {
 
-    public static void copyRow(Row source, Row target){
+    public static void copyRow(Row source, Row target) {
         for (int i = 0; i < (int) source.getLastCellNum(); i++) {
             Cell targetCell = target.createCell(i);
             Cell sourceCell = source.getCell(i);
             CellType cellTypeEnum = sourceCell.getCellTypeEnum();
-            switch (cellTypeEnum){
+            switch (cellTypeEnum) {
                 case STRING:
                     targetCell.setCellValue(sourceCell.getStringCellValue());
                     break;

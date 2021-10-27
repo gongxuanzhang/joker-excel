@@ -12,7 +12,7 @@ public class ExportSheetWrapper implements SheetNameOverlayable {
 
     private final Export export;
 
-    public ExportSheetWrapper(Export export){
+    public ExportSheetWrapper(Export export) {
         this.export = export;
     }
 
@@ -23,8 +23,8 @@ public class ExportSheetWrapper implements SheetNameOverlayable {
 
     @Override
     public String getValue() {
-        if(export ==null){
-           return defaultValue();
+        if (export == null) {
+            return defaultValue();
         }
         return export.sheetName();
     }

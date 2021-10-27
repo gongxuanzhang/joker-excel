@@ -17,7 +17,7 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime reconvert(String cellValue, Class<? extends LocalDateTime> clazz)  {
+    public LocalDateTime reconvert(String cellValue, Class<? extends LocalDateTime> clazz) {
         return LocalDateTime.from(DATE_TIME_FORMATTER.parse(cellValue));
     }
 }

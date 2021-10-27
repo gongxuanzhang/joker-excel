@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 public class User {
 
 
-    @ExcelField(name = "姓名",unique = true)
-    @NotBlank(message = "用户名不能为空")
+    @ExcelField(name = "姓名", unique = true)
     private String name;
     @ExcelField(select = {"男", "女"})
     private String sex;

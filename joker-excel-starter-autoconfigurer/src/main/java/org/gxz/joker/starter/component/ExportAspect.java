@@ -52,16 +52,16 @@ public class ExportAspect implements ApplicationContextAware {
             throw new IllegalAccessException("返回值必须是list");
         }
         List<?> result = (List<?>) pjp.proceed();
-       if(CollectionUtils.isEmpty(result)){
-           throw new NullPointerException("无法解析出数据");
-       }
+        if (CollectionUtils.isEmpty(result)) {
+            throw new NullPointerException("无法解析出数据");
+        }
         Method method = sig.getMethod();
         Export export = method.getAnnotation(Export.class);
         ExcelDescription excelDescription = new ExcelDescription();
         Class<?> beanClass = result.get(0).getClass();
-        excelDescription.fuseExcelName(new ExportNameWrapper(method,beanClass,pjp.getArgs(),applicationContext));
+        excelDescription.fuseExcelName(new ExportNameWrapper(method, beanClass, pjp.getArgs(), applicationContext));
         excelDescription.fuseSheetName(new ExportSheetWrapper(export));
-        excelDescription.fuseField(new ExportFieldWrapper(export),new BeanClassWrapper(beanClass));
+        excelDescription.fuseField(new ExportFieldWrapper(export), new BeanClassWrapper(beanClass));
         HttpServletResponse response =
                 ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
         if (Objects.isNull(response)) {

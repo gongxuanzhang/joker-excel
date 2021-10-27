@@ -51,13 +51,14 @@ public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResol
         }
         MultipartFile file = request.getFile("file");
         AnalysisDataHolder<?> analysisDataHolder = uploadAnalysis.analysisData(file, parameter);
-        WebDataBinder binder = binderFactory.createBinder(webRequest, analysisDataHolder.getErrorRows(), ComponentConstant.ERROR_ROW_BINDER_KEY);
+        WebDataBinder binder = binderFactory.createBinder(webRequest, analysisDataHolder.getErrorRows(),
+                ComponentConstant.ERROR_ROW_BINDER_KEY);
         if (binder.getTarget() != null) {
-            bindRequestParameters(binder,webRequest);
+            bindRequestParameters(binder, webRequest);
         }
         BindingResult bindingResult = binder.getBindingResult();
-        Map<String,Object> model = bindingResult.getModel();
-        model.put(ComponentConstant.ERROR_HEAD_BINDER_KEY,analysisDataHolder.getHead());
+        Map<String, Object> model = bindingResult.getModel();
+        model.put(ComponentConstant.ERROR_HEAD_BINDER_KEY, analysisDataHolder.getHead());
         mavContainer.removeAttributes(model);
         mavContainer.addAllAttributes(model);
         return analysisDataHolder.getData();

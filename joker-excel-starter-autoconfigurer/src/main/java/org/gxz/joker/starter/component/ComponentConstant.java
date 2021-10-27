@@ -1,7 +1,6 @@
 package org.gxz.joker.starter.component;
 
 /**
- *
  * 相关组件的常量
  *
  * @author gxz gongxuanzhang@foxmail.com

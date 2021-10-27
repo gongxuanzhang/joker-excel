@@ -25,16 +25,14 @@ public class ExcelDescription {
     private static final String EXCEL_SUFFIX = ".xlsx";
 
     /**
-     *
      * 合并excelNames
-     *
      **/
     public void fuseExcelName(ExcelNameOverlayable... element) {
         if (excelName != null) {
             throw new IllegalStateException("method fuseExcelName only use once");
         }
         this.excelName = FuseUtils.fuse(element);
-        if(!StringUtils.hasText(excelName)){
+        if (!StringUtils.hasText(excelName)) {
             excelName = DefaultValueConstant.EXPORT_EXCEL_NAME;
         }
         if (!excelName.endsWith(EXCEL_SUFFIX)) {
@@ -44,9 +42,7 @@ public class ExcelDescription {
 
 
     /**
-     *
      * 合并sheetNames
-     *
      **/
     public void fuseSheetName(SheetNameOverlayable... element) {
         if (sheetName != null) {
@@ -57,9 +53,7 @@ public class ExcelDescription {
 
 
     /**
-     *
      * 合并最后需要过滤的字段集合
-     *
      **/
     public void fuseField(FieldOverlayable... element) {
         if (fieldHolder != null) {

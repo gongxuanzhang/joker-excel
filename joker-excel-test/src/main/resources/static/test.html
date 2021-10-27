@@ -29,7 +29,6 @@
     <button type="button" class="layui-btn" id="test3">测试参数有注解</button>
 
 
-
 </div>
 
 <table id="aaa">
@@ -47,15 +46,15 @@
         height: 315 //设置高度
     })
 
-    $("#test2").click(function(){
-            $.post("/t",{age:1}).then(data=>{
-                alert(data)
-            })
+    $("#test2").click(function () {
+        $.post("/t", {age: 1}).then(data => {
+            alert(data)
+        })
     })
 
 
-    $("#test3").click(function(){
-        $.post("/tt",{age:1}).then(data=>{
+    $("#test3").click(function () {
+        $.post("/tt", {age: 1}).then(data => {
             alert(data)
         })
     })

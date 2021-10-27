@@ -57,6 +57,7 @@ public class ExcelExportExecutor {
             try {
                 setRow(row, lists.get(i), rules);
             } catch (ConvertException e) {
+                sheet.removeRow(row);
                 // TODO: 2021/10/25  这里是导出回调
             }
         }
@@ -105,7 +106,6 @@ public class ExcelExportExecutor {
                 orderRule.put(i, ruleMap.get(headString));
             }
         }
-
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
             JSONObject jsonObject = new JSONObject();
@@ -146,9 +146,8 @@ public class ExcelExportExecutor {
         } else {
             JokerCallBackCombination.uploadSuccess(data);
         }
-        return new AnalysisDataHolder<>(data,errorRows,headRow);
+        return new AnalysisDataHolder<>(data, errorRows, headRow);
     }
-
 
 
     private static void setRow(Row row, Object object, List<Rule> rules) throws ConvertException {
@@ -241,82 +240,6 @@ public class ExcelExportExecutor {
             stream = stream.filter(field -> field.isAnnotationPresent(ExcelField.class));
         }
         return stream.map(Field::getName).collect(Collectors.toSet());
-    }
-
-
-    @Setter
-    @Getter
-    public static class Rule implements Comparable<Rule> {
-
-        String fieldName;
-
-        Converter converter;
-
-        String[] select;
-
-        int width;
-
-        String cellName;
-
-        int order;
-
-        Class<?> fieldType;
-
-        boolean unique;
-
-        String errorMessage;
-
-        private void init(ExcelField excelField, Class<?> fieldType) {
-            this.order = excelField.order();
-            this.cellName = excelField.name().isEmpty() ? this.fieldName : excelField.name();
-            Class<? extends Converter> converterClass = excelField.converter();
-            ConverterRegistry converterRegistry = ConverterRegistry.getInstance();
-            Converter converterByType = converterRegistry.getConverterByType(converterClass);
-            if (converterByType == null) {
-                try {
-                    converterRegistry.putCustom(converterClass, converterClass.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-            this.converter = converterRegistry.getConverterByType(converterClass);
-            this.unique = excelField.unique();
-            if (this.unique) {
-                this.converter = new UniqueConverter(this.converter);
-            }
-            this.width = excelField.width();
-            this.select = excelField.select();
-            this.fieldType = fieldType;
-
-            this.errorMessage = excelField.errorMessage();
-        }
-
-        private void init(Class<?> fieldType) {
-            this.width = 4000;
-            this.select = new String[]{};
-            this.converter = ConverterRegistry.DEFAULT_CONVERTER;
-            this.order = -1;
-            this.cellName = this.fieldName;
-            this.fieldType = fieldType;
-            this.errorMessage = "";
-        }
-
-
-        public Rule(Field field) {
-            this.fieldName = field.getName();
-            if (field.isAnnotationPresent(ExcelField.class)) {
-                ExcelField excelField = field.getAnnotation(ExcelField.class);
-                this.init(excelField, field.getType());
-            } else {
-                this.init(field.getType());
-            }
-        }
-
-
-        @Override
-        public int compareTo(Rule rule) {
-            return Integer.compare(this.order, rule.order);
-        }
     }
 
 

@@ -8,17 +8,16 @@ import org.gxz.joker.starter.service.DefaultSupport;
  * Joker导出的配置类
  * 此类可以配置导出相关事宜 包括包含字段 忽略字段  导出内容，
  * 优先级  配置类> export注解属性> excelData注解属性
+ *
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public interface JokerConfiguration {
 
 
-
     /**
-     *
      * 当配置类的属性为null 或者为默认值的时候，是否会被其他低优先级的属性覆盖
      **/
-    default boolean overField(){
+    default boolean overField() {
         return false;
     }
 

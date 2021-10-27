@@ -2,6 +2,9 @@ package org.gxz.joker.starter.config;
 
 
 import org.apache.poi.ss.usermodel.Row;
+import org.gxz.joker.starter.config.build.JokerBuilder;
+import org.gxz.joker.starter.config.build.JokerExportBuilder;
+import org.gxz.joker.starter.config.build.JokerUploadBuilder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -12,18 +15,21 @@ import java.util.List;
  **/
 public class JokerCallBackCombination {
 
+    private JokerCallBackCombination() {
+
+    }
+
     static List<UploadErrorRowCallBack> errorCallBack;
     static List<UploadFinishCallBack> finishCallBack;
     static List<UploadSuccessCallBack> successCallBack;
 
 
-
     public static void registerBuild(JokerBuilder jokerBuilder) {
-        JokerBuilder.JokerUploadBuilder jokerUploadBuilder = jokerBuilder.jokerUploadBuilder;
-        JokerBuilder.JokerExportBuilder jokerExportBuilder = jokerBuilder.jokerExportBuilder;
-        register(jokerUploadBuilder.errorCallBack);
-        register(jokerUploadBuilder.finishCallBack);
-        register(jokerUploadBuilder.successCallBack);
+        JokerUploadBuilder jokerUploadBuilder = jokerBuilder.getJokerUploadBuilder();
+        JokerExportBuilder jokerExportBuilder = jokerBuilder.getJokerExportBuilder();
+        register(jokerUploadBuilder.getErrorCallBack());
+        register(jokerUploadBuilder.getFinishCallBack());
+        register(jokerUploadBuilder.getSuccessCallBack());
     }
 
     private static void register(UploadErrorRowCallBack callBack) {
@@ -47,24 +53,24 @@ public class JokerCallBackCombination {
         successCallBack.add(callBack);
     }
 
-    public static void uploadRowError(Row row, Throwable t){
-        if(!CollectionUtils.isEmpty(errorCallBack)){
+    public static void uploadRowError(Row row, Throwable t) {
+        if (!CollectionUtils.isEmpty(errorCallBack)) {
             for (UploadErrorRowCallBack callBack : errorCallBack) {
-                callBack.onRowError(row,t);
+                callBack.onRowError(row, t);
             }
         }
     }
 
-    public static void uploadFinish(List<?> data){
-        if(!CollectionUtils.isEmpty(finishCallBack)){
+    public static void uploadFinish(List<?> data) {
+        if (!CollectionUtils.isEmpty(finishCallBack)) {
             for (UploadFinishCallBack callBack : finishCallBack) {
                 callBack.onFinish(data);
             }
         }
     }
 
-    public static void uploadSuccess(List<?> data){
-        if(!CollectionUtils.isEmpty(successCallBack)){
+    public static void uploadSuccess(List<?> data) {
+        if (!CollectionUtils.isEmpty(successCallBack)) {
             for (UploadSuccessCallBack callBack : successCallBack) {
                 callBack.onSuccess(data);
             }

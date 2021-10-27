@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 
 /**
  * 导出一个带时间戳的excel
- * @author gxz gongxuanzhang@foxmail.com
  *
+ * @author gxz gongxuanzhang@foxmail.com
  **/
 public class MyNameFactory implements ExcelNameFactory {
     @Override

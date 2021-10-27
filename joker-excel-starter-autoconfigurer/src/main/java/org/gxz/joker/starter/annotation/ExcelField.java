@@ -45,10 +45,15 @@ public @interface ExcelField {
     String[] select() default {};
 
     /**
-     *
      * 是否唯一
      **/
     boolean unique() default false;
+
+    /**
+     * 是否必要
+     **/
+    boolean require() default false;
+
 
     /**
      * 如果遇到异常报错 抛出异常消息内容。

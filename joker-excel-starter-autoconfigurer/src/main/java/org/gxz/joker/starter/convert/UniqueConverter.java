@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public class UniqueConverter<T> implements Converter<T>{
+public class UniqueConverter<T> implements Converter<T> {
 
     private final Converter<T> converter;
 
@@ -20,7 +20,6 @@ public class UniqueConverter<T> implements Converter<T>{
     public UniqueConverter(Converter<T> converter) {
         this.converter = converter;
     }
-
 
 
     @Override

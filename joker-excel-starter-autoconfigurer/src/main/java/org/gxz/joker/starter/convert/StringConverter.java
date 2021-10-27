@@ -11,7 +11,7 @@ public class StringConverter implements Converter<String> {
     }
 
     @Override
-    public String reconvert(String cellValue, Class<? extends String> clazz)  {
+    public String reconvert(String cellValue, Class<? extends String> clazz) {
         return cellValue;
     }
 

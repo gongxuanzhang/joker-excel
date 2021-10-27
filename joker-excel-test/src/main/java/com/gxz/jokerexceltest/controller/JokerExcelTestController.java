@@ -1,5 +1,7 @@
 package com.gxz.jokerexceltest.controller;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.gxz.joker.starter.annotation.ErrorRows;
 import org.gxz.joker.starter.annotation.Export;
@@ -34,27 +36,25 @@ public class JokerExcelTestController {
     }
 
 
-
-
-    @Export(value = "配置了sheetName的导出",sheetName = "这是sheet的名字")
+    @Export(value = "配置了sheetName的导出", sheetName = "这是sheet的名字")
     @GetMapping("/export/1")
     public List<User> exportSheetName() {
         return data();
     }
 
-    @Export(value = "没有name",ignore = "age")
+    @Export(value = "没有name", ignore = "age")
     @GetMapping("/export/2")
     public List<User> exportWithExportConfigurationAnnotation() {
         return data();
     }
 
-    @Export(value = "只有name",include = "name")
+    @Export(value = "只有name", include = "name")
     @GetMapping("/export/3")
     public List<User> export3() {
         return data();
     }
 
-    @Export(value = "只有name",include = "name",nameFactory = MyNameFactory.class)
+    @Export(value = "只有name", include = "name", nameFactory = MyNameFactory.class)
     @GetMapping("/export/4")
     public List<User> export4() {
         return data();
@@ -75,7 +75,7 @@ public class JokerExcelTestController {
     }
 
 
-    @Export(value = "正常导出",nameFactory = MyNameFactory.class)
+    @Export(value = "正常导出", nameFactory = MyNameFactory.class)
     @GetMapping("/export")
     public List<User> export() {
         return data();
@@ -83,12 +83,12 @@ public class JokerExcelTestController {
 
 
     @PostMapping("/t")
-    public String test(User user,BindingResult bindingResult){
+    public String test(User user, BindingResult bindingResult) {
         return "asdf";
     }
 
     @PostMapping("/tt")
-    public String testt(@Valid User user,BindingResult bindingResult){
+    public String testt(@Valid User user, BindingResult bindingResult) {
         return "asdf";
     }
 
@@ -108,8 +108,11 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@Upload List<User> users,@ErrorRows Workbook workbook) throws IOException {
-        workbook.write(new FileOutputStream("aaa.xlsx"));
+    public Map<String, Object> upload(@Upload List<User> users, @ErrorRows List<Row> rows,
+                                      @ErrorRows Workbook workbook) throws IOException {
+        Sheet sheetAt = workbook.getSheetAt(0);
+        int lastRowNum = sheetAt.getLastRowNum();
+        workbook.write(new FileOutputStream("错误.xlsx"));
         for (User user : users) {
             System.out.println(user);
         }

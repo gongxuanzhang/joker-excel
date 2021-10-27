@@ -12,7 +12,7 @@ public class ExportFieldWrapper implements FieldOverlayable {
 
     private final Export export;
 
-    public ExportFieldWrapper(Export export){
+    public ExportFieldWrapper(Export export) {
         this.export = export;
     }
 
@@ -24,7 +24,7 @@ public class ExportFieldWrapper implements FieldOverlayable {
 
     @Override
     public FieldHolder getValue() {
-        if(export == null){
+        if (export == null) {
             return defaultValue();
         }
         return new FieldHolder().setIgnore(export.ignore()).setInclude(export.include())

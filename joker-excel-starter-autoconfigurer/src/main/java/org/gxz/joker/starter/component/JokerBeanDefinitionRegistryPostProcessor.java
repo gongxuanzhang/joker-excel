@@ -13,7 +13,7 @@ public class JokerBeanDefinitionRegistryPostProcessor implements BeanDefinitionR
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         String[] beanDefinitionNames = registry.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
-            if(beanDefinitionName.contains("Executer")){
+            if (beanDefinitionName.contains("Executer")) {
                 System.out.println(beanDefinitionName);
             }
         }

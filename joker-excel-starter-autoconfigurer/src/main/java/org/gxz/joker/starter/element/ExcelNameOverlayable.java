@@ -19,7 +19,6 @@ public interface ExcelNameOverlayable extends StringOverlayable {
     }
 
     /**
-     *
      * 判断传入的工厂类是否是默认值
      **/
     default boolean factoryDefault(Class<? extends ExcelNameFactory> factoryClass) {
