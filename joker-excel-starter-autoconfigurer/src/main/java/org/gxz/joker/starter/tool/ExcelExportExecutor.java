@@ -8,6 +8,7 @@ import org.gxz.joker.starter.config.JokerCallBackCombination;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
 import org.gxz.joker.starter.convert.UniqueConverter;
+import org.gxz.joker.starter.element.Checkable;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.element.FieldHolder;
 import org.gxz.joker.starter.exception.ConvertException;
@@ -99,6 +100,7 @@ public class ExcelExportExecutor {
         Map<Integer, Rule> orderRule = new HashMap<>();
         boolean haveError = false;
         Row headRow = sheet.getRow(0);
+        // 设置表头
         for (int i = 0; i < headRow.getLastCellNum(); i++) {
             Cell cell = headRow.getCell(i);
             String headString = cell.getStringCellValue();
@@ -106,8 +108,9 @@ public class ExcelExportExecutor {
                 orderRule.put(i, ruleMap.get(headString));
             }
         }
+        // 设置内容
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
-            XSSFRow row = sheet.getRow(rowIndex);
+            Row row = sheet.getRow(rowIndex);
             JSONObject jsonObject = new JSONObject();
             boolean cellError = false;
             for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
@@ -137,7 +140,15 @@ public class ExcelExportExecutor {
                 }
             }
             if (!cellError) {
-                data.add(jsonObject.toJavaObject(clazz));
+                T rowData = jsonObject.toJavaObject(clazz);
+                if (Checkable.class.isAssignableFrom(clazz)) {
+                    try {
+                        ((Checkable) rowData).check();
+                    } catch (ConvertException ignore) {
+                        continue;
+                    }
+                }
+                data.add(rowData);
             }
 
         }
@@ -155,6 +166,9 @@ public class ExcelExportExecutor {
             Rule rule = rules.get(i);
             Cell cell = row.createCell(i);
             Class<?> clazz = object.getClass();
+            if (Checkable.class.isAssignableFrom(clazz)) {
+                ((Checkable) object).check();
+            }
             cell.setCellValue(getValueByRule(clazz, object, rule));
         }
     }
