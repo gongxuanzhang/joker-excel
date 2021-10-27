@@ -27,9 +27,12 @@ public class JokerCallBackCombination {
     public static void registerBuild(JokerBuilder jokerBuilder) {
         JokerUploadBuilder jokerUploadBuilder = jokerBuilder.getJokerUploadBuilder();
         JokerExportBuilder jokerExportBuilder = jokerBuilder.getJokerExportBuilder();
-        register(jokerUploadBuilder.getErrorCallBack());
-        register(jokerUploadBuilder.getFinishCallBack());
-        register(jokerUploadBuilder.getSuccessCallBack());
+        if (jokerUploadBuilder != null) {
+            register(jokerUploadBuilder.getErrorCallBack());
+            register(jokerUploadBuilder.getFinishCallBack());
+            register(jokerUploadBuilder.getSuccessCallBack());
+        }
+
     }
 
     private static void register(UploadErrorRowCallBack callBack) {

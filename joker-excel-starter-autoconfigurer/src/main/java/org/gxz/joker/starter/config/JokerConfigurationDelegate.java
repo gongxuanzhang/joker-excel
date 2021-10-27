@@ -18,8 +18,11 @@ public class JokerConfigurationDelegate {
 
     public static void registerBuild(JokerBuilder jokerBuilder) {
         HeadBuilder head = jokerBuilder.head();
-        registerPrefix(head);
-        registerSuffix(head);
+        if (head != null) {
+            registerPrefix(head);
+            registerSuffix(head);
+        }
+
     }
 
     private static void registerPrefix(HeadBuilder head) {
