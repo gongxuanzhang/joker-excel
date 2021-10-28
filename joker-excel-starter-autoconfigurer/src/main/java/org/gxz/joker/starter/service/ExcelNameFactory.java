@@ -5,7 +5,9 @@ import java.lang.reflect.Method;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
- * excel导出时的命名工厂
+ * excel导出时的命名工厂，
+ * 命名工厂如果不在spring容器中，将会被反射实例化，存储在缓存中
+ * 缓存不是持久化的，默认只存储1小时，如果命名工厂有全局逻辑，可以设置singleton方法为true让实例永久存储
  **/
 public interface ExcelNameFactory {
 
@@ -18,6 +20,14 @@ public interface ExcelNameFactory {
      * @param method 调用的反射方法内容
      * @return 返回最终生成的excel导出名称
      **/
-    public String getExcelName(Class<?> clazz, Object[] args, Method method);
+    String getExcelName(Class<?> clazz, Object[] args, Method method);
+
+    /**
+     * 此工厂被创建之后是否永久单例
+     */
+    default boolean singleton() {
+        return false;
+    }
+
 
 }

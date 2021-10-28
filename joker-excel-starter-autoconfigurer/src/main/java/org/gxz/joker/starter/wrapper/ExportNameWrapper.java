@@ -1,5 +1,7 @@
 package org.gxz.joker.starter.wrapper;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.gxz.joker.starter.annotation.Export;
 import org.gxz.joker.starter.element.ExcelNameOverlayable;
 import org.gxz.joker.starter.element.OrderConstant;
@@ -7,12 +9,22 @@ import org.gxz.joker.starter.service.ExcelNameFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public class ExportNameWrapper implements ExcelNameOverlayable {
+
+
+    public static Cache<Class<? extends ExcelNameFactory>, ExcelNameFactory> ttlCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(1, TimeUnit.HOURS)
+            .build();
+
+    public static Map<Class<? extends  ExcelNameFactory>,ExcelNameFactory> singletonCache = new ConcurrentHashMap<>();
 
     private final Export export;
     private final Method method;
@@ -56,7 +68,19 @@ public class ExportNameWrapper implements ExcelNameOverlayable {
         }
 
         try {
-            return factoryClass.newInstance().getExcelName(beanClass, args, method);
+            ExcelNameFactory instance = ttlCache.getIfPresent(factoryClass);
+            if(instance ==null){
+                instance = singletonCache.get(factoryClass);
+                if(instance == null){
+                    instance = factoryClass.newInstance();
+                    if(instance.singleton()){
+                        singletonCache.put(factoryClass,instance);
+                    }else{
+                        ttlCache.put(factoryClass,instance);
+                    }
+                }
+            }
+            return  instance.getExcelName(beanClass, args, method);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return export.value();
