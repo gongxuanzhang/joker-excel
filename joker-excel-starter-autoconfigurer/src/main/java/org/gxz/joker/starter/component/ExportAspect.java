@@ -63,7 +63,7 @@ public class ExportAspect implements ApplicationContextAware {
         Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
         workbook.setSheetName(0, excelDescription.getSheetName());
         ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
-        return result;
+        return null;
     }
 
     private ExcelDescription analysisExcelDesc(ProceedingJoinPoint pjp, Class<?> beanType) {
