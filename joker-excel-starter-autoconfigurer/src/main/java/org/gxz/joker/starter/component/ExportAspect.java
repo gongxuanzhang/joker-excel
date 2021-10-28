@@ -46,7 +46,7 @@ public class ExportAspect implements ApplicationContextAware {
         // 校验环境内容
         MethodSignature sig = (MethodSignature) pjp.getSignature();
         Class<?> returnType = sig.getReturnType();
-        if (!returnType.isAssignableFrom(Iterable.class)) {
+        if (!(Iterable.class.isAssignableFrom(returnType))) {
             throw new ExportReturnException("导出的方法返回值必须是能迭代的！");
         }
         HttpServletResponse response =
