@@ -49,20 +49,13 @@ import java.util.stream.Stream;
 public class ExcelExportExecutor {
 
 
-    public static <T> Workbook writeWorkBook(List<T> list, ExcelDescription excelDescription) {
-        if (list == null || list.isEmpty()) {
-            throw new NullPointerException("实体内容为空");
-        }
-        Class<?> clazz = list.get(0).getClass();
-
-        ExcelInfo excelInfo = analysisExportRule(clazz, excelDescription);
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("sheet");
-        Row headRow = sheet.createRow(0);
-        CellStyle cellStyle = workbook.createCellStyle();
-        DataFormat dataFormat = workbook.createDataFormat();
-        cellStyle.setDataFormat(dataFormat.getFormat("@"));
+    public static <T> Workbook writeWorkBook(Iterable<T> targetData, ExcelDescription excelDescription) {
+        Class<?> beanType = excelDescription.getBeanType();
+        ExcelInfo excelInfo = analysisExportRule(beanType, excelDescription);
+        XSSFWorkbook excel = ExportUtils.createEmptySheetExcel("sheet");
+        XSSFSheet sheet = excel.getSheetAt(0);
         // 设置表头
+        Row headRow = sheet.createRow(0);
         String[] head = excelInfo.getHead();
         for (int i = 0; i < head.length; i++) {
             headRow.createCell(i).setCellValue(head[i]);
@@ -70,35 +63,18 @@ public class ExcelExportExecutor {
         List<Rule> rules = excelInfo.getRules();
 
         int rowNum = 1;
-        for (T data : list) {
+        for (T rowData : targetData) {
             Row row = sheet.createRow(rowNum);
             try {
-                setRow(row, data, rules);
+                setRow(row, rowData, rules);
                 rowNum++;
             } catch (ConvertException e) {
                 sheet.removeRow(row);
                 // TODO: 2021/10/25  这里是导出回调
             }
-
         }
-
-
-        // 设置长度和下拉框
-        XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
-        for (int i = 0; i < rules.size(); i++) {
-            sheet.setColumnWidth(i, rules.get(i).getWidth());
-            String[] select = rules.get(i).getSelect();
-            if (select.length > 0) {
-                XSSFDataValidationConstraint assetTypeConstraint =
-                        (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(select);
-                CellRangeAddressList typeList = new CellRangeAddressList(1, sheet.getLastRowNum(), i, i);
-                XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(assetTypeConstraint,
-                        typeList);
-                sheet.addValidationData(validation);
-            }
-        }
-
-        return workbook;
+        JokerConfigurationDelegate.clip(sheet,rules);
+        return excel;
     }
 
 
@@ -230,16 +206,16 @@ public class ExcelExportExecutor {
     }
 
 
-    private static ExcelInfo analysisExportRule(Class<?> clazz, ExcelDescription excelDescription) {
+    private static ExcelInfo analysisExportRule(Class<?> beanType, ExcelDescription excelDescription) {
         ExcelInfo excelInfo = new ExcelInfo();
-        String[] excelFields = getExcelFields(clazz, excelDescription);
+        String[] excelFields = getExcelFields(beanType, excelDescription);
         if (excelFields.length == 0) {
-            throw new IllegalStateException(clazz.getName() + "无法解析出内容");
+            throw new IllegalStateException(beanType.getName() + "无法解析出内容");
         }
 
         List<Rule> rules = Arrays.stream(excelFields).map(excelField -> {
             try {
-                return clazz.getDeclaredField(excelField);
+                return beanType.getDeclaredField(excelField);
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }

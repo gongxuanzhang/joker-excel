@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @Getter
-public class ExcelException extends RuntimeException {
+public class ExcelException extends JokerRuntimeException {
 
     /**
      * 解析错误的行数 注意是从第1行开始的

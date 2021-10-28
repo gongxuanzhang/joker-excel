@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.element;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.gxz.joker.starter.tool.FuseUtils;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +22,9 @@ public class ExcelDescription {
     private String sheetName;
 
     private FieldHolder fieldHolder;
+
+    @Setter
+    private Class<?> beanType;
 
     private static final String EXCEL_SUFFIX = ".xlsx";
 

@@ -1,12 +1,12 @@
 package org.gxz.joker.starter.config;
 
-import org.apache.poi.ss.formula.functions.T;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.gxz.joker.starter.component.BaseUploadCheck;
-import org.gxz.joker.starter.component.UploadCheck;
 import org.gxz.joker.starter.config.build.ConcatSupplier;
 import org.gxz.joker.starter.config.build.HeadBuilder;
 import org.gxz.joker.starter.config.build.JokerBuilder;
-import org.gxz.joker.starter.exception.ConvertException;
+import org.gxz.joker.starter.element.gardener.GardenerComposite;
+import org.gxz.joker.starter.tool.Rule;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +17,21 @@ import java.util.Map;
  **/
 public class JokerConfigurationDelegate {
 
+
     private static ConcatSupplier suffixSupplier;
     private static ConcatSupplier prefixSupplier;
     private static Map<String, BaseUploadCheck> checkMap;
+    private static GardenerComposite gardenerComposite;
 
     private JokerConfigurationDelegate() {
 
+    }
+
+    public static void registerGardener(GardenerComposite gardenerComposite){
+        if(JokerConfigurationDelegate.gardenerComposite!=null){
+            throw new IllegalArgumentException("重复注册 gardenerComposite");
+        }
+        JokerConfigurationDelegate.gardenerComposite = gardenerComposite;
     }
 
     public static void registerBuild(JokerBuilder jokerBuilder) {
@@ -76,19 +85,30 @@ public class JokerConfigurationDelegate {
         }
     }
 
+
     public static String getPrefix(ExcelFieldDescription description) {
+        if(prefixSupplier == null){
+            prefixSupplier = (d) -> "";
+        }
         return prefixSupplier.apply(description);
     }
 
     public static String getSuffix(ExcelFieldDescription description) {
+        if(suffixSupplier == null){
+            suffixSupplier = (d) -> "";
+        }
         return suffixSupplier.apply(description);
     }
 
 
-    public static <T> BaseUploadCheck uploadCheck(String checkId) {
+    public static BaseUploadCheck uploadCheck(String checkId) {
         if (checkMap == null) {
             return null;
         }
         return checkMap.get(checkId);
+    }
+
+    public static void clip(Sheet sheet, List<Rule> ruleList){
+        gardenerComposite.clip(sheet,ruleList);
     }
 }

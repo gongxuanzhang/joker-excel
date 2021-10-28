@@ -1,7 +1,12 @@
 package org.gxz.joker.starter.tool;
 
 
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,6 +30,16 @@ public class ExportUtils {
         } catch (IOException e) {
             // throw new NormalException(e.getMessage());
         }
+    }
+
+    public static XSSFWorkbook createEmptySheetExcel(String sheetName) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        // 设置样式
+        CellStyle cellStyle = workbook.createCellStyle();
+        DataFormat dataFormat = workbook.createDataFormat();
+        cellStyle.setDataFormat(dataFormat.getFormat("@"));
+        workbook.createSheet(sheetName);
+        return workbook;
     }
 
 }

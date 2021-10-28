@@ -6,7 +6,11 @@ import org.gxz.joker.starter.component.ExportAspect;
 import org.gxz.joker.starter.component.JokerBeanPostProcessor;
 import org.gxz.joker.starter.component.UploadMethodArgumentProcessor;
 import org.gxz.joker.starter.component.UploadAnalysis;
+import org.gxz.joker.starter.config.JokerConfigurationDelegate;
+import org.gxz.joker.starter.element.gardener.GardenerComposite;
+import org.gxz.joker.starter.element.gardener.SelectGardener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -22,11 +26,19 @@ import java.util.List;
         ExportAspect.class,
         UploadAnalysis.class,
         UploadMethodArgumentProcessor.class
-
 })
 @Configuration
 public class JokerAutoConfiguration implements WebMvcConfigurer {
 
+
+
+    @Bean
+    public GardenerComposite gardenerComposite(){
+        GardenerComposite gardenerComposite = new GardenerComposite();
+        gardenerComposite.addResolver(new SelectGardener());
+        JokerConfigurationDelegate.registerGardener(gardenerComposite);
+        return gardenerComposite;
+    }
 
     @Autowired
     private UploadMethodArgumentProcessor uploadArgumentProcessor;
