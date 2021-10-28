@@ -33,6 +33,8 @@ public class Rule implements Comparable<Rule> {
 
     String errorMessage;
 
+    boolean require;
+
     private void init(ExcelField excelField, Class<?> fieldType) {
         this.order = excelField.order();
         this.cellName = excelField.name().isEmpty() ? this.fieldName : excelField.name();
@@ -52,6 +54,7 @@ public class Rule implements Comparable<Rule> {
         if (this.unique) {
             this.converter = new UniqueConverter(this.converter);
         }
+        this.require = excelField.require();
         this.width = excelField.width();
         this.select = excelField.select();
         this.fieldType = fieldType;

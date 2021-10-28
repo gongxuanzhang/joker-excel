@@ -7,6 +7,8 @@ import org.gxz.joker.starter.component.JokerBeanPostProcessor;
 import org.gxz.joker.starter.component.UploadMethodArgumentProcessor;
 import org.gxz.joker.starter.component.UploadAnalysis;
 import org.gxz.joker.starter.config.JokerConfigurationDelegate;
+import org.gxz.joker.starter.element.check.CheckComposite;
+import org.gxz.joker.starter.element.check.RequireCheck;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.element.gardener.SelectGardener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,14 @@ public class JokerAutoConfiguration implements WebMvcConfigurer {
         gardenerComposite.addResolver(new SelectGardener());
         JokerConfigurationDelegate.registerGardener(gardenerComposite);
         return gardenerComposite;
+    }
+
+    @Bean
+    public CheckComposite checkComposite(){
+        CheckComposite checkComposite = new CheckComposite();
+        checkComposite.addCheck(new RequireCheck());
+        JokerConfigurationDelegate.registerCheck(checkComposite);
+        return checkComposite;
     }
 
     @Autowired

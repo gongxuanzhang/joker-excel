@@ -110,6 +110,9 @@ public class ExcelExportExecutor {
         // 设置内容
         for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
+            if(row == null){
+                continue;
+            }
             JSONObject jsonObject = new JSONObject();
             boolean cellError = false;
             for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
@@ -121,6 +124,7 @@ public class ExcelExportExecutor {
                 try {
                     Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
                             cellRule.getFieldType());
+                    JokerConfigurationDelegate.check(cellRule,value);
                     jsonObject.put(cellRule.getFieldName(), value);
                 } catch (ExcelException e) {
                     errorRows.add(row);
