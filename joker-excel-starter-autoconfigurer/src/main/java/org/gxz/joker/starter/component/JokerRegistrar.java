@@ -32,6 +32,7 @@ public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 
     private ResourceLoader resourceLoader;
 
+    Class<?>[] scanClass = new Class[]{JokerGlobalConfig.class,BaseUploadCheck.class};
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata,
@@ -40,8 +41,9 @@ public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
         // 构建一个classPath扫描器
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.setResourceLoader(this.resourceLoader);
-        AssignableTypeFilter annotationTypeFilter = new AssignableTypeFilter(JokerGlobalConfig.class);
-        scanner.addIncludeFilter(annotationTypeFilter);
+        for (Class<?> aClass : scanClass) {
+            scanner.addIncludeFilter(new AssignableTypeFilter(aClass));
+        }
         // 获取需要扫描的包路径
         List<String> basePackages = new ArrayList<>();
         Map<String, Object> attributes = metadata.getAnnotationAttributes(EnableJokerExcel.class.getCanonicalName());

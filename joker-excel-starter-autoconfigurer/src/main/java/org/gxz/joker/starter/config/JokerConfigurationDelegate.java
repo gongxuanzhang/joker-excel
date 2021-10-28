@@ -1,15 +1,16 @@
 package org.gxz.joker.starter.config;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.gxz.joker.starter.component.UploadAnalysisPostProcessor;
-import org.gxz.joker.starter.config.build.CheckBuilder;
+import org.apache.poi.ss.formula.functions.T;
+import org.gxz.joker.starter.component.BaseUploadCheck;
+import org.gxz.joker.starter.component.UploadCheck;
 import org.gxz.joker.starter.config.build.ConcatSupplier;
 import org.gxz.joker.starter.config.build.HeadBuilder;
 import org.gxz.joker.starter.config.build.JokerBuilder;
+import org.gxz.joker.starter.exception.ConvertException;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -18,7 +19,7 @@ public class JokerConfigurationDelegate {
 
     private static ConcatSupplier suffixSupplier;
     private static ConcatSupplier prefixSupplier;
-    private static List<UploadAnalysisPostProcessor> processors;
+    private static Map<String, BaseUploadCheck> checkMap;
 
     private JokerConfigurationDelegate() {
 
@@ -28,23 +29,14 @@ public class JokerConfigurationDelegate {
         HeadBuilder head = jokerBuilder.head();
         registerPrefix(head);
         registerSuffix(head);
-        CheckBuilder check = jokerBuilder.check();
-        registerCheck(check);
-
     }
 
 
-    private static void registerCheck(CheckBuilder checkBuilder) {
-        if (checkBuilder == null) {
-            registerNullCheck();
-            return;
+    public static void registerCheck(BaseUploadCheck baseUploadCheck) {
+        if (checkMap == null) {
+            checkMap = new HashMap<>(16);
         }
-        processors = checkBuilder.getProcessors();
-    }
-
-    private static void registerNullCheck() {
-        processors = new ArrayList<>();
-        processors.add((data, row,method) -> {});
+        checkMap.put(baseUploadCheck.getId(), baseUploadCheck);
     }
 
     private static void registerPrefix(HeadBuilder head) {
@@ -92,9 +84,11 @@ public class JokerConfigurationDelegate {
         return suffixSupplier.apply(description);
     }
 
-    public static void postUploadAnalysis(List<?> data, List<Row> rows, Method method) {
-        processors.forEach((p) -> p.postProcessAfterUploadAnalysis(data, rows,method));
+
+    public static <T> BaseUploadCheck uploadCheck(String checkId) {
+        if (checkMap == null) {
+            return null;
+        }
+        return checkMap.get(checkId);
     }
-
-
 }

@@ -1,28 +1,43 @@
 package org.gxz.joker.starter.tool;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.component.AnalysisDataHolder;
+import org.gxz.joker.starter.component.BaseUploadCheck;
 import org.gxz.joker.starter.config.JokerCallBackCombination;
 import org.gxz.joker.starter.config.JokerConfigurationDelegate;
 import org.gxz.joker.starter.convert.Converter;
-import org.gxz.joker.starter.convert.ConverterRegistry;
-import org.gxz.joker.starter.convert.UniqueConverter;
 import org.gxz.joker.starter.element.Checkable;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.element.FieldHolder;
 import org.gxz.joker.starter.exception.ConvertException;
 import org.gxz.joker.starter.exception.ExcelException;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.*;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -87,24 +102,27 @@ public class ExcelExportExecutor {
     }
 
 
-    public static <T> AnalysisDataHolder<T> readWorkBook(Workbook workbook, Class<T> clazz,Method method) {
+    public static <T> AnalysisDataHolder<T> readWorkBook(Workbook workbook, Class<T> clazz, String checkId) {
         ExcelInfo excelInfo = analysisExportRule(clazz, null);
         List<Rule> rules = excelInfo.getRules();
         Sheet sheet = workbook.getSheetAt(0);
-        return analysis(sheet, rules, clazz,method);
+        return analysis(sheet, rules, clazz, checkId);
     }
 
 
     /**
      * 这个方法在列改变顺序的情况下仍然能正确解析
      **/
-    private static <T> AnalysisDataHolder<T> analysis(Sheet sheet, List<Rule> rules, Class<T> clazz,Method method) {
+    private static <T> AnalysisDataHolder<T> analysis(Sheet sheet, List<Rule> rules, Class<T> clazz, String checkId) {
         List<T> data = new ArrayList<>();
         List<Row> errorRows = new ArrayList<>();
         Map<String, Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
-        Map<Integer, Rule> orderRule = new HashMap<>();
+        Map<Integer, Rule> orderRule = new HashMap<>(16);
         boolean haveError = false;
         Row headRow = sheet.getRow(0);
+        Set<Integer> errorIndexCandidate = new HashSet<>();
+        Map<Integer,Integer> listErrorTable = new HashMap<>();
+        BaseUploadCheck uploadCheck = JokerConfigurationDelegate.uploadCheck(checkId);
         // 设置表头
         for (int i = 0; i < headRow.getLastCellNum(); i++) {
             Cell cell = headRow.getCell(i);
@@ -144,19 +162,36 @@ public class ExcelExportExecutor {
                     break;
                 }
             }
+            // 如果成功转换，最后还需要校验
             if (!cellError) {
                 T rowData = jsonObject.toJavaObject(clazz);
-                if (Checkable.class.isAssignableFrom(clazz)) {
+                if (rowData instanceof Checkable) {
                     try {
-                        ((Checkable) rowData).check();
+                        ((Checkable<?>) rowData).check();
+                        listErrorTable.put(data.size(),rowIndex);
+                        data.add(rowData);
                     } catch (ConvertException ignore) {
-                        continue;
+                        errorIndexCandidate.add(rowIndex);
                     }
                 }
-                data.add(rowData);
             }
         }
-        JokerConfigurationDelegate.postUploadAnalysis(data,errorRows,method);
+        if (uploadCheck != null) {
+            uploadCheck.register(data);
+            Iterator<T> iterator = data.iterator();
+            int itIndex = 0;
+            while (iterator.hasNext()) {
+                T next = iterator.next();
+                try {
+                    uploadCheck.uploadCheck(next);
+                } catch (Exception e) {
+                    errorIndexCandidate.add(listErrorTable.get(itIndex));
+                    iterator.remove();
+                }
+                itIndex++;
+            }
+        }
+        errorIndexCandidate.forEach((ei)->errorRows.add(sheet.getRow(ei)));
         if (haveError) {
             JokerCallBackCombination.uploadFinish(data);
         } else {

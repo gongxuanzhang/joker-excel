@@ -108,7 +108,7 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@Upload List<User> users, @ErrorRows List<Row> rows,
+    public Map<String, Object> upload(@Upload("123") List<User> users, @ErrorRows List<Row> rows,
                                       @ErrorRows Workbook workbook) throws IOException {
         Sheet sheetAt = workbook.getSheetAt(0);
         int lastRowNum = sheetAt.getLastRowNum();
