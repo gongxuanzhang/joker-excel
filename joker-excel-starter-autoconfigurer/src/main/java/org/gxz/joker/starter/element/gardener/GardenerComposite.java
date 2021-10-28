@@ -61,6 +61,10 @@ public class GardenerComposite implements Gardener, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, Gardener> beansOfType = applicationContext.getBeansOfType(Gardener.class);
-        beansOfType.forEach((k,v)->addResolver(v));
+        for (Gardener value : beansOfType.values()) {
+            if(!(value instanceof GardenerComposite)){
+                addResolver(value);
+            }
+        }
     }
 }
