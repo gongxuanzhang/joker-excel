@@ -7,6 +7,7 @@ import org.gxz.joker.starter.config.build.ConcatSupplier;
 import org.gxz.joker.starter.config.build.HeadBuilder;
 import org.gxz.joker.starter.config.build.JokerBuilder;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class JokerConfigurationDelegate {
 
     private static void registerNullCheck() {
         processors = new ArrayList<>();
-        processors.add((data, row) -> {});
+        processors.add((data, row,method) -> {});
     }
 
     private static void registerPrefix(HeadBuilder head) {
@@ -91,8 +92,8 @@ public class JokerConfigurationDelegate {
         return suffixSupplier.apply(description);
     }
 
-    public static void postUploadAnalysis(List<?> data, List<Row> rows) {
-        processors.forEach((p) -> p.postProcessAfterUploadAnalysis(data, rows));
+    public static void postUploadAnalysis(List<?> data, List<Row> rows, Method method) {
+        processors.forEach((p) -> p.postProcessAfterUploadAnalysis(data, rows,method));
     }
 
 

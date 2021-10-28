@@ -25,7 +25,7 @@ public class UploadAnalysis {
         Assert.state(fileName.endsWith(".xlsx"), "文件格式错误 请下载数据修改后上传");
         try (InputStream fileInputStream = file.getInputStream()) {
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
-            return ExcelExportExecutor.readWorkBook(xssfWorkbook, genericClass);
+            return ExcelExportExecutor.readWorkBook(xssfWorkbook, genericClass,parameter.getMethod());
         } catch (IOException e) {
             e.printStackTrace();
         }

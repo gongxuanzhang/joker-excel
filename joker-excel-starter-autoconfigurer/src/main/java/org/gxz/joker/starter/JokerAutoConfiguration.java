@@ -3,7 +3,6 @@ package org.gxz.joker.starter;
 
 import org.gxz.joker.starter.component.ErrorRowsArgumentProcessor;
 import org.gxz.joker.starter.component.ExportAspect;
-import org.gxz.joker.starter.component.JokerBeanDefinitionRegistryPostProcessor;
 import org.gxz.joker.starter.component.JokerBeanPostProcessor;
 import org.gxz.joker.starter.component.UploadMethodArgumentProcessor;
 import org.gxz.joker.starter.component.UploadAnalysis;
@@ -22,7 +21,6 @@ import java.util.List;
 @Import({JokerBeanPostProcessor.class,
         ExportAspect.class,
         UploadAnalysis.class,
-        JokerBeanDefinitionRegistryPostProcessor.class,
         UploadMethodArgumentProcessor.class
 
 })

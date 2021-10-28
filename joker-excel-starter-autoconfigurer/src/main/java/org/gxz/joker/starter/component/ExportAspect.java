@@ -41,11 +41,9 @@ public class ExportAspect implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    @Autowired(required = false)
-    private JokerGlobalConfig jokerGlobalConfig;
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
-    public Object logJournal(ProceedingJoinPoint pjp) throws Throwable {
+    public Object exportAspect(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature sig = (MethodSignature) pjp.getSignature();
         Class<?> returnType = sig.getReturnType();
         if (!returnType.isAssignableFrom(List.class)) {

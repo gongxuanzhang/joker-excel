@@ -21,6 +21,7 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -86,18 +87,18 @@ public class ExcelExportExecutor {
     }
 
 
-    public static <T> AnalysisDataHolder<T> readWorkBook(XSSFWorkbook workbook, Class<T> clazz) {
+    public static <T> AnalysisDataHolder<T> readWorkBook(Workbook workbook, Class<T> clazz,Method method) {
         ExcelInfo excelInfo = analysisExportRule(clazz, null);
         List<Rule> rules = excelInfo.getRules();
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        return analysis(sheet, rules, clazz);
+        Sheet sheet = workbook.getSheetAt(0);
+        return analysis(sheet, rules, clazz,method);
     }
 
 
     /**
      * 这个方法在列改变顺序的情况下仍然能正确解析
      **/
-    private static <T> AnalysisDataHolder<T> analysis(XSSFSheet sheet, List<Rule> rules, Class<T> clazz) {
+    private static <T> AnalysisDataHolder<T> analysis(Sheet sheet, List<Rule> rules, Class<T> clazz,Method method) {
         List<T> data = new ArrayList<>();
         List<Row> errorRows = new ArrayList<>();
         Map<String, Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
@@ -155,7 +156,7 @@ public class ExcelExportExecutor {
                 data.add(rowData);
             }
         }
-        JokerConfigurationDelegate.postUploadAnalysis(data,errorRows);
+        JokerConfigurationDelegate.postUploadAnalysis(data,errorRows,method);
         if (haveError) {
             JokerCallBackCombination.uploadFinish(data);
         } else {

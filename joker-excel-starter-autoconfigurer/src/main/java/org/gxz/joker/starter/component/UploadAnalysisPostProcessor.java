@@ -2,6 +2,7 @@ package org.gxz.joker.starter.component;
 
 import org.apache.poi.ss.usermodel.Row;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 @FunctionalInterface
 public interface UploadAnalysisPostProcessor {
 
-    void postProcessAfterUploadAnalysis(List<?> data, List<Row> rows);
+    void postProcessAfterUploadAnalysis(List<?> data, List<Row> rows, Method method);
 
 
 }
