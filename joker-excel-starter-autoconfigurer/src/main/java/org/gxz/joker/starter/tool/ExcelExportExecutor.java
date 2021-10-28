@@ -5,6 +5,7 @@ import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.component.AnalysisDataHolder;
 import org.gxz.joker.starter.config.JokerCallBackCombination;
+import org.gxz.joker.starter.config.JokerConfigurationDelegate;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
 import org.gxz.joker.starter.convert.UniqueConverter;
@@ -153,8 +154,8 @@ public class ExcelExportExecutor {
                 }
                 data.add(rowData);
             }
-
         }
+        JokerConfigurationDelegate.postUploadAnalysis(data,errorRows);
         if (haveError) {
             JokerCallBackCombination.uploadFinish(data);
         } else {

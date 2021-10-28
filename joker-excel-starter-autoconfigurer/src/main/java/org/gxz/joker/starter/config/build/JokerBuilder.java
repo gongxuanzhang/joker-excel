@@ -19,6 +19,8 @@ public class JokerBuilder {
     CheckBuilder checkBuilder;
 
 
+
+
     public JokerUploadBuilder upload() {
         if (this.jokerUploadBuilder == null) {
             this.jokerUploadBuilder = new JokerUploadBuilder(this);
@@ -46,8 +48,6 @@ public class JokerBuilder {
         }
         return this.checkBuilder;
     }
-
-
 
 
 }

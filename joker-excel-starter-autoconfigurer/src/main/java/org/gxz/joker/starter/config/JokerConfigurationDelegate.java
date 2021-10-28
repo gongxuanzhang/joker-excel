@@ -1,8 +1,14 @@
 package org.gxz.joker.starter.config;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.gxz.joker.starter.component.UploadAnalysisPostProcessor;
+import org.gxz.joker.starter.config.build.CheckBuilder;
 import org.gxz.joker.starter.config.build.ConcatSupplier;
 import org.gxz.joker.starter.config.build.HeadBuilder;
 import org.gxz.joker.starter.config.build.JokerBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -11,6 +17,7 @@ public class JokerConfigurationDelegate {
 
     private static ConcatSupplier suffixSupplier;
     private static ConcatSupplier prefixSupplier;
+    private static List<UploadAnalysisPostProcessor> processors;
 
     private JokerConfigurationDelegate() {
 
@@ -18,11 +25,25 @@ public class JokerConfigurationDelegate {
 
     public static void registerBuild(JokerBuilder jokerBuilder) {
         HeadBuilder head = jokerBuilder.head();
-        if (head != null) {
-            registerPrefix(head);
-            registerSuffix(head);
-        }
+        registerPrefix(head);
+        registerSuffix(head);
+        CheckBuilder check = jokerBuilder.check();
+        registerCheck(check);
 
+    }
+
+
+    private static void registerCheck(CheckBuilder checkBuilder) {
+        if (checkBuilder == null) {
+            registerNullCheck();
+            return;
+        }
+        processors = checkBuilder.getProcessors();
+    }
+
+    private static void registerNullCheck() {
+        processors = new ArrayList<>();
+        processors.add((data, row) -> {});
     }
 
     private static void registerPrefix(HeadBuilder head) {
@@ -68,6 +89,10 @@ public class JokerConfigurationDelegate {
 
     public static String getSuffix(ExcelFieldDescription description) {
         return suffixSupplier.apply(description);
+    }
+
+    public static void postUploadAnalysis(List<?> data, List<Row> rows) {
+        processors.forEach((p) -> p.postProcessAfterUploadAnalysis(data, rows));
     }
 
 
