@@ -16,6 +16,6 @@ public class RequireCheck implements RuleCheck{
     }
 
     public boolean isNull(Object value){
-        return value == null || StringUtils.hasText(value.toString());
+        return value == null || StringUtils.isEmpty(value.toString());
     }
 }
