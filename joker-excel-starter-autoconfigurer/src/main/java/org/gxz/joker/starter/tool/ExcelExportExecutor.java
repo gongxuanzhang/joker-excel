@@ -3,6 +3,7 @@ package org.gxz.joker.starter.tool;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -153,6 +154,8 @@ public class ExcelExportExecutor {
                     } catch (ConvertException ignore) {
                         errorIndexCandidate.add(rowIndex);
                     }
+                }else{
+                    data.add(rowData);
                 }
             }
         }
