@@ -155,6 +155,7 @@ public class ExcelExportExecutor {
                         errorIndexCandidate.add(rowIndex);
                     }
                 }else{
+                    listErrorTable.put(data.size(),rowIndex);
                     data.add(rowData);
                 }
             }
