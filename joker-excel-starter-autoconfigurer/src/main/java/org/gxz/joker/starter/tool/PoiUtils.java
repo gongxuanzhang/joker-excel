@@ -17,7 +17,7 @@ public class PoiUtils {
             Cell sourceCell = source.getCell(i);
             if(sourceCell != null){
                 Cell targetCell = target.createCell(i);
-                Object cellValue = getCellValue(targetCell);
+                Object cellValue = getCellValue(sourceCell);
                 CellType cellTypeEnum = sourceCell.getCellTypeEnum();
                 switch (cellTypeEnum) {
                     case STRING:
