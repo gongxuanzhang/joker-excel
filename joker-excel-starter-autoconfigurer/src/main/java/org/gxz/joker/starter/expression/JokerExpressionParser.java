@@ -11,6 +11,24 @@ import org.springframework.lang.Nullable;
  **/
 public class JokerExpressionParser extends SpelExpressionParser {
 
+    private static ParserContext parserContext = new ParserContext() {
+        @Override
+        public boolean isTemplate() {
+            return true;
+        }
+
+        @Override
+        public String getExpressionPrefix() {
+            return "${";
+        }
+
+        @Override
+        public String getExpressionSuffix() {
+            return "}";
+        }
+    };
+
+
     @Override
     protected SpelExpression doParseExpression(String expressionString, @Nullable ParserContext context) throws ParseException {
         if(expressionString.contains("|")){
