@@ -30,7 +30,11 @@ public class RowUtils {
 
     public static void appendCell(Row row, String value){
         short lastCellNum = row.getLastCellNum();
-        Cell cell = row.createCell(lastCellNum);
+        appendCell(row,value,lastCellNum);
+    }
+
+    public static void appendCell(Row row, String value,int cellIndex){
+        Cell cell = row.createCell(cellIndex);
         cell.setCellValue(value);
     }
 }

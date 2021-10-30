@@ -96,7 +96,7 @@ public class ErrorRowsArgumentProcessor implements HandlerMethodArgumentResolver
             Row row = errorSheet.createRow(i + 1);
             ErrorRow holder = errorRows.get(i);
             RowUtils.copyRow(holder.getRow(), row);
-            RowUtils.appendCell(row,holder.getErrorMessage());
+            RowUtils.appendCell(row,holder.getErrorMessage(),errorSheetHead.getLastCellNum());
         }
         return workbook;
     }
