@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
+import org.gxz.joker.starter.service.ErrorRow;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AnalysisDataHolder<T> {
     private List<T> data;
-    private List<Row> errorRows;
+    private List<ErrorRow> errorRows;
     private Row head;
 
     public AnalysisDataHolder(List<T> data) {

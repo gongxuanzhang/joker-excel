@@ -19,9 +19,17 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.gxz.joker.starter.wrapper.ExportSheetWrapper;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.expression.StandardBeanExpressionResolver;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,9 +44,10 @@ import java.util.Objects;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @Aspect
-public class ExportAspect implements ApplicationContextAware {
+public class ExportAspect implements ApplicationContextAware , BeanFactoryAware {
 
     private ApplicationContext applicationContext;
+
 
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
@@ -81,5 +90,14 @@ public class ExportAspect implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        ExpressionParser parpser = new SpelExpressionParser();
+        // Expression expression = parpser.parseExpression("${data|data}");
+        // expression.getValue();
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        StandardBeanExpressionResolver standardBeanExpressionResolver =
+                new StandardBeanExpressionResolver(((ConfigurableListableBeanFactory) beanFactory).getBeanClassLoader());
     }
 }

@@ -4,6 +4,7 @@ package org.gxz.joker.starter;
 import org.gxz.joker.starter.component.ErrorRowsArgumentProcessor;
 import org.gxz.joker.starter.component.ExportAspect;
 import org.gxz.joker.starter.component.JokerBeanPostProcessor;
+import org.gxz.joker.starter.component.JokerSpelFunction;
 import org.gxz.joker.starter.component.UploadMethodArgumentProcessor;
 import org.gxz.joker.starter.component.UploadAnalysis;
 import org.gxz.joker.starter.config.JokerConfigurationDelegate;
@@ -12,9 +13,11 @@ import org.gxz.joker.starter.element.check.RequireCheck;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.element.gardener.SelectGardener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -27,10 +30,12 @@ import java.util.List;
 @Import({JokerBeanPostProcessor.class,
         ExportAspect.class,
         UploadAnalysis.class,
-        UploadMethodArgumentProcessor.class
+        UploadMethodArgumentProcessor.class,
+        JokerSpelFunction.class
+
 })
 @Configuration
-public class JokerAutoConfiguration implements WebMvcConfigurer {
+public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAware {
 
 
 
@@ -59,4 +64,8 @@ public class JokerAutoConfiguration implements WebMvcConfigurer {
         resolvers.add(new ErrorRowsArgumentProcessor());
     }
 
+    @Override
+    public void setEnvironment(Environment environment) {
+
+    }
 }

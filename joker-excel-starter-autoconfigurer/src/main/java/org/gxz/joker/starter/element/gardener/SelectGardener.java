@@ -5,7 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.gxz.joker.starter.tool.Rule;
+import org.gxz.joker.starter.service.Rule;
 
 import java.util.List;
 

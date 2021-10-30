@@ -1,5 +1,7 @@
 package org.gxz.joker.starter.annotation;
 
+import org.gxz.joker.starter.element.DefaultValueConstant;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,4 +16,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ErrorRows {
+
+    String head() default DefaultValueConstant.ERROR_MESSAGE;
 }

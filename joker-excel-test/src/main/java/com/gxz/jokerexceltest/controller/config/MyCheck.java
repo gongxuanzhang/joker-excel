@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
  **/
 public class MyCheck extends BaseUploadCheck {
 
-    @Autowired
-    private ExportAspect jokerAutoConfiguration;
 
     @Override
     public String getId() {

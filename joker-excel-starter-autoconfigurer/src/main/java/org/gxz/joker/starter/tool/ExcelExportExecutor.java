@@ -3,17 +3,10 @@ package org.gxz.joker.starter.tool;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
-import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.gxz.joker.starter.annotation.ExcelData;
@@ -28,7 +21,10 @@ import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.element.FieldHolder;
 import org.gxz.joker.starter.exception.ConvertException;
 import org.gxz.joker.starter.exception.ExcelException;
+import org.gxz.joker.starter.service.ErrorRow;
+import org.gxz.joker.starter.service.Rule;
 
+import javax.crypto.MacSpi;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +70,7 @@ public class ExcelExportExecutor {
                 // TODO: 2021/10/25  这里是导出回调
             }
         }
-        JokerConfigurationDelegate.clip(sheet,rules);
+        JokerConfigurationDelegate.clip(sheet, rules);
         return excel;
     }
 
@@ -92,13 +88,13 @@ public class ExcelExportExecutor {
      **/
     private static <T> AnalysisDataHolder<T> analysis(Sheet sheet, List<Rule> rules, Class<T> clazz, String checkId) {
         List<T> data = new ArrayList<>();
-        List<Row> errorRows = new ArrayList<>();
+        List<ErrorRow> errorRows = new ArrayList<>();
         Map<String, Rule> ruleMap = rules.stream().collect(Collectors.toMap(Rule::getCellName, Function.identity()));
         Map<Integer, Rule> orderRule = new HashMap<>(16);
         boolean haveError = false;
         Row headRow = sheet.getRow(0);
-        Set<Integer> errorIndexCandidate = new HashSet<>();
-        Map<Integer,Integer> listErrorTable = new HashMap<>();
+        Map<Integer,String> errorRowCandidate = new HashMap<>();
+        Map<Integer, Integer> listErrorTable = new HashMap<>();
         BaseUploadCheck uploadCheck = JokerConfigurationDelegate.uploadCheck(checkId);
         // 设置表头
         for (int i = 0; i < headRow.getLastCellNum(); i++) {
@@ -111,7 +107,7 @@ public class ExcelExportExecutor {
         // 设置内容
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             Row row = sheet.getRow(rowIndex);
-            if(row == null){
+            if (row == null) {
                 continue;
             }
             JSONObject jsonObject = new JSONObject();
@@ -125,20 +121,20 @@ public class ExcelExportExecutor {
                 try {
                     Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
                             cellRule.getFieldType());
-                    JokerConfigurationDelegate.check(cellRule,value);
+                    JokerConfigurationDelegate.check(cellRule, value);
                     jsonObject.put(cellRule.getFieldName(), value);
                 } catch (ExcelException e) {
-                    errorRows.add(row);
+                    errorRows.add(new ErrorRow(row,e.getMessage()));
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, e);
                     break;
                 } catch (Exception e) {
-                    errorRows.add(row);
+                    errorRows.add(new ErrorRow(row,e.getMessage()));
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, new ExcelException(rowIndex + 1,
-                            cellRule.errorMessage, cellIndex + 1,
+                            cellRule.getErrorMessage(), cellIndex + 1,
                             cell.getStringCellValue()));
                     break;
                 }
@@ -149,15 +145,13 @@ public class ExcelExportExecutor {
                 if (rowData instanceof Checkable) {
                     try {
                         ((Checkable<?>) rowData).check();
-                        listErrorTable.put(data.size(),rowIndex);
-                        data.add(rowData);
-                    } catch (ConvertException ignore) {
-                        errorIndexCandidate.add(rowIndex);
+                    } catch (ConvertException e) {
+                        errorRowCandidate.put(rowIndex,e.getMessage());
+                        continue;
                     }
-                }else{
-                    listErrorTable.put(data.size(),rowIndex);
-                    data.add(rowData);
                 }
+                listErrorTable.put(data.size(), rowIndex);
+                data.add(rowData);
             }
         }
         if (uploadCheck != null) {
@@ -169,13 +163,16 @@ public class ExcelExportExecutor {
                 try {
                     uploadCheck.uploadCheck(next);
                 } catch (Exception e) {
-                    errorIndexCandidate.add(listErrorTable.get(itIndex));
+                    errorRowCandidate.put(listErrorTable.get(itIndex),e.getMessage());
                     iterator.remove();
                 }
                 itIndex++;
             }
         }
-        errorIndexCandidate.forEach((ei)->errorRows.add(sheet.getRow(ei)));
+        errorRowCandidate.forEach((index,message) -> {
+            Row err = sheet.getRow(index);
+            errorRows.add(new ErrorRow(err, message));
+        });
         if (haveError) {
             JokerCallBackCombination.uploadFinish(data);
         } else {

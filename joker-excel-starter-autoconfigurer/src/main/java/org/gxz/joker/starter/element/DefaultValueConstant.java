@@ -16,4 +16,6 @@ public interface DefaultValueConstant {
     String EMPTY = "";
 
     boolean ALL_FIELD = true;
+
+    String ERROR_MESSAGE = "errorMessage";
 }

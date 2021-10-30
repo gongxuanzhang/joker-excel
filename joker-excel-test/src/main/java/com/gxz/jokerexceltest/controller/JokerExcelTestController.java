@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.gxz.joker.starter.annotation.ErrorRows;
 import org.gxz.joker.starter.annotation.Export;
 import org.gxz.joker.starter.annotation.Upload;
+import org.gxz.joker.starter.service.ErrorRow;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
@@ -108,14 +109,18 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@Upload("123") List<User> users, @ErrorRows List<Row> rows,
+    public Map<String, Object> upload(@Upload("123") List<User> users,
+                                      @ErrorRows List<Row> rows,
+                                      @ErrorRows List<ErrorRow> errorRows,
+                                      @ErrorRows List<String> errorMessage,
+                                      @ErrorRows Object errorObject,
                                       @ErrorRows Workbook workbook) throws IOException {
         Sheet sheetAt = workbook.getSheetAt(0);
         int lastRowNum = sheetAt.getLastRowNum();
         workbook.write(new FileOutputStream("错误.xlsx"));
-        for (User user : users) {
-            System.out.println(user);
-        }
+//        for (User user : users) {
+//            System.out.println(user);
+//        }
         Map<String, Object> result = new HashMap<>();
         result.put("data", users);
         result.put("code", 0);

@@ -27,4 +27,10 @@ public class RowUtils {
         }
 
     }
+
+    public static void appendCell(Row row, String value){
+        short lastCellNum = row.getLastCellNum();
+        Cell cell = row.createCell(lastCellNum);
+        cell.setCellValue(value);
+    }
 }
