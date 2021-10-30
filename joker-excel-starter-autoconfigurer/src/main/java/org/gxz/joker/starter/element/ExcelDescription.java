@@ -2,6 +2,7 @@ package org.gxz.joker.starter.element;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.tool.FuseUtils;
 import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.util.StringUtils;
@@ -18,10 +19,11 @@ import java.util.Arrays;
 @Getter
 public class ExcelDescription {
 
-    private final ConfigurablePropertyResolver springResolver;
 
-    public ExcelDescription(ConfigurablePropertyResolver environmentResolver) {
-        this.springResolver = environmentResolver;
+    private final ConcatPropertyResolver resolver;
+
+    public ExcelDescription(ConcatPropertyResolver resolver) {
+        this.resolver = resolver;
     }
 
 
@@ -50,7 +52,7 @@ public class ExcelDescription {
         if (!excelName.endsWith(EXCEL_SUFFIX)) {
             excelName += EXCEL_SUFFIX;
         }
-        excelName = springResolver.resolvePlaceholders(excelName);
+        excelName = resolver.resolvePlaceholders(excelName);
     }
 
 

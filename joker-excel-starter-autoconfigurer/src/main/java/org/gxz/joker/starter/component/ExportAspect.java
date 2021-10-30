@@ -8,6 +8,8 @@ import org.gxz.joker.starter.annotation.Export;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.exception.ExportReturnException;
+import org.gxz.joker.starter.expression.ConcatPropertyResolver;
+import org.gxz.joker.starter.expression.JokerExpressionParser;
 import org.gxz.joker.starter.tool.ExcelExportExecutor;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.wrapper.BeanClassWrapper;
@@ -54,7 +56,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -66,6 +70,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private ConfigurablePropertyResolver environmentResolver;
 
+    private Map<Method, ExpressionParser> methodResolvers = new ConcurrentHashMap<>();
 
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
@@ -96,7 +101,9 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     private ExcelDescription analysisExcelDesc(ProceedingJoinPoint pjp, Class<?> beanType) {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Export export = method.getAnnotation(Export.class);
-        ExcelDescription excelDescription = new ExcelDescription(environmentResolver);
+        ExpressionParser methodParser = methodResolvers.computeIfAbsent(method, k -> new JokerExpressionParser());
+        ConcatPropertyResolver resolver = new ConcatPropertyResolver(this.environmentResolver, methodParser);
+        ExcelDescription excelDescription = new ExcelDescription(resolver);
         excelDescription.setBeanType(beanType);
         excelDescription.fuseExcelName(new ExportNameWrapper(method, beanType, pjp.getArgs(), applicationContext));
         excelDescription.fuseSheetName(new ExportSheetWrapper(export));
@@ -111,7 +118,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     }
 
     public static void main(String[] args) {
-        ExpressionParser parser = new SpelExpressionParser();
+        ExpressionParser parser = new JokerExpressionParser();
         ParserContext parserContext = new ParserContext() {
             @Override
             public boolean isTemplate() {
@@ -128,7 +135,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
                 return "}";
             }
         };
-        String template = "${Hello}#{'World!'}";
+        String template = "${asdf}";
         Expression expression = parser.parseExpression(template, parserContext);
         System.out.println(expression.getValue());
 
@@ -144,7 +151,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
         System.out.println(lesson);
 
         //StandardEvaluationContext构造器传入root对象，可以通过#root来访问root对象
-        context = new StandardEvaluationContext(new String[]{"a","b"});
+        context = new StandardEvaluationContext(new String[]{"a", "b"});
         Object value = parser.parseExpression("#root").getValue(context);
         System.out.println(value);
         String rootObj = parser.parseExpression("#root").getValue(context, String.class);
@@ -157,9 +164,9 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     }
 
 
-    @SneakyThrows
     @Override
     public void setEnvironment(Environment environment) {
-        this.environmentResolver = (ConfigurablePropertyResolver)environment;
+        this.environmentResolver = (ConfigurablePropertyResolver) environment;
+        environmentResolver.resolvePlaceholders("${asdf}");
     }
 }
