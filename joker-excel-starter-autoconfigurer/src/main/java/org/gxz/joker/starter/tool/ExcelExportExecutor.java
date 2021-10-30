@@ -93,7 +93,7 @@ public class ExcelExportExecutor {
         Map<Integer, Rule> orderRule = new HashMap<>(16);
         boolean haveError = false;
         Row headRow = sheet.getRow(0);
-        Map<Integer,String> errorRowCandidate = new HashMap<>();
+        Map<Integer, String> errorRowCandidate = new HashMap<>();
         Map<Integer, Integer> listErrorTable = new HashMap<>();
         BaseUploadCheck uploadCheck = JokerConfigurationDelegate.uploadCheck(checkId);
         // 设置表头
@@ -119,18 +119,18 @@ public class ExcelExportExecutor {
                 }
                 Cell cell = row.getCell(cellIndex);
                 try {
-                    Object value = cellRule.getConverter().reconvert(cell.getStringCellValue(),
+                    Object value = cell == null ? null : cellRule.getConverter().reconvert(cell.getStringCellValue(),
                             cellRule.getFieldType());
                     JokerConfigurationDelegate.check(cellRule, value);
                     jsonObject.put(cellRule.getFieldName(), value);
                 } catch (ExcelException e) {
-                    errorRows.add(new ErrorRow(row,e.getMessage()));
+                    errorRows.add(new ErrorRow(row, e.getMessage()));
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, e);
                     break;
                 } catch (Exception e) {
-                    errorRows.add(new ErrorRow(row,e.getMessage()));
+                    errorRows.add(new ErrorRow(row, e.getMessage()));
                     cellError = true;
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, new ExcelException(rowIndex + 1,
@@ -146,7 +146,7 @@ public class ExcelExportExecutor {
                     try {
                         ((Checkable<?>) rowData).check();
                     } catch (ConvertException e) {
-                        errorRowCandidate.put(rowIndex,e.getMessage());
+                        errorRowCandidate.put(rowIndex, e.getMessage());
                         continue;
                     }
                 }
@@ -163,13 +163,13 @@ public class ExcelExportExecutor {
                 try {
                     uploadCheck.uploadCheck(next);
                 } catch (Exception e) {
-                    errorRowCandidate.put(listErrorTable.get(itIndex),e.getMessage());
+                    errorRowCandidate.put(listErrorTable.get(itIndex), e.getMessage());
                     iterator.remove();
                 }
                 itIndex++;
             }
         }
-        errorRowCandidate.forEach((index,message) -> {
+        errorRowCandidate.forEach((index, message) -> {
             Row err = sheet.getRow(index);
             errorRows.add(new ErrorRow(err, message));
         });
