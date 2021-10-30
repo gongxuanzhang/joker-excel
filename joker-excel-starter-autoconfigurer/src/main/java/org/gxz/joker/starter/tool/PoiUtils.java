@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public class RowUtils {
+public class PoiUtils {
 
     public static void copyRow(Row source, Row target) {
         for (int i = 0; i < (int) source.getLastCellNum(); i++) {
@@ -37,4 +37,24 @@ public class RowUtils {
         Cell cell = row.createCell(cellIndex);
         cell.setCellValue(value);
     }
+
+    public static Object getCellValue(Cell cell){
+        if(cell == null){
+            return null;
+        }
+        CellType cellTypeEnum = cell.getCellTypeEnum();
+        switch (cellTypeEnum){
+            case STRING:
+                return cell.getStringCellValue();
+            case BOOLEAN:
+                return cell.getBooleanCellValue();
+            case FORMULA:
+                return cell.getCellFormula();
+            case NUMERIC:
+                return cell.getNumericCellValue();
+            default:
+                return null;
+        }
+    }
+
 }

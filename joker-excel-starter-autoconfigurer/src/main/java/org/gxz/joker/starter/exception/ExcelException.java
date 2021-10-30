@@ -25,9 +25,9 @@ public class ExcelException extends JokerRuntimeException {
     /**
      * 解析错误的单元格内容
      **/
-    private String cellValue;
+    private Object cellValue;
 
-    public ExcelException(int rowCount, String errorMessage, int colCount, String cellValue) {
+    public ExcelException(int rowCount, String errorMessage, int colCount, Object cellValue) {
         super(errorMessageAnalysis(errorMessage, rowCount, colCount, cellValue));
         this.rowCount = rowCount;
         this.colCount = colCount;
@@ -41,10 +41,14 @@ public class ExcelException extends JokerRuntimeException {
 
     private static final String DEFAULT_ERROR_MESSAGE = "第r%行 第c%列 [v%] 解析错误";
 
-    private static String errorMessageAnalysis(String errorMessage, int rowCount, int colCount, String cellValue) {
-        if (StringUtils.isEmpty(errorMessage)) {
-            return errorMessageAnalysis(DEFAULT_ERROR_MESSAGE, rowCount, colCount, cellValue);
+    private static String errorMessageAnalysis(String errorMessage, int rowCount, int colCount, Object cellValue) {
+        String valueString = "";
+        if(cellValue != null){
+            valueString = cellValue.toString();
         }
-        return errorMessage.replaceAll("r%", rowCount + "").replaceAll("c%", colCount + "").replaceAll("v%", cellValue);
+        if (StringUtils.isEmpty(errorMessage)) {
+            return errorMessageAnalysis(DEFAULT_ERROR_MESSAGE, rowCount, colCount, valueString);
+        }
+        return errorMessage.replaceAll("r%", rowCount + "").replaceAll("c%", colCount + "").replaceAll("v%", valueString);
     }
 }

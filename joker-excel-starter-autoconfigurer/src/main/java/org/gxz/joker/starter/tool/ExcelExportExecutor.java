@@ -135,7 +135,7 @@ public class ExcelExportExecutor {
                     haveError = true;
                     JokerCallBackCombination.uploadRowError(row, new ExcelException(rowIndex + 1,
                             cellRule.getErrorMessage(), cellIndex + 1,
-                            cell.getStringCellValue()));
+                            PoiUtils.getCellValue(cell)));
                     break;
                 }
             }
