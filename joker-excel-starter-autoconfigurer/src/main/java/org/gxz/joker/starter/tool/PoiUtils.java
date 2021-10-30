@@ -59,7 +59,8 @@ public class PoiUtils {
             case FORMULA:
                 return cell.getCellFormula();
             case NUMERIC:
-                return cell.getNumericCellValue();
+                cell.setCellType(CellType.STRING);
+                return cell.getStringCellValue();
             case BLANK:
                 return "";
             default:
