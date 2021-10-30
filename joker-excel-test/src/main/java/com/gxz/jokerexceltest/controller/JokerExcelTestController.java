@@ -76,7 +76,7 @@ public class JokerExcelTestController {
     }
 
 
-    @Export(value = "正常导出", nameFactory = MyNameFactory.class)
+    @Export(value = "正常导出${JAVA_HOME}")
     @GetMapping("/export")
     public List<User> export() {
         return data();

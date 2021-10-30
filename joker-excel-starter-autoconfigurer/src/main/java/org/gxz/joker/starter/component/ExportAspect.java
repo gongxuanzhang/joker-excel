@@ -1,5 +1,6 @@
 package org.gxz.joker.starter.component;
 
+import lombok.SneakyThrows;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.iterators.ArrayListIterator;
 import org.aspectj.lang.Signature;
@@ -23,20 +24,35 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanExpressionContext;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.expression.StandardBeanExpressionResolver;
+import org.springframework.core.env.ConfigurablePropertyResolver;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.PropertySources;
+import org.springframework.core.env.PropertySourcesPropertyResolver;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.support.StandardServletEnvironment;
 
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,9 +60,11 @@ import java.util.Objects;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @Aspect
-public class ExportAspect implements ApplicationContextAware , BeanFactoryAware {
+public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private ApplicationContext applicationContext;
+
+    private ConfigurablePropertyResolver environmentResolver;
 
 
 
@@ -78,7 +96,7 @@ public class ExportAspect implements ApplicationContextAware , BeanFactoryAware 
     private ExcelDescription analysisExcelDesc(ProceedingJoinPoint pjp, Class<?> beanType) {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Export export = method.getAnnotation(Export.class);
-        ExcelDescription excelDescription = new ExcelDescription();
+        ExcelDescription excelDescription = new ExcelDescription(environmentResolver);
         excelDescription.setBeanType(beanType);
         excelDescription.fuseExcelName(new ExportNameWrapper(method, beanType, pjp.getArgs(), applicationContext));
         excelDescription.fuseSheetName(new ExportSheetWrapper(export));
@@ -90,14 +108,58 @@ public class ExportAspect implements ApplicationContextAware , BeanFactoryAware 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        ExpressionParser parpser = new SpelExpressionParser();
-        // Expression expression = parpser.parseExpression("${data|data}");
-        // expression.getValue();
     }
 
+    public static void main(String[] args) {
+        ExpressionParser parser = new SpelExpressionParser();
+        ParserContext parserContext = new ParserContext() {
+            @Override
+            public boolean isTemplate() {
+                return true;
+            }
+
+            @Override
+            public String getExpressionPrefix() {
+                return "${";
+            }
+
+            @Override
+            public String getExpressionSuffix() {
+                return "}";
+            }
+        };
+        String template = "${Hello}#{'World!'}";
+        Expression expression = parser.parseExpression(template, parserContext);
+        System.out.println(expression.getValue());
+
+
+        EvaluationContext context = new StandardEvaluationContext();
+        context.setVariable("name", "路人甲java");
+        context.setVariable("lesson", "Spring系列");
+
+        //获取name变量，lesson变量
+        String name = parser.parseExpression("#name").getValue(context, String.class);
+        System.out.println(name);
+        String lesson = parser.parseExpression("#lesson").getValue(context, String.class);
+        System.out.println(lesson);
+
+        //StandardEvaluationContext构造器传入root对象，可以通过#root来访问root对象
+        context = new StandardEvaluationContext(new String[]{"a","b"});
+        Object value = parser.parseExpression("#root").getValue(context);
+        System.out.println(value);
+        String rootObj = parser.parseExpression("#root").getValue(context, String.class);
+        System.out.println(rootObj);
+
+        //#this用来访问当前上线文中的对象
+        String thisObj = parser.parseExpression("#this").getValue(context, String.class);
+        System.out.println(thisObj);
+
+    }
+
+
+    @SneakyThrows
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        StandardBeanExpressionResolver standardBeanExpressionResolver =
-                new StandardBeanExpressionResolver(((ConfigurableListableBeanFactory) beanFactory).getBeanClassLoader());
+    public void setEnvironment(Environment environment) {
+        this.environmentResolver = (ConfigurablePropertyResolver)environment;
     }
 }

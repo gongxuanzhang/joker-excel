@@ -3,6 +3,7 @@ package org.gxz.joker.starter.element;
 import lombok.Getter;
 import lombok.Setter;
 import org.gxz.joker.starter.tool.FuseUtils;
+import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -16,6 +17,13 @@ import java.util.Arrays;
 
 @Getter
 public class ExcelDescription {
+
+    private final ConfigurablePropertyResolver springResolver;
+
+    public ExcelDescription(ConfigurablePropertyResolver environmentResolver) {
+        this.springResolver = environmentResolver;
+    }
+
 
     private String excelName;
 
@@ -33,7 +41,7 @@ public class ExcelDescription {
      **/
     public void fuseExcelName(ExcelNameOverlayable... element) {
         if (excelName != null) {
-            throw new IllegalStateException("method fuseExcelName only use once");
+            throw new IllegalStateException("method fuseExcelName only invoke once");
         }
         this.excelName = FuseUtils.fuse(element);
         if (!StringUtils.hasText(excelName)) {
@@ -42,6 +50,7 @@ public class ExcelDescription {
         if (!excelName.endsWith(EXCEL_SUFFIX)) {
             excelName += EXCEL_SUFFIX;
         }
+        excelName = springResolver.resolvePlaceholders(excelName);
     }
 
 
@@ -50,7 +59,7 @@ public class ExcelDescription {
      **/
     public void fuseSheetName(SheetNameOverlayable... element) {
         if (sheetName != null) {
-            throw new IllegalStateException("method fuseSheetName only use once");
+            throw new IllegalStateException("method fuseSheetName only invoke once");
         }
         this.sheetName = FuseUtils.fuse(element);
     }
@@ -61,7 +70,7 @@ public class ExcelDescription {
      **/
     public void fuseField(FieldOverlayable... element) {
         if (fieldHolder != null) {
-            throw new IllegalStateException("method fuseField only use once");
+            throw new IllegalStateException("method fuseField only invoke once");
         }
         Arrays.sort(element);
         for (FieldOverlayable fieldOverlayable : element) {

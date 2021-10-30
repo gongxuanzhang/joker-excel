@@ -118,11 +118,12 @@ public class ExcelExportExecutor {
                     continue;
                 }
                 Cell cell = row.getCell(cellIndex);
+                Object cellValue = PoiUtils.getCellValue(cell);
                 try {
-                    Object value = cell == null ? null : cellRule.getConverter().reconvert(cell.getStringCellValue(),
+                    Object filedValue = cellValue==null ? null : cellRule.getConverter().reconvert(cellValue.toString(),
                             cellRule.getFieldType());
-                    JokerConfigurationDelegate.check(cellRule, value);
-                    jsonObject.put(cellRule.getFieldName(), value);
+                    JokerConfigurationDelegate.check(cellRule, filedValue);
+                    jsonObject.put(cellRule.getFieldName(), filedValue);
                 } catch (ExcelException e) {
                     errorRows.add(new ErrorRow(row, e.getMessage()));
                     cellError = true;
