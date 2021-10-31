@@ -4,6 +4,7 @@ package org.gxz.joker.starter.expression;
 import org.springframework.expression.EvaluationException;
 
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,7 +18,10 @@ public class AutoExpression extends JokerArgumentExpression {
 
     public AtomicLong timeStamp = new AtomicLong();
 
-    public final int numberFill;
+
+
+    public int numberFill;
+
 
 
 
@@ -29,14 +33,32 @@ public class AutoExpression extends JokerArgumentExpression {
     @Override
     protected void initArgs(String[] args) {
         if(args == null || args.length == 0){
-            numberFill = 0;
+            this.numberFill = 0;
         }else{
-            args.
+            switch (args.length) {
+                case 1:
+                    this.numberFill = Integer.parseInt(args[0]);
+                case 2:
+                    this.timeStamp =null;
+                    break;
+                default:
+                    break;
+            }
         }
+    }
+
+    private void resolveResetUnit(String resetUnit){
+
     }
 
     @Override
     public Object getValue() throws EvaluationException {
         return null;
+    }
+
+    public static class ResetResolver{
+        ResetResolver(String resetUnit){
+
+        }
     }
 }
