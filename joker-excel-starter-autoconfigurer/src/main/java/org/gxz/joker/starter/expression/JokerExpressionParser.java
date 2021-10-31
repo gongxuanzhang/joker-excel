@@ -6,10 +6,13 @@ import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.lang.Nullable;
 
+
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public class JokerExpressionParser extends SpelExpressionParser {
+
+    public JokerExpressionSupport jokerExpressionSupport;
 
     private static ParserContext parserContext = new ParserContext() {
         @Override
@@ -31,10 +34,12 @@ public class JokerExpressionParser extends SpelExpressionParser {
 
     @Override
     protected SpelExpression doParseExpression(String expressionString, @Nullable ParserContext context) throws ParseException {
-        if(expressionString.contains("|")){
-            System.out.println("应该是这个");
-            // return new JokerExpression();
+        if (jokerExpressionSupport.support(expressionString)) {
+            String[] args = jokerExpressionSupport.resolveArgs(expressionString);
+            return jokerExpressionSupport.resolve(args);
         }
         return super.doParseExpression(expressionString,context);
     }
+
+
 }

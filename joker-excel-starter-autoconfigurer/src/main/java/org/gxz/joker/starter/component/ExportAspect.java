@@ -1,61 +1,39 @@
 package org.gxz.joker.starter.component;
 
-import lombok.SneakyThrows;
 import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.collections4.iterators.ArrayListIterator;
-import org.aspectj.lang.Signature;
-import org.gxz.joker.starter.annotation.Export;
-import org.gxz.joker.starter.element.ExcelDescription;
-import org.gxz.joker.starter.element.gardener.GardenerComposite;
-import org.gxz.joker.starter.exception.ExportReturnException;
-import org.gxz.joker.starter.expression.ConcatPropertyResolver;
-import org.gxz.joker.starter.expression.JokerExpressionParser;
-import org.gxz.joker.starter.tool.ExcelExportExecutor;
-import org.gxz.joker.starter.tool.ExportUtils;
-import org.gxz.joker.starter.wrapper.BeanClassWrapper;
-import org.gxz.joker.starter.wrapper.ExportFieldWrapper;
-import org.gxz.joker.starter.wrapper.ExportNameWrapper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.gxz.joker.starter.annotation.Export;
+import org.gxz.joker.starter.element.ExcelDescription;
+import org.gxz.joker.starter.exception.ExportReturnException;
+import org.gxz.joker.starter.expression.ConcatPropertyResolver;
+import org.gxz.joker.starter.expression.JokerExpressionParser;
+import org.gxz.joker.starter.tool.ExcelExportExecutor;
+import org.gxz.joker.starter.tool.ExportUtils;
+import org.gxz.joker.starter.tool.ThreadMethodHolder;
+import org.gxz.joker.starter.wrapper.BeanClassWrapper;
+import org.gxz.joker.starter.wrapper.ExportFieldWrapper;
+import org.gxz.joker.starter.wrapper.ExportNameWrapper;
 import org.gxz.joker.starter.wrapper.ExportSheetWrapper;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.BeanExpressionContext;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.expression.StandardBeanExpressionResolver;
 import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.PropertySource;
-import org.springframework.core.env.PropertySources;
-import org.springframework.core.env.PropertySourcesPropertyResolver;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParserContext;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.support.StandardServletEnvironment;
 
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,25 +54,30 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
     public Object exportAspect(ProceedingJoinPoint pjp) throws Throwable {
         // 校验环境内容
-        MethodSignature sig = (MethodSignature) pjp.getSignature();
-        Class<?> returnType = sig.getReturnType();
-        if (!(Iterable.class.isAssignableFrom(returnType))) {
-            throw new ExportReturnException("导出的方法返回值必须是能迭代的！");
+        try{
+            MethodSignature sig = (MethodSignature) pjp.getSignature();
+            ThreadMethodHolder.setMethod(sig.getMethod());
+            Class<?> returnType = sig.getReturnType();
+            if (!(Iterable.class.isAssignableFrom(returnType))) {
+                throw new ExportReturnException("导出的方法返回值必须是能迭代的！");
+            }
+            HttpServletResponse response =
+                    ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
+            if (Objects.isNull(response)) {
+                throw new IllegalStateException("拿不到response");
+            }
+            Iterable<?> result = (Iterable<?>) pjp.proceed();
+            if (IterableUtils.isEmpty(result)) {
+                throw new NullPointerException("无法解析出数据");
+            }
+            Class<?> beanType = result.iterator().next().getClass();
+            ExcelDescription excelDescription = analysisExcelDesc(pjp, beanType);
+            Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
+            workbook.setSheetName(0, excelDescription.getSheetName());
+            ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
+        }finally {
+            ThreadMethodHolder.clear();
         }
-        HttpServletResponse response =
-                ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
-        if (Objects.isNull(response)) {
-            throw new IllegalStateException("拿不到response");
-        }
-        Iterable<?> result = (Iterable<?>) pjp.proceed();
-        if (IterableUtils.isEmpty(result)) {
-            throw new NullPointerException("无法解析出数据");
-        }
-        Class<?> beanType = result.iterator().next().getClass();
-        ExcelDescription excelDescription = analysisExcelDesc(pjp, beanType);
-        Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
-        workbook.setSheetName(0, excelDescription.getSheetName());
-        ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
         return null;
     }
 
