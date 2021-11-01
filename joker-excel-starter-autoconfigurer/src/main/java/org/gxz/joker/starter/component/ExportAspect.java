@@ -50,7 +50,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private ConfigurablePropertyResolver environmentResolver;
 
-    private JokerExpressionParserComposite parserComposite = new JokerExpressionParserComposite();
+    private final JokerExpressionParserComposite parserComposite = new JokerExpressionParserComposite();
 
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
@@ -103,41 +103,10 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     }
 
-    public static void main(String[] args) {
-//        ExpressionParser parser = new JokerExpressionParserAdapter(null);
-//
-//        String template = "${asdf}";
-//        Expression expression = parser.parseExpression(template, parserContext);
-//        System.out.println(expression.getValue());
-//
-//
-//        EvaluationContext context = new StandardEvaluationContext();
-//        context.setVariable("name", "路人甲java");
-//        context.setVariable("lesson", "Spring系列");
-//
-//        //获取name变量，lesson变量
-//        String name = parser.parseExpression("#name").getValue(context, String.class);
-//        System.out.println(name);
-//        String lesson = parser.parseExpression("#lesson").getValue(context, String.class);
-//        System.out.println(lesson);
-//
-//        //StandardEvaluationContext构造器传入root对象，可以通过#root来访问root对象
-//        context = new StandardEvaluationContext(new String[]{"a", "b"});
-//        Object value = parser.parseExpression("#root").getValue(context);
-//        System.out.println(value);
-//        String rootObj = parser.parseExpression("#root").getValue(context, String.class);
-//        System.out.println(rootObj);
-//
-//        //#this用来访问当前上线文中的对象
-//        String thisObj = parser.parseExpression("#this").getValue(context, String.class);
-//        System.out.println(thisObj);
-
-    }
 
 
     @Override
     public void setEnvironment(Environment environment) {
         this.environmentResolver = (ConfigurablePropertyResolver) environment;
-        environmentResolver.resolvePlaceholders("${asdf}");
     }
 }

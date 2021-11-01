@@ -9,6 +9,7 @@ import org.gxz.joker.starter.exception.CellValueException;
 import org.gxz.joker.starter.expression.JokerExpressionParser;
 import org.gxz.joker.starter.service.Rule;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +135,9 @@ public class JokerConfigurationDelegate {
     }
 
     public static List<JokerExpressionParser> getParserList(){
+        if(parserList == null){
+            parserList = Collections.emptyList();
+        }
         return parserList;
     }
 }
