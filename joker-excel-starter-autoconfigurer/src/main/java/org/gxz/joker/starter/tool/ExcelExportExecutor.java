@@ -3,6 +3,7 @@ package org.gxz.joker.starter.tool;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -57,19 +58,20 @@ public class ExcelExportExecutor {
             headRow.createCell(i).setCellValue(head[i]);
         }
         List<Rule> rules = excelInfo.getRules();
-
         int rowNum = 1;
-        for (T rowData : targetData) {
-            Row row = sheet.createRow(rowNum);
-            try {
-                setRow(row, rowData, rules);
-                rowNum++;
-            } catch (ConvertException e) {
-                sheet.removeRow(row);
-                // TODO: 2021/10/25  这里是导出回调
+        if (!IterableUtils.isEmpty(targetData)) {
+            for (T rowData : targetData) {
+                Row row = sheet.createRow(rowNum);
+                try {
+                    setRow(row, rowData, rules);
+                    rowNum++;
+                } catch (ConvertException e) {
+                    sheet.removeRow(row);
+                    // TODO: 2021/10/25  这里是导出回调
+                }
             }
+            JokerConfigurationDelegate.clip(sheet, rules);
         }
-        JokerConfigurationDelegate.clip(sheet, rules);
         return excel;
     }
 
@@ -121,7 +123,7 @@ public class ExcelExportExecutor {
                 try {
                     Object filedValue = cellValue == null ? null :
                             cellRule.getConverter().reconvert(cellValue.toString(),
-                            cellRule.getFieldType());
+                                    cellRule.getFieldType());
                     JokerConfigurationDelegate.check(cellRule, filedValue);
                     jsonObject.put(cellRule.getFieldName(), filedValue);
                 } catch (ExcelException e) {

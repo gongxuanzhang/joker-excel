@@ -6,33 +6,27 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.gxz.joker.starter.JokerAutoConfiguration;
 import org.gxz.joker.starter.annotation.Export;
-import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.exception.ExportReturnException;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
-import org.gxz.joker.starter.expression.JokerExpressionParser;
 import org.gxz.joker.starter.expression.JokerExpressionParserAdapter;
 import org.gxz.joker.starter.expression.JokerExpressionParserComposite;
 import org.gxz.joker.starter.tool.ExcelExportExecutor;
 import org.gxz.joker.starter.tool.ExportUtils;
+import org.gxz.joker.starter.tool.ReflectUtil;
 import org.gxz.joker.starter.tool.ThreadMethodHolder;
 import org.gxz.joker.starter.wrapper.BeanClassWrapper;
 import org.gxz.joker.starter.wrapper.ExportFieldWrapper;
 import org.gxz.joker.starter.wrapper.ExportNameWrapper;
 import org.gxz.joker.starter.wrapper.ExportSheetWrapper;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.core.env.Environment;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -68,11 +62,13 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
             if (Objects.isNull(response)) {
                 throw new IllegalStateException("拿不到response");
             }
+            Class<?> beanType;
             Iterable<?> result = (Iterable<?>) pjp.proceed();
             if (IterableUtils.isEmpty(result)) {
-                throw new NullPointerException("无法解析出数据");
+                beanType = ReflectUtil.getMethodResultGenericity(sig.getMethod());
+            } else {
+                beanType = result.iterator().next().getClass();
             }
-            Class<?> beanType = result.iterator().next().getClass();
             ExcelDescription excelDescription = analysisExcelDesc(pjp, beanType);
             Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
             workbook.setSheetName(0, excelDescription.getSheetName());

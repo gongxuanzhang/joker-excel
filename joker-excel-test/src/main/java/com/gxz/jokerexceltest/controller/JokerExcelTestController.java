@@ -20,9 +20,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -60,6 +62,14 @@ public class JokerExcelTestController {
     public List<User> export4() {
         return data();
     }
+
+    @Export
+    @GetMapping("/empty")
+    public List<User> empty(){
+        return new ArrayList<>();
+    }
+
+
 
 
     @Export(configurationClass = IocJokerConfiguration.class)

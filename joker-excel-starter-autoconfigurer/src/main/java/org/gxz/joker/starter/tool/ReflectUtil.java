@@ -4,6 +4,10 @@ import lombok.Data;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ResolvableType;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -22,6 +26,18 @@ public class ReflectUtil {
             return Object.class;
         }
         return generics[0].getRawClass();
+    }
+
+
+    public static Class<?> getMethodResultGenericity(Method method) {
+        Type genericReturnType = method.getGenericReturnType();
+        //System.out.println(genericReturnType);
+        //获取返回值的泛型参数
+        if (genericReturnType instanceof ParameterizedType) {
+            Type actualTypeArgument = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
+            return (Class<?>) actualTypeArgument;
+        }
+        return null;
     }
 
 }

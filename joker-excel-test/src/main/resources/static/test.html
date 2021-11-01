@@ -46,19 +46,6 @@
         height: 315 //设置高度
     })
 
-    $("#test2").click(function () {
-        $.post("/t", {age: 1}).then(data => {
-            alert(data)
-        })
-    })
-
-
-    $("#test3").click(function () {
-        $.post("/tt", {age: 1}).then(data => {
-            alert(data)
-        })
-    })
-
 
     layui.use('upload', function () {
         var upload = layui.upload;
