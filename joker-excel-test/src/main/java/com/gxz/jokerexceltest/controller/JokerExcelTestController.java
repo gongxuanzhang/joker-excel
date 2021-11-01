@@ -76,9 +76,15 @@ public class JokerExcelTestController {
     }
 
 
-    @Export(value = "正常导出${JAVA_HOME}")
+    @Export(value = "${auto|4|m}正常导出${JAVA_HOME}")
     @GetMapping("/export")
     public List<User> export() {
+        return data();
+    }
+
+    @Export(value = "${auto|5|m}正常导出${JAVA_HOME}")
+    @GetMapping("/export1")
+    public List<User> export1() {
         return data();
     }
 

@@ -3,7 +3,7 @@ package org.gxz.joker.starter.service;
 import lombok.Data;
 import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.config.ExcelFieldDescription;
-import org.gxz.joker.starter.config.JokerConfigurationDelegate;
+import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ConverterRegistry;
 import org.gxz.joker.starter.convert.UniqueConverter;

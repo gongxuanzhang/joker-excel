@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.config.build;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
@@ -8,7 +9,6 @@ import lombok.Getter;
  *
  * @author gxz gongxuanzhang@foxmail.com
  **/
-@Getter
 public class JokerBuilder {
     JokerUploadBuilder jokerUploadBuilder;
 
@@ -17,6 +17,8 @@ public class JokerBuilder {
     HeadBuilder headBuilder;
 
     CheckBuilder checkBuilder;
+
+    ExpressionBuilder expressionBuilder;
 
 
 
@@ -49,5 +51,11 @@ public class JokerBuilder {
         return this.checkBuilder;
     }
 
+    public ExpressionBuilder expression(){
+        if(this.expressionBuilder == null){
+            this.expressionBuilder = new ExpressionBuilder(this);
+        }
+        return expressionBuilder;
+    }
 
 }

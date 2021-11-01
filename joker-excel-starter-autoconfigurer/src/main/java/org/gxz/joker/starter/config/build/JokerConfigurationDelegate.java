@@ -1,13 +1,12 @@
-package org.gxz.joker.starter.config;
+package org.gxz.joker.starter.config.build;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.gxz.joker.starter.component.BaseUploadCheck;
-import org.gxz.joker.starter.config.build.ConcatSupplier;
-import org.gxz.joker.starter.config.build.HeadBuilder;
-import org.gxz.joker.starter.config.build.JokerBuilder;
+import org.gxz.joker.starter.config.ExcelFieldDescription;
 import org.gxz.joker.starter.element.check.CheckComposite;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.exception.CellValueException;
+import org.gxz.joker.starter.expression.JokerExpressionParser;
 import org.gxz.joker.starter.service.Rule;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class JokerConfigurationDelegate {
     private static Map<String, BaseUploadCheck> checkMap;
     private static GardenerComposite gardenerComposite;
     private static CheckComposite checkComposite;
-
+    private static List<JokerExpressionParser> parserList;
     private JokerConfigurationDelegate() {
 
     }
@@ -53,6 +52,7 @@ public class JokerConfigurationDelegate {
         HeadBuilder head = jokerBuilder.head();
         registerPrefix(head);
         registerSuffix(head);
+        registerParser(jokerBuilder.expressionBuilder);
     }
 
 
@@ -62,6 +62,12 @@ public class JokerConfigurationDelegate {
         }
         checkMap.put(baseUploadCheck.getId(), baseUploadCheck);
     }
+
+
+    public static void registerParser(ExpressionBuilder expressionBuilder){
+        parserList = expressionBuilder.getParserList();
+    }
+
 
     private static void registerPrefix(HeadBuilder head) {
         if (head == null) {
@@ -125,5 +131,9 @@ public class JokerConfigurationDelegate {
 
     public static void clip(Sheet sheet, List<Rule> ruleList) {
         gardenerComposite.clip(sheet, ruleList);
+    }
+
+    public static List<JokerExpressionParser> getParserList(){
+        return parserList;
     }
 }

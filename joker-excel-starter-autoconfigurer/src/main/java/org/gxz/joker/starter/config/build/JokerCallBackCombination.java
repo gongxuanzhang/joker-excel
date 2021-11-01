@@ -1,7 +1,10 @@
-package org.gxz.joker.starter.config;
+package org.gxz.joker.starter.config.build;
 
 
 import org.apache.poi.ss.usermodel.Row;
+import org.gxz.joker.starter.config.UploadErrorRowCallBack;
+import org.gxz.joker.starter.config.UploadFinishCallBack;
+import org.gxz.joker.starter.config.UploadSuccessCallBack;
 import org.gxz.joker.starter.config.build.JokerBuilder;
 import org.gxz.joker.starter.config.build.JokerExportBuilder;
 import org.gxz.joker.starter.config.build.JokerUploadBuilder;
@@ -25,8 +28,8 @@ public class JokerCallBackCombination {
 
 
     public static void registerBuild(JokerBuilder jokerBuilder) {
-        JokerUploadBuilder jokerUploadBuilder = jokerBuilder.getJokerUploadBuilder();
-        JokerExportBuilder jokerExportBuilder = jokerBuilder.getJokerExportBuilder();
+        JokerUploadBuilder jokerUploadBuilder = jokerBuilder.jokerUploadBuilder;
+        JokerExportBuilder jokerExportBuilder = jokerBuilder.jokerExportBuilder;
         if (jokerUploadBuilder != null) {
             register(jokerUploadBuilder.getErrorCallBack());
             register(jokerUploadBuilder.getFinishCallBack());

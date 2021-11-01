@@ -6,11 +6,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.gxz.joker.starter.JokerAutoConfiguration;
 import org.gxz.joker.starter.annotation.Export;
+import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.element.ExcelDescription;
 import org.gxz.joker.starter.exception.ExportReturnException;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.expression.JokerExpressionParser;
+import org.gxz.joker.starter.expression.JokerExpressionParserAdapter;
+import org.gxz.joker.starter.expression.JokerExpressionParserComposite;
 import org.gxz.joker.starter.tool.ExcelExportExecutor;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.tool.ThreadMethodHolder;
@@ -19,6 +23,7 @@ import org.gxz.joker.starter.wrapper.ExportFieldWrapper;
 import org.gxz.joker.starter.wrapper.ExportNameWrapper;
 import org.gxz.joker.starter.wrapper.ExportSheetWrapper;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
@@ -27,16 +32,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -48,13 +50,13 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private ConfigurablePropertyResolver environmentResolver;
 
-    private Map<Method, ExpressionParser> methodResolvers = new ConcurrentHashMap<>();
+    private JokerExpressionParserComposite parserComposite = new JokerExpressionParserComposite();
 
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
     public Object exportAspect(ProceedingJoinPoint pjp) throws Throwable {
         // 校验环境内容
-        try{
+        try {
             MethodSignature sig = (MethodSignature) pjp.getSignature();
             ThreadMethodHolder.setMethod(sig.getMethod());
             Class<?> returnType = sig.getReturnType();
@@ -75,7 +77,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
             Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
             workbook.setSheetName(0, excelDescription.getSheetName());
             ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
-        }finally {
+        } finally {
             ThreadMethodHolder.clear();
         }
         return null;
@@ -84,8 +86,8 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     private ExcelDescription analysisExcelDesc(ProceedingJoinPoint pjp, Class<?> beanType) {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Export export = method.getAnnotation(Export.class);
-        ExpressionParser methodParser = methodResolvers.computeIfAbsent(method, k -> new JokerExpressionParser());
-        ConcatPropertyResolver resolver = new ConcatPropertyResolver(this.environmentResolver, methodParser);
+        ExpressionParser adapter = new JokerExpressionParserAdapter(parserComposite);
+        ConcatPropertyResolver resolver = new ConcatPropertyResolver(this.environmentResolver, adapter);
         ExcelDescription excelDescription = new ExcelDescription(resolver);
         excelDescription.setBeanType(beanType);
         excelDescription.fuseExcelName(new ExportNameWrapper(method, beanType, pjp.getArgs(), applicationContext));
@@ -98,51 +100,37 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+
     }
 
     public static void main(String[] args) {
-        ExpressionParser parser = new JokerExpressionParser();
-        ParserContext parserContext = new ParserContext() {
-            @Override
-            public boolean isTemplate() {
-                return true;
-            }
-
-            @Override
-            public String getExpressionPrefix() {
-                return "${";
-            }
-
-            @Override
-            public String getExpressionSuffix() {
-                return "}";
-            }
-        };
-        String template = "${asdf}";
-        Expression expression = parser.parseExpression(template, parserContext);
-        System.out.println(expression.getValue());
-
-
-        EvaluationContext context = new StandardEvaluationContext();
-        context.setVariable("name", "路人甲java");
-        context.setVariable("lesson", "Spring系列");
-
-        //获取name变量，lesson变量
-        String name = parser.parseExpression("#name").getValue(context, String.class);
-        System.out.println(name);
-        String lesson = parser.parseExpression("#lesson").getValue(context, String.class);
-        System.out.println(lesson);
-
-        //StandardEvaluationContext构造器传入root对象，可以通过#root来访问root对象
-        context = new StandardEvaluationContext(new String[]{"a", "b"});
-        Object value = parser.parseExpression("#root").getValue(context);
-        System.out.println(value);
-        String rootObj = parser.parseExpression("#root").getValue(context, String.class);
-        System.out.println(rootObj);
-
-        //#this用来访问当前上线文中的对象
-        String thisObj = parser.parseExpression("#this").getValue(context, String.class);
-        System.out.println(thisObj);
+//        ExpressionParser parser = new JokerExpressionParserAdapter(null);
+//
+//        String template = "${asdf}";
+//        Expression expression = parser.parseExpression(template, parserContext);
+//        System.out.println(expression.getValue());
+//
+//
+//        EvaluationContext context = new StandardEvaluationContext();
+//        context.setVariable("name", "路人甲java");
+//        context.setVariable("lesson", "Spring系列");
+//
+//        //获取name变量，lesson变量
+//        String name = parser.parseExpression("#name").getValue(context, String.class);
+//        System.out.println(name);
+//        String lesson = parser.parseExpression("#lesson").getValue(context, String.class);
+//        System.out.println(lesson);
+//
+//        //StandardEvaluationContext构造器传入root对象，可以通过#root来访问root对象
+//        context = new StandardEvaluationContext(new String[]{"a", "b"});
+//        Object value = parser.parseExpression("#root").getValue(context);
+//        System.out.println(value);
+//        String rootObj = parser.parseExpression("#root").getValue(context, String.class);
+//        System.out.println(rootObj);
+//
+//        //#this用来访问当前上线文中的对象
+//        String thisObj = parser.parseExpression("#this").getValue(context, String.class);
+//        System.out.println(thisObj);
 
     }
 

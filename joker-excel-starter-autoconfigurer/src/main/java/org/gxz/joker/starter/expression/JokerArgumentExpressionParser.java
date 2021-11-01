@@ -12,23 +12,27 @@ import javax.validation.constraints.NotNull;
  * @author gxz gongxuanzhang@foxmail.com
  * @date 2021/10/30 21:00
  */
-public abstract class JokerArgumentExpressionSupport implements JokerExpressionSupport {
+public abstract class JokerArgumentExpressionParser implements JokerExpressionParser {
+
+
 
     /**
      * 对参数进行解析
-     * @param args 参数
+     *
+     * @param args 如果参数为空 将会给一个空数组
      * @return 返回真正表达式
      */
-    public abstract JokerArgumentExpression resolve(String[] args);
+    public abstract JokerArgumentExpression resolve(@NotNull String[] args);
 
     @Override
-    public JokerArgumentExpression resolve(String expression) {
+    public JokerArgumentExpression parseExpression(String expression) {
         String[] args = resolveArgs(expression);
         return resolve(args);
     }
 
     /**
      * 获取解析的第一个标志
+     *
      * @return
      */
     public abstract String getMain();
@@ -41,7 +45,7 @@ public abstract class JokerArgumentExpressionSupport implements JokerExpressionS
     protected String[] resolveArgs(String expression) {
         String[] split = expression.split(getSeparator());
         if (split.length <= 1) {
-            return null;
+            return new String[0];
         }
         String[] result = new String[split.length - 1];
         System.arraycopy(split, 1, result, 0, result.length);
@@ -49,7 +53,7 @@ public abstract class JokerArgumentExpressionSupport implements JokerExpressionS
     }
 
     protected String getSeparator() {
-        return "|";
+        return "\\|";
     }
 
 
