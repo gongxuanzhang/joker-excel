@@ -22,6 +22,7 @@ public class JokerExpressionParserComposite implements JokerExpressionParser {
 
     {
         parserList.add(new AutoJokerExpressionParser());
+        parserList.add(new DateExpressionParser());
         parserList.addAll(JokerConfigurationDelegate.getParserList());
     }
 
