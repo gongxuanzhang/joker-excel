@@ -111,7 +111,7 @@ public class AutoExpression extends JokerArgumentExpression {
         }
         StringBuilder sb = new StringBuilder(index+"");
         int length = sb.length();
-        for (int i = 0; i <= numberFill - length; i++) {
+        for (int i = 0; i < numberFill - length; i++) {
             sb.insert(0, '0');
         }
         return sb.toString();
