@@ -20,7 +20,7 @@ public class MyCheck extends BaseUploadCheck {
 
     @Override
     public void uploadCheck(Object data) throws ConvertException {
-        if(((User)data).getSex().contains("男")){
+        if (((User) data).getSex().contains("男")) {
             System.out.println(1);
             throw new ConvertException("错了");
         }

@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 方法隔离的表达式解析器
  * 包装了方法缓存
+ *
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public abstract class MethodIsolationExpressionParser extends JokerArgumentExpressionParser {
@@ -24,8 +25,8 @@ public abstract class MethodIsolationExpressionParser extends JokerArgumentExpre
 
 
     /**
-     *
      * 方法隔离的解析
+     *
      * @param args 参数
      * @return 解析的表达式
      **/

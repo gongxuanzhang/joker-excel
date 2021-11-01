@@ -32,7 +32,7 @@ public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 
     private ResourceLoader resourceLoader;
 
-    Class<?>[] scanClass = new Class[]{JokerGlobalConfig.class,BaseUploadCheck.class};
+    Class<?>[] scanClass = new Class[]{JokerGlobalConfig.class, BaseUploadCheck.class};
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata,

@@ -52,7 +52,7 @@ public class ConcatPropertyResolver {
             return value;
         }
         for (ExpressionParser parser : concat) {
-            Expression expression = parser.parseExpression(value,parserContext);
+            Expression expression = parser.parseExpression(value, parserContext);
             value = expression.getValue(String.class);
         }
         return main.resolvePlaceholders(value);

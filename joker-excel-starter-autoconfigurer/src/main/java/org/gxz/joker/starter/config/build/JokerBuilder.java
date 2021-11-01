@@ -21,8 +21,6 @@ public class JokerBuilder {
     ExpressionBuilder expressionBuilder;
 
 
-
-
     public JokerUploadBuilder upload() {
         if (this.jokerUploadBuilder == null) {
             this.jokerUploadBuilder = new JokerUploadBuilder(this);
@@ -51,8 +49,8 @@ public class JokerBuilder {
         return this.checkBuilder;
     }
 
-    public ExpressionBuilder expression(){
-        if(this.expressionBuilder == null){
+    public ExpressionBuilder expression() {
+        if (this.expressionBuilder == null) {
             this.expressionBuilder = new ExpressionBuilder(this);
         }
         return expressionBuilder;

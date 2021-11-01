@@ -8,5 +8,5 @@ import org.gxz.joker.starter.service.Rule;
  **/
 public interface RuleCheck {
 
-    void check(Rule rule,Object value) throws CellValueException;
+    void check(Rule rule, Object value) throws CellValueException;
 }

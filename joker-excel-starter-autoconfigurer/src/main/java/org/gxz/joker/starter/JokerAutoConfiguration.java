@@ -39,9 +39,8 @@ import java.util.List;
 public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAware {
 
 
-
     @Bean
-    public GardenerComposite gardenerComposite(){
+    public GardenerComposite gardenerComposite() {
         GardenerComposite gardenerComposite = new GardenerComposite();
         gardenerComposite.addResolver(new SelectGardener());
         JokerConfigurationDelegate.registerGardener(gardenerComposite);
@@ -49,7 +48,7 @@ public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAwar
     }
 
     @Bean
-    public CheckComposite checkComposite(){
+    public CheckComposite checkComposite() {
         CheckComposite checkComposite = new CheckComposite();
         checkComposite.addCheck(new RequireCheck());
         JokerConfigurationDelegate.registerCheck(checkComposite);

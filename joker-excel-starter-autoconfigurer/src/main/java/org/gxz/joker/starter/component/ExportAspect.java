@@ -104,7 +104,6 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     }
 
 
-
     @Override
     public void setEnvironment(Environment environment) {
         this.environmentResolver = (ConfigurablePropertyResolver) environment;

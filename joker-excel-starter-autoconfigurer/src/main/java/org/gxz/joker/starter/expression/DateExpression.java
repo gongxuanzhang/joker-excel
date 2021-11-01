@@ -30,7 +30,7 @@ public class DateExpression extends JokerArgumentExpression {
     private String pattern;
 
     static {
-        DATE_TIME_FORMATTER_MAP.put(DEFAULT_PATTERN,DateTimeFormatter.ofPattern(DEFAULT_PATTERN));
+        DATE_TIME_FORMATTER_MAP.put(DEFAULT_PATTERN, DateTimeFormatter.ofPattern(DEFAULT_PATTERN));
     }
 
 
@@ -41,10 +41,10 @@ public class DateExpression extends JokerArgumentExpression {
 
     @Override
     protected void initArgs(String[] args) {
-        if(args.length>0){
+        if (args.length > 0) {
             this.pattern = args[0];
-            DATE_TIME_FORMATTER_MAP.put(pattern,DateTimeFormatter.ofPattern(pattern));
-        }else{
+            DATE_TIME_FORMATTER_MAP.put(pattern, DateTimeFormatter.ofPattern(pattern));
+        } else {
             this.pattern = DEFAULT_PATTERN;
         }
     }

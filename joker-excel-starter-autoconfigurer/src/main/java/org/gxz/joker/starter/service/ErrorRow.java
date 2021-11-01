@@ -13,7 +13,7 @@ public class ErrorRow {
 
     private final Row row;
 
-    private final  String errorMessage;
+    private final String errorMessage;
 
 
 }

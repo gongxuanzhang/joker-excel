@@ -15,7 +15,7 @@ public class PoiUtils {
     public static void copyRow(Row source, Row target) {
         for (int i = 0; i < (int) source.getLastCellNum(); i++) {
             Cell sourceCell = source.getCell(i);
-            if(sourceCell != null){
+            if (sourceCell != null) {
                 Cell targetCell = target.createCell(i);
                 Object cellValue = getCellValue(sourceCell);
                 CellType cellTypeEnum = sourceCell.getCellTypeEnum();

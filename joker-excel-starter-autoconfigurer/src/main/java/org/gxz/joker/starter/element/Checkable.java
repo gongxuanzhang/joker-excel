@@ -11,7 +11,7 @@ public interface Checkable<T> {
 
     void check() throws ConvertException;
 
-    default void check(List<T> data){
+    default void check(List<T> data) {
 
     }
 

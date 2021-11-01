@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public abstract class BaseUploadCheck implements UploadCheck{
+public abstract class BaseUploadCheck implements UploadCheck {
 
     private List<?> prototype;
 
@@ -16,7 +16,7 @@ public abstract class BaseUploadCheck implements UploadCheck{
         return new UnmodifiableList<>(prototype);
     }
 
-    public void register(List<?> prototype){
+    public void register(List<?> prototype) {
         this.prototype = prototype;
     }
 }

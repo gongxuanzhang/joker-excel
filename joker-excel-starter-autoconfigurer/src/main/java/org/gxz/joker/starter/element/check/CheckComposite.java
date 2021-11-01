@@ -44,12 +44,11 @@ public class CheckComposite implements RuleCheck, ApplicationContextAware {
     }
 
 
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, RuleCheck> beansOfType = applicationContext.getBeansOfType(RuleCheck.class);
         for (RuleCheck value : beansOfType.values()) {
-            if(!(value instanceof CheckComposite)){
+            if (!(value instanceof CheckComposite)) {
                 addCheck(value);
             }
         }
@@ -58,7 +57,7 @@ public class CheckComposite implements RuleCheck, ApplicationContextAware {
     @Override
     public void check(Rule rule, Object value) throws CellValueException {
         for (RuleCheck check : this.checks) {
-            check.check(rule,value);
+            check.check(rule, value);
         }
     }
 }

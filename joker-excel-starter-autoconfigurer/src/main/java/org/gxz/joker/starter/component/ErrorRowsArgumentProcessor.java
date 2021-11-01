@@ -53,7 +53,7 @@ public class ErrorRowsArgumentProcessor implements HandlerMethodArgumentResolver
             Class<?> parameterType = parameter.getParameterType();
             if (parameterType == Workbook.class) {
                 ErrorRows errorRows = parameter.getParameterAnnotation(ErrorRows.class);
-                return createErrorExcel(model,errorRows.head());
+                return createErrorExcel(model, errorRows.head());
             }
             if (parameterType == List.class || parameterType == Object.class) {
                 return selectListResult(ReflectUtil.getOnlyGenericity(parameter), model);
@@ -83,19 +83,19 @@ public class ErrorRowsArgumentProcessor implements HandlerMethodArgumentResolver
 
     }
 
-    private Workbook createErrorExcel(Map<String, Object> model,String headRow) {
+    private Workbook createErrorExcel(Map<String, Object> model, String headRow) {
         Workbook workbook = new XSSFWorkbook();
         Sheet errorSheet = workbook.createSheet("错误数据");
         Row head = (Row) model.get(ComponentConstant.ERROR_HEAD_BINDER_KEY);
         List<ErrorRow> errorRows = (List<ErrorRow>) model.get(ComponentConstant.ERROR_ROW_BINDER_KEY);
         Row errorSheetHead = errorSheet.createRow(0);
         PoiUtils.copyRow(head, errorSheetHead);
-        PoiUtils.appendCell(errorSheetHead,headRow);
+        PoiUtils.appendCell(errorSheetHead, headRow);
         for (int i = 0; i < errorRows.size(); i++) {
             Row row = errorSheet.createRow(i + 1);
             ErrorRow holder = errorRows.get(i);
             PoiUtils.copyRow(holder.getRow(), row);
-            PoiUtils.appendCell(row,holder.getErrorMessage(),head.getLastCellNum());
+            PoiUtils.appendCell(row, holder.getErrorMessage(), head.getLastCellNum());
         }
         return workbook;
     }

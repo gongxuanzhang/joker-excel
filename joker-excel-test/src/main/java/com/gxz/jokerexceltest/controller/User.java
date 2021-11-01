@@ -72,7 +72,7 @@ public class User implements Checkable<User> {
 
     @Override
     public void check() throws ConvertException {
-        if(this.name.contains("1")){
+        if (this.name.contains("1")) {
             throw new ConvertException("a");
         }
     }

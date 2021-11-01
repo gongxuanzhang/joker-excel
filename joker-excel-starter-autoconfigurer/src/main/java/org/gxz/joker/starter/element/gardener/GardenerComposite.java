@@ -46,8 +46,8 @@ public class GardenerComposite implements Gardener, ApplicationContextAware {
     @Override
     public void clip(Sheet sheet, List<Rule> ruleList) {
         for (Gardener gardener : this.gardeners) {
-            if (gardener.support(sheet,ruleList)) {
-                gardener.clip(sheet,ruleList);
+            if (gardener.support(sheet, ruleList)) {
+                gardener.clip(sheet, ruleList);
             }
         }
     }
@@ -62,7 +62,7 @@ public class GardenerComposite implements Gardener, ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, Gardener> beansOfType = applicationContext.getBeansOfType(Gardener.class);
         for (Gardener value : beansOfType.values()) {
-            if(!(value instanceof GardenerComposite)){
+            if (!(value instanceof GardenerComposite)) {
                 addResolver(value);
             }
         }

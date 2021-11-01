@@ -21,17 +21,17 @@ public class ExpressionBuilder extends JoinAbleBuilder {
         super(jokerBuilder);
     }
 
-    public ExpressionBuilder addParser(JokerExpressionParser parser){
+    public ExpressionBuilder addParser(JokerExpressionParser parser) {
         parserList.add(parser);
         return this;
     }
 
-    public ExpressionBuilder addParser(JokerExpressionParser... parser){
+    public ExpressionBuilder addParser(JokerExpressionParser... parser) {
         parserList.addAll(Arrays.asList(parser));
         return this;
     }
 
-    public ExpressionBuilder addParser(Collection<JokerExpressionParser> parser){
+    public ExpressionBuilder addParser(Collection<JokerExpressionParser> parser) {
         parserList.addAll(parser);
         return this;
     }

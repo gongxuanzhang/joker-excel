@@ -43,12 +43,13 @@ public class ExcelException extends JokerRuntimeException {
 
     private static String errorMessageAnalysis(String errorMessage, int rowCount, int colCount, Object cellValue) {
         String valueString = "";
-        if(cellValue != null){
+        if (cellValue != null) {
             valueString = cellValue.toString();
         }
         if (StringUtils.isEmpty(errorMessage)) {
             return errorMessageAnalysis(DEFAULT_ERROR_MESSAGE, rowCount, colCount, valueString);
         }
-        return errorMessage.replaceAll("r%", rowCount + "").replaceAll("c%", colCount + "").replaceAll("v%", valueString);
+        return errorMessage.replaceAll("r%", rowCount + "").replaceAll("c%", colCount + "").replaceAll("v%",
+                valueString);
     }
 }

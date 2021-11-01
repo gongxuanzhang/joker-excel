@@ -21,10 +21,10 @@ public class JokerExpressionParserAdapter extends SpelExpressionParser {
 
     @Override
     protected SpelExpression doParseExpression(String expressionString, @Nullable ParserContext context) throws ParseException {
-        if(parser.support(expressionString)){
+        if (parser.support(expressionString)) {
             return parser.parseExpression(expressionString);
         }
-        return super.doParseExpression(expressionString,context);
+        return super.doParseExpression(expressionString, context);
     }
 
 

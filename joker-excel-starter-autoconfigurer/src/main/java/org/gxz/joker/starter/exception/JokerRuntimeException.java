@@ -3,7 +3,7 @@ package org.gxz.joker.starter.exception;
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public class JokerRuntimeException extends RuntimeException{
+public class JokerRuntimeException extends RuntimeException {
 
     public JokerRuntimeException() {
     }

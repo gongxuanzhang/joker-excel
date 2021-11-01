@@ -22,7 +22,7 @@ public class MyConfig implements JokerGlobalConfig {
                 .errorCallBack((row, error) -> System.out.println("失败的行"))
                 .finishCallBack((data) -> System.out.println("完成的行数"))
                 .and().head().suffix("这是后缀")
-        .and().expression().addParser(new AutoJokerExpressionParser());
+                .and().expression().addParser(new AutoJokerExpressionParser());
 
     }
 }

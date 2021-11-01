@@ -26,6 +26,7 @@ public class JokerConfigurationDelegate {
     private static GardenerComposite gardenerComposite;
     private static CheckComposite checkComposite;
     private static List<JokerExpressionParser> parserList;
+
     private JokerConfigurationDelegate() {
 
     }
@@ -65,7 +66,7 @@ public class JokerConfigurationDelegate {
     }
 
 
-    public static void registerParser(ExpressionBuilder expressionBuilder){
+    public static void registerParser(ExpressionBuilder expressionBuilder) {
         parserList = expressionBuilder.getParserList();
     }
 
@@ -134,8 +135,8 @@ public class JokerConfigurationDelegate {
         gardenerComposite.clip(sheet, ruleList);
     }
 
-    public static List<JokerExpressionParser> getParserList(){
-        if(parserList == null){
+    public static List<JokerExpressionParser> getParserList() {
+        if (parserList == null) {
             parserList = Collections.emptyList();
         }
         return parserList;

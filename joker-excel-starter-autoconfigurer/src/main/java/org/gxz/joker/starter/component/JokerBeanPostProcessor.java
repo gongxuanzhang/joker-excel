@@ -23,7 +23,7 @@ public class JokerBeanPostProcessor implements BeanPostProcessor {
             JokerCallBackCombination.registerBuild(getJokerBuilder());
             JokerConfigurationDelegate.registerBuild(getJokerBuilder());
         }
-        if(bean instanceof BaseUploadCheck){
+        if (bean instanceof BaseUploadCheck) {
             JokerConfigurationDelegate.registerCheck((BaseUploadCheck) bean);
         }
         return bean;

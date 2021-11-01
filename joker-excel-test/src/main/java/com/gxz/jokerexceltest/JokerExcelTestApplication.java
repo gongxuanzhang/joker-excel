@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JokerExcelTestApplication {
 
     public static void main(String[] args) {
-         SpringApplication.run(JokerExcelTestApplication.class, args);
+        SpringApplication.run(JokerExcelTestApplication.class, args);
 
 
     }

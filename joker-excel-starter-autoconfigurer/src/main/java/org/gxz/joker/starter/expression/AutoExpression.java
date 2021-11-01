@@ -109,7 +109,7 @@ public class AutoExpression extends JokerArgumentExpression {
         if (index >= maxCount) {
             throw new IllegalStateException("填充大小为[" + numberFill + "],但是序号已经拍到了" + index + "建议调大数字");
         }
-        StringBuilder sb = new StringBuilder(index+"");
+        StringBuilder sb = new StringBuilder(index + "");
         int length = sb.length();
         for (int i = 0; i < numberFill - length; i++) {
             sb.insert(0, '0');

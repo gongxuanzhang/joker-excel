@@ -24,7 +24,7 @@ public class ExportNameWrapper implements ExcelNameOverlayable {
             .expireAfterAccess(1, TimeUnit.HOURS)
             .build();
 
-    public static Map<Class<? extends  ExcelNameFactory>,ExcelNameFactory> singletonCache = new ConcurrentHashMap<>();
+    public static Map<Class<? extends ExcelNameFactory>, ExcelNameFactory> singletonCache = new ConcurrentHashMap<>();
 
     private final Export export;
     private final Method method;
@@ -69,18 +69,18 @@ public class ExportNameWrapper implements ExcelNameOverlayable {
 
         try {
             ExcelNameFactory instance = ttlCache.getIfPresent(factoryClass);
-            if(instance ==null){
+            if (instance == null) {
                 instance = singletonCache.get(factoryClass);
-                if(instance == null){
+                if (instance == null) {
                     instance = factoryClass.newInstance();
-                    if(instance.singleton()){
-                        singletonCache.put(factoryClass,instance);
-                    }else{
-                        ttlCache.put(factoryClass,instance);
+                    if (instance.singleton()) {
+                        singletonCache.put(factoryClass, instance);
+                    } else {
+                        ttlCache.put(factoryClass, instance);
                     }
                 }
             }
-            return  instance.getExcelName(beanClass, args, method);
+            return instance.getExcelName(beanClass, args, method);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return export.value();
