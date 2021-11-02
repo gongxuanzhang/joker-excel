@@ -7,24 +7,22 @@ import org.gxz.joker.starter.annotation.ErrorRows;
 import org.gxz.joker.starter.annotation.Export;
 import org.gxz.joker.starter.annotation.Upload;
 import org.gxz.joker.starter.service.ErrorRow;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -57,18 +55,17 @@ public class JokerExcelTestController {
         return data();
     }
 
-    @Export(value = "只有name", include = "name", nameFactory = MyNameFactory.class)
+    @Export(value = "只有name", include = "name", nameFactory = TimeStampFactory.class)
     @GetMapping("/export/4")
     public List<User> export4() {
         return data();
     }
 
-    @Export
-    @GetMapping("/empty")
-    public List<User> empty(){
+    @Export(nameFactory = TimeStampFactory.class)
+    @GetMapping("/custom")
+    public List<User> custom() {
         return new ArrayList<>();
     }
-
 
 
 

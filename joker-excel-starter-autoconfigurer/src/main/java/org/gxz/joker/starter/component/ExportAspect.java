@@ -44,7 +44,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private ConfigurablePropertyResolver environmentResolver;
 
-    private final JokerExpressionParserComposite parserComposite = new JokerExpressionParserComposite();
+    private JokerExpressionParserComposite parserComposite;
 
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
@@ -96,6 +96,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        this.parserComposite = new JokerExpressionParserComposite(applicationContext);
 
     }
 

@@ -25,12 +25,20 @@ import org.springframework.expression.spel.standard.SpelExpression;
  **/
 public abstract class JokerArgumentExpression extends SpelExpression {
 
-    protected String[] args;
+    private String[] args;
+
+    protected String[] getArgs(){
+        return this.args;
+    }
+
 
     public JokerArgumentExpression(String[] args) {
         super(null, null, null);
+        this.args = args;
         initArgs(args);
     }
+
+
 
     /**
      * 通过表达式参数，为自己初始化
@@ -39,8 +47,14 @@ public abstract class JokerArgumentExpression extends SpelExpression {
 
     }
 
+    public abstract String getStrValue();
+
     @Override
-    public abstract Object getValue() throws EvaluationException;
+    public Object getValue() throws EvaluationException{
+        return getStrValue();
+    }
+
+
 
 
     @Override

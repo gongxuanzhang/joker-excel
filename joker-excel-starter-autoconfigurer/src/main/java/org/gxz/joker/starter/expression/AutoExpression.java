@@ -90,9 +90,9 @@ public class AutoExpression extends JokerArgumentExpression {
     }
 
     @Override
-    public Object getValue() throws EvaluationException {
+    public String getStrValue() throws EvaluationException {
         if (!enableReset) {
-            return count.incrementAndGet();
+            return count.incrementAndGet() + "";
         }
         long now = Instant.now().toEpochMilli();
         long round = timeStamp.get();

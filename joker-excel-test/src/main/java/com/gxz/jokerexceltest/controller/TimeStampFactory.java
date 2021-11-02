@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  *
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public class MyNameFactory implements ExcelNameFactory {
+public class TimeStampFactory implements ExcelNameFactory {
     @Override
     public String getExcelName(Class<?> clazz, Object[] args, Method method) {
         return "工厂名称" + System.currentTimeMillis();

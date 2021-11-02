@@ -1,6 +1,9 @@
 package org.gxz.joker.starter.expression;
 
 
+import org.gxz.joker.starter.element.ApplicationContextInject;
+import org.springframework.context.ApplicationContext;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -12,8 +15,10 @@ import javax.validation.constraints.NotNull;
  * @author gxz gongxuanzhang@foxmail.com
  * @date 2021/10/30 21:00
  */
-public abstract class JokerArgumentExpressionParser implements JokerExpressionParser {
+public abstract class JokerArgumentExpressionParser implements JokerExpressionParser, ApplicationContextInject {
 
+
+    private ApplicationContext ioc;
 
     /**
      * 对参数进行解析
@@ -56,4 +61,13 @@ public abstract class JokerArgumentExpressionParser implements JokerExpressionPa
     }
 
 
+    @Override
+    public void setApplicationContext(ApplicationContext ioc) {
+        this.ioc = ioc;
+    }
+
+    @Override
+    public ApplicationContext getApplicationContext() {
+        return this.ioc;
+    }
 }

@@ -1,6 +1,8 @@
 package org.gxz.joker.starter.expression;
 
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
+import org.gxz.joker.starter.element.ApplicationContextInject;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class JokerExpressionParserComposite implements JokerExpressionParser {
 
     private Map<String, JokerExpressionParser> cache = new ConcurrentHashMap<>();
 
+
     private List<JokerExpressionParser> parserList = new ArrayList<>();
 
     {
@@ -25,6 +28,16 @@ public class JokerExpressionParserComposite implements JokerExpressionParser {
         parserList.add(new DateExpressionParser());
         parserList.addAll(JokerConfigurationDelegate.getParserList());
     }
+
+
+    public JokerExpressionParserComposite(ApplicationContext ioc) {
+        for (JokerExpressionParser jokerExpressionParser : parserList) {
+            if (jokerExpressionParser instanceof ApplicationContextInject) {
+                ((ApplicationContextInject) jokerExpressionParser).setApplicationContext(ioc);
+            }
+        }
+    }
+
 
     public void addJokerExpressionParser(JokerExpressionParser parser) {
         this.parserList.add(parser);

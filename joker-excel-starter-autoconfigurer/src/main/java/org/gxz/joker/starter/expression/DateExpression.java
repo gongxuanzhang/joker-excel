@@ -51,7 +51,7 @@ public class DateExpression extends JokerArgumentExpression {
 
 
     @Override
-    public Object getValue() throws EvaluationException {
+    public String getStrValue() throws EvaluationException {
         DateTimeFormatter dateTimeFormatter = DATE_TIME_FORMATTER_MAP.get(this.pattern);
         return dateTimeFormatter.format(LocalDateTime.now());
     }
