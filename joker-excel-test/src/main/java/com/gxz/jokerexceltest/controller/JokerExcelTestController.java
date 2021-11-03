@@ -68,7 +68,6 @@ public class JokerExcelTestController {
     }
 
 
-
     @Export(configurationClass = IocJokerConfiguration.class)
     @GetMapping("/export/configuration/ioc")
     public List<User> exportWithExportAndSpringIoc() {
@@ -131,10 +130,10 @@ public class JokerExcelTestController {
         Sheet sheetAt = workbook.getSheetAt(0);
         int lastRowNum = sheetAt.getLastRowNum();
         workbook.write(new FileOutputStream("错误.xlsx"));
-//        for (User user : users) {
-//            System.out.println(user);
-//        }
-        Map<String, Object> result = new HashMap<>();
+        for (User user : users) {
+            System.out.println(user);
+        }
+        Map<String, Object> result = new HashMap<>(16);
         result.put("data", users);
         result.put("code", 0);
         result.put("msg", "");

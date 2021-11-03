@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.element.check;
 
-import org.gxz.joker.starter.exception.CellValueException;
+import org.gxz.joker.starter.exception.CheckValueException;
+import org.gxz.joker.starter.service.ColumnRule;
 import org.gxz.joker.starter.service.Rule;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -55,7 +56,7 @@ public class CheckComposite implements RuleCheck, ApplicationContextAware {
     }
 
     @Override
-    public void check(Rule rule, Object value) throws CellValueException {
+    public void check(ColumnRule rule, Object value) throws CheckValueException {
         for (RuleCheck check : this.checks) {
             check.check(rule, value);
         }

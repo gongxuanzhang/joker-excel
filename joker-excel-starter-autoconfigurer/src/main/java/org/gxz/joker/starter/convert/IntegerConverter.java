@@ -15,7 +15,7 @@ public class IntegerConverter implements Converter<Integer> {
     }
 
     @Override
-    public Integer reconvert(String cellValue, Class<? extends Integer> clazz) {
+    public Integer reconvert(String cellValue, Class<Integer> clazz) {
         if (StringUtils.hasText(cellValue)) {
             return Integer.valueOf(cellValue);
         }

@@ -25,6 +25,8 @@ public class AutoExpression extends JokerArgumentExpression {
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+");
 
+    private static final int ARGS_MIN = 2;
+
     private AtomicInteger count;
 
     private AtomicLong timeStamp;
@@ -45,7 +47,7 @@ public class AutoExpression extends JokerArgumentExpression {
     @Override
     protected void initArgs(String[] args) {
         count = new AtomicInteger(0);
-        if (args.length < 2) {
+        if (args.length < ARGS_MIN) {
             enableReset = false;
         } else {
             enableReset = true;

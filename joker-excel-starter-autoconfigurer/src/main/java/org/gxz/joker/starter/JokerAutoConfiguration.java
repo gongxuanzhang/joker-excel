@@ -12,6 +12,7 @@ import org.gxz.joker.starter.element.check.CheckComposite;
 import org.gxz.joker.starter.element.check.RequireCheck;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.element.gardener.SelectGardener;
+import org.gxz.joker.starter.element.gardener.WidthGardener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,7 @@ public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAwar
     public GardenerComposite gardenerComposite() {
         GardenerComposite gardenerComposite = new GardenerComposite();
         gardenerComposite.addResolver(new SelectGardener());
+        gardenerComposite.addResolver(new WidthGardener());
         JokerConfigurationDelegate.registerGardener(gardenerComposite);
         return gardenerComposite;
     }

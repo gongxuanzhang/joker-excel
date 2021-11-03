@@ -2,6 +2,7 @@ package org.gxz.joker.starter.annotation;
 
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.convert.ManagerConverter;
+import org.gxz.joker.starter.element.DefaultValueConstant;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,17 +28,17 @@ public @interface ExcelField {
     /**
      * 顺序
      **/
-    int order() default Integer.MAX_VALUE;
+    int order() default DefaultValueConstant.ORDER;
 
     /***
      * 解析器
      **/
-    Class<? extends Converter> converter() default ManagerConverter.class;
+    Class<? extends Converter<?>> converter() default ManagerConverter.class;
 
     /**
      * cell长度
      **/
-    int width() default 4000;
+    int width() default DefaultValueConstant.CELL_WIDTH;
 
     /**
      * 下拉框内容

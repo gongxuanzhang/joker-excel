@@ -1,6 +1,8 @@
 package org.gxz.joker.starter.convert;
 
 
+import org.gxz.joker.starter.exception.JokerRuntimeException;
+
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,6 +28,12 @@ public class ConverterRegistry {
     }
 
 
+    /**
+     * 通过被转换的类型获取转换器实例
+     *
+     * @param type 被转换的类型
+     * @return 转换器实例
+     **/
     public Converter<?> getConverterByType(Type type) {
         Converter<?> defaultConvert = defaultConverterMap.getOrDefault(type, null);
         if (defaultConvert != null) {
@@ -36,6 +44,28 @@ public class ConverterRegistry {
             return null;
         }
         return customConverterMap.getOrDefault(type, null);
+    }
+
+    /**
+     * 通过转换器的类型获取转换器实例
+     * 如果没有，就创建转换器，同时加入注册
+     *
+     * @param converterClass 转换器类型
+     * @return 转换实例
+     **/
+    public Converter<?> getConverterAndEnrol(Class<? extends Converter<?>> converterClass) {
+
+        Converter<?> converterByType = getConverterByType(converterClass);
+        if (converterByType == null) {
+            try {
+                putCustom(converterClass, converterClass.newInstance());
+                converterByType = getConverterByType(converterClass);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+                throw new JokerRuntimeException("无法解析转换器");
+            }
+        }
+        return converterByType;
     }
 
 
@@ -61,7 +91,7 @@ public class ConverterRegistry {
         if (customConverterMap == null) {
             synchronized (this) {
                 if (customConverterMap == null) {
-                    customConverterMap = new ConcurrentHashMap<>();
+                    customConverterMap = new ConcurrentHashMap<>(16);
                 }
             }
         }

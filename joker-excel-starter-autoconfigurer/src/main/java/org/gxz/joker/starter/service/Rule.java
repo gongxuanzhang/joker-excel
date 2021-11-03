@@ -10,6 +10,9 @@ import org.gxz.joker.starter.convert.UniqueConverter;
 
 import java.lang.reflect.Field;
 
+/**
+ * @author gongxuanzhang
+ */
 @Data
 public class Rule implements Comparable<Rule> {
 

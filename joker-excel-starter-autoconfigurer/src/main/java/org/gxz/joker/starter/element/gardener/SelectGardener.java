@@ -5,23 +5,24 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.gxz.joker.starter.service.ColumnRule;
 import org.gxz.joker.starter.service.Rule;
 
 import java.util.List;
 
 /**
+ * 下拉框工匠
+ *
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public class SelectGardener extends XSSFGardener {
 
 
     @Override
-    public void xssfClip(XSSFSheet sheet, List<Rule> ruleList) {
-        // 设置长度和下拉框
+    public void xssfClip(XSSFSheet sheet, List<ColumnRule> ruleList) {
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         for (int i = 0; i < ruleList.size(); i++) {
-            sheet.setColumnWidth(i, ruleList.get(i).getWidth());
-            String[] select = ruleList.get(i).getSelect();
+            String[] select = ruleList.get(i).getDataRule().getExcelFieldDescription().getSelect();
             if (select.length > 0) {
                 XSSFDataValidationConstraint assetTypeConstraint =
                         (XSSFDataValidationConstraint) dvHelper.createExplicitListConstraint(select);

@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.ServletRequest;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -50,18 +48,18 @@ public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResol
             return null;
         }
         MultipartFile file = request.getFile("file");
-        AnalysisDataHolder<?> analysisDataHolder = uploadAnalysis.analysisData(file, parameter);
-        WebDataBinder binder = binderFactory.createBinder(webRequest, analysisDataHolder.getErrorRows(),
+        ReadHolder<?> readHolder = uploadAnalysis.analysisData(file, parameter);
+        WebDataBinder binder = binderFactory.createBinder(webRequest, readHolder.getErrorRows(),
                 ComponentConstant.ERROR_ROW_BINDER_KEY);
         if (binder.getTarget() != null) {
             bindRequestParameters(binder, webRequest);
         }
         BindingResult bindingResult = binder.getBindingResult();
         Map<String, Object> model = bindingResult.getModel();
-        model.put(ComponentConstant.ERROR_HEAD_BINDER_KEY, analysisDataHolder.getHead());
+        model.put(ComponentConstant.ERROR_HEAD_BINDER_KEY, readHolder.getHead());
         mavContainer.removeAttributes(model);
         mavContainer.addAllAttributes(model);
-        return analysisDataHolder.getData();
+        return readHolder.getData();
     }
 
 

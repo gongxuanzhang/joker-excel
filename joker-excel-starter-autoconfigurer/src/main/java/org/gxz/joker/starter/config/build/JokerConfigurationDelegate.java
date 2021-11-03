@@ -5,8 +5,9 @@ import org.gxz.joker.starter.component.BaseUploadCheck;
 import org.gxz.joker.starter.config.ExcelFieldDescription;
 import org.gxz.joker.starter.element.check.CheckComposite;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
-import org.gxz.joker.starter.exception.CellValueException;
+import org.gxz.joker.starter.exception.CheckValueException;
 import org.gxz.joker.starter.expression.JokerExpressionParser;
+import org.gxz.joker.starter.service.ColumnRule;
 import org.gxz.joker.starter.service.Rule;
 
 import java.util.Collections;
@@ -45,7 +46,7 @@ public class JokerConfigurationDelegate {
         JokerConfigurationDelegate.checkComposite = checkComposite;
     }
 
-    public static void check(Rule rule, Object value) throws CellValueException {
+    public static void check(ColumnRule rule, Object value) throws CheckValueException {
         checkComposite.check(rule, value);
     }
 
@@ -131,7 +132,7 @@ public class JokerConfigurationDelegate {
         return checkMap.get(checkId);
     }
 
-    public static void clip(Sheet sheet, List<Rule> ruleList) {
+    public static void clip(Sheet sheet, List<ColumnRule> ruleList) {
         gardenerComposite.clip(sheet, ruleList);
     }
 

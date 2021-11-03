@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.component;
 
 import org.gxz.joker.starter.annotation.Upload;
+import org.gxz.joker.starter.service.UploadExcelReader;
 import org.gxz.joker.starter.tool.ExcelExportExecutor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.gxz.joker.starter.tool.ReflectUtil;
@@ -18,19 +19,15 @@ import java.util.Map;
 public class UploadAnalysis {
 
 
-    public AnalysisDataHolder<?> analysisData(MultipartFile file, MethodParameter parameter) {
+    public ReadHolder<?> analysisData(MultipartFile file, MethodParameter parameter) {
         Class<?> genericClass = ReflectUtil.getOnlyGenericity(parameter);
-        if (genericClass == Object.class) {
-            genericClass = Map.class;
-        }
         Assert.notNull(file, "找不到上传的文件");
         String fileName = file.getOriginalFilename();
         Assert.state(fileName.endsWith(".xlsx"), "文件格式错误 请下载数据修改后上传");
         try (InputStream fileInputStream = file.getInputStream()) {
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
             Upload upload = parameter.getParameterAnnotation(Upload.class);
-            Assert.notNull(upload, "无法解析upload");
-            return ExcelExportExecutor.readWorkBook(xssfWorkbook, genericClass, upload.value());
+            UploadExcelReader<?> uploadExcelReader = new UploadExcelReader<>(genericClass, upload);
+            return uploadExcelReader.read(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }

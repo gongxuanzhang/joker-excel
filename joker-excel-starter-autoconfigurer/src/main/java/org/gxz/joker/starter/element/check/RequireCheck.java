@@ -1,17 +1,28 @@
 package org.gxz.joker.starter.element.check;
 
-import org.gxz.joker.starter.exception.CellValueException;
-import org.gxz.joker.starter.service.Rule;
+import org.gxz.joker.starter.config.ExcelFieldDescription;
+import org.gxz.joker.starter.exception.CheckValueException;
+import org.gxz.joker.starter.service.ColumnRule;
+import org.gxz.joker.starter.service.DataRule;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
  **/
 public class RequireCheck implements RuleCheck {
+
+
     @Override
-    public void check(Rule rule, Object value) throws CellValueException {
-        if (rule.isRequire() && isNull(value)) {
-            throw new CellValueException(rule.getCellName() + "为空");
+    public void check(ColumnRule rule, Object value) throws CheckValueException {
+        boolean require =
+                Optional.ofNullable(rule.getDataRule())
+                        .map(DataRule::getExcelFieldDescription)
+                        .map(ExcelFieldDescription::isRequire)
+                        .orElse(false);
+        if (require && isNull(value)) {
+            throw new CheckValueException(rule.getDataRule().getFieldName() + "为空");
         }
     }
 

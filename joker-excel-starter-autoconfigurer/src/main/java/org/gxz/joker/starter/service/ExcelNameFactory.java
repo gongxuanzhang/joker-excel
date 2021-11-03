@@ -24,6 +24,7 @@ public interface ExcelNameFactory {
 
     /**
      * 此工厂被创建之后是否永久单例
+     * @return true为永久单例，默认为非单例(可以被回收，不持久化数据)
      */
     default boolean singleton() {
         return false;

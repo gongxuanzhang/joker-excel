@@ -2,6 +2,7 @@ package org.gxz.joker.starter.component;
 
 import org.apache.commons.collections4.list.UnmodifiableList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,10 +14,11 @@ public abstract class BaseUploadCheck implements UploadCheck {
 
     @Override
     public List<?> getContent() {
-        return new UnmodifiableList<>(prototype);
+        return prototype;
     }
 
     public void register(List<?> prototype) {
-        this.prototype = prototype;
+        List<?> snapshot = new ArrayList<>(prototype);
+        this.prototype = new UnmodifiableList<>(snapshot);
     }
 }

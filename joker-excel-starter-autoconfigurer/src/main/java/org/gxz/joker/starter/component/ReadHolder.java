@@ -14,12 +14,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnalysisDataHolder<T> {
+public class ReadHolder<T> {
     private List<T> data;
     private List<ErrorRow> errorRows;
     private Row head;
 
-    public AnalysisDataHolder(List<T> data) {
+    public ReadHolder(List<T> data) {
         this.data = data;
     }
 }

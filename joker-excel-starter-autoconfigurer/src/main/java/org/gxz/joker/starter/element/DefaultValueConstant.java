@@ -18,4 +18,8 @@ public interface DefaultValueConstant {
     boolean ALL_FIELD = true;
 
     String ERROR_MESSAGE = "errorMessage";
+
+    int CELL_WIDTH = -1;
+
+    int ORDER = Integer.MAX_VALUE;
 }

@@ -1,7 +1,6 @@
 package org.gxz.joker.starter.convert;
 
 import org.gxz.joker.starter.exception.ConvertException;
-import org.gxz.joker.starter.exception.ExcelException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class UniqueConverter<T> implements Converter<T> {
     }
 
     @Override
-    public T reconvert(String cellValue, Class<? extends T> clazz) throws ConvertException {
+    public T reconvert(String cellValue, Class<T> clazz) throws ConvertException {
         T reconvert = converter.reconvert(cellValue, clazz);
         if (!uploadValues.add(reconvert)) {
             throw new ConvertException("第r%行 第c%列 [v%] 重复数据");

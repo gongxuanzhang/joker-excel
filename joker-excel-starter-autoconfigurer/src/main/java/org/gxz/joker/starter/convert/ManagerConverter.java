@@ -48,7 +48,7 @@ public class ManagerConverter implements Converter<Object> {
 
 
     @Override
-    public Object reconvert(String cellValue, Class<? extends Object> clazz) throws ConvertException {
+    public Object reconvert(String cellValue, Class<Object> clazz) throws ConvertException {
         Converter orDefault = converterCache.getOrDefault(clazz, jsonConverter);
         return orDefault.reconvert(cellValue, clazz);
     }

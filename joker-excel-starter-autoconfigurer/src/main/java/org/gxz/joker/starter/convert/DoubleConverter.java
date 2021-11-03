@@ -15,7 +15,7 @@ public class DoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public Double reconvert(String cellValue, Class<? extends Double> clazz) {
+    public Double reconvert(String cellValue, Class<Double> clazz) {
         if (StringUtils.hasText(cellValue)) {
             return Double.valueOf(cellValue);
         }

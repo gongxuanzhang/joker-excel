@@ -12,7 +12,8 @@ import org.gxz.joker.starter.exception.ExportReturnException;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.expression.JokerExpressionParserAdapter;
 import org.gxz.joker.starter.expression.JokerExpressionParserComposite;
-import org.gxz.joker.starter.tool.ExcelExportExecutor;
+import org.gxz.joker.starter.service.ExcelCreator;
+import org.gxz.joker.starter.service.SimpleExcelCreator;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.tool.ReflectUtil;
 import org.gxz.joker.starter.tool.ThreadMethodHolder;
@@ -70,7 +71,8 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
                 beanType = result.iterator().next().getClass();
             }
             ExcelDescription excelDescription = analysisExcelDesc(pjp, beanType);
-            Workbook workbook = ExcelExportExecutor.writeWorkBook(result, excelDescription);
+            ExcelCreator excelCreator = new SimpleExcelCreator(result, excelDescription);
+            Workbook workbook = excelCreator.create();
             workbook.setSheetName(0, excelDescription.getSheetName());
             ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
         } finally {

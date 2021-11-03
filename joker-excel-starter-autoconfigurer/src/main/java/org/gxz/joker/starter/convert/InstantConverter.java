@@ -23,7 +23,7 @@ public class InstantConverter implements Converter<Instant> {
     }
 
     @Override
-    public Instant reconvert(String cellValue, Class<? extends Instant> clazz) {
+    public Instant reconvert(String cellValue, Class<Instant> clazz) {
         LocalDateTime reconvert = delegate.reconvert(cellValue, LocalDateTime.class);
         return reconvert.toInstant(ZoneOffset.of("+8"));
     }

@@ -3,6 +3,7 @@ package com.gxz.jokerexceltest.controller;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.element.Checkable;
+import org.gxz.joker.starter.exception.CheckValueException;
 import org.gxz.joker.starter.exception.ConvertException;
 
 import javax.validation.constraints.NotBlank;
@@ -12,10 +13,10 @@ import java.time.LocalDateTime;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @ExcelData
-public class User implements Checkable<User> {
+public class User implements Checkable {
 
 
-    @ExcelField(name = "姓名", unique = true)
+    @ExcelField(name = "姓名", unique = true, width = 7000)
     private String name;
     @ExcelField(select = {"男", "女"})
     private String sex;
@@ -71,9 +72,9 @@ public class User implements Checkable<User> {
     }
 
     @Override
-    public void check() throws ConvertException {
+    public void check() throws CheckValueException {
         if (this.name.contains("1")) {
-            throw new ConvertException("a");
+            throw new CheckValueException("a");
         }
     }
 }

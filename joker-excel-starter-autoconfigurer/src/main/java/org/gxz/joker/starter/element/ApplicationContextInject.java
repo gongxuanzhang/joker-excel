@@ -9,16 +9,15 @@ import org.springframework.context.ApplicationContext;
  **/
 public interface ApplicationContextInject {
     /**
-     *
      * 配置容器
-     *
+     * @param ioc spring ioc
      **/
     void setApplicationContext(ApplicationContext ioc);
 
 
     /**
-     *
      * 拿到容器
+     *
      * @return spring ioc
      **/
     ApplicationContext getApplicationContext();

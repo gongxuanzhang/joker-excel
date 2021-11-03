@@ -1,7 +1,10 @@
 package org.gxz.joker.starter.config;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.gxz.joker.starter.annotation.ExcelField;
+import org.gxz.joker.starter.element.DefaultValueConstant;
+import org.gxz.joker.starter.element.ExcelDescription;
 
 /**
  * 字段描述
@@ -10,13 +13,6 @@ import org.gxz.joker.starter.annotation.ExcelField;
  **/
 @Getter
 public class ExcelFieldDescription {
-
-
-    public ExcelFieldDescription(ExcelField excelField) {
-        this.isRequire = excelField.require();
-        this.isUnique = excelField.unique();
-        this.select = excelField.select();
-    }
 
 
     /**
@@ -33,6 +29,23 @@ public class ExcelFieldDescription {
      * 字段下拉框内容，如果不是下拉框字段，为空数组
      **/
     private final String[] select;
+
+
+    @Setter
+    private String fieldName;
+
+
+    public ExcelFieldDescription(ExcelField excelField) {
+        this.isRequire = excelField.require();
+        this.isUnique = excelField.unique();
+        this.select = excelField.select();
+    }
+
+    public ExcelFieldDescription() {
+        this.isRequire = false;
+        this.isUnique = false;
+        this.select = new String[]{};
+    }
 
 
 }

@@ -31,8 +31,7 @@ public class ReflectUtil {
 
     public static Class<?> getMethodResultGenericity(Method method) {
         Type genericReturnType = method.getGenericReturnType();
-        //System.out.println(genericReturnType);
-        //获取返回值的泛型参数
+        //  获取返回值的泛型参数
         if (genericReturnType instanceof ParameterizedType) {
             Type actualTypeArgument = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
             return (Class<?>) actualTypeArgument;

@@ -34,6 +34,8 @@ public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 
     Class<?>[] scanClass = new Class[]{JokerGlobalConfig.class, BaseUploadCheck.class};
 
+    private static final String KEY = "basePackages";
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata,
                                         BeanDefinitionRegistry registry,
@@ -48,7 +50,7 @@ public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
         List<String> basePackages = new ArrayList<>();
         Map<String, Object> attributes = metadata.getAnnotationAttributes(EnableJokerExcel.class.getCanonicalName());
         if (!CollectionUtils.isEmpty(attributes)) {
-            for (String pkg : (String[]) attributes.get("basePackages")) {
+            for (String pkg : (String[]) attributes.get(KEY)) {
                 if (StringUtils.hasText(pkg)) {
                     basePackages.add(pkg);
                 }

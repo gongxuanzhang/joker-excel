@@ -15,7 +15,7 @@ public class LongConverter implements Converter<Long> {
     }
 
     @Override
-    public Long reconvert(String cellValue, Class<? extends Long> clazz) {
+    public Long reconvert(String cellValue, Class<Long> clazz) {
         if (StringUtils.hasText(cellValue)) {
             return Long.valueOf(cellValue);
         }

@@ -27,7 +27,7 @@ public abstract class JokerArgumentExpression extends SpelExpression {
 
     private String[] args;
 
-    protected String[] getArgs(){
+    protected String[] getArgs() {
         return this.args;
     }
 
@@ -39,7 +39,6 @@ public abstract class JokerArgumentExpression extends SpelExpression {
     }
 
 
-
     /**
      * 通过表达式参数，为自己初始化
      */
@@ -47,14 +46,17 @@ public abstract class JokerArgumentExpression extends SpelExpression {
 
     }
 
+    /**
+     *
+     * 计算表达式的值
+     * @return 返回表达式的值
+     **/
     public abstract String getStrValue();
 
     @Override
-    public Object getValue() throws EvaluationException{
+    public Object getValue() throws EvaluationException {
         return getStrValue();
     }
-
-
 
 
     @Override

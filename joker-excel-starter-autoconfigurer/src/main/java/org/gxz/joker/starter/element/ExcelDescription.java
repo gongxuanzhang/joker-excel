@@ -31,6 +31,9 @@ public class ExcelDescription {
 
     private String sheetName;
 
+    /**
+     * 字段的取舍相关
+     **/
     private FieldHolder fieldHolder;
 
     @Setter

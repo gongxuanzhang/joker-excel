@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.element.gardener;
 
 import org.apache.poi.ss.usermodel.Sheet;
+import org.gxz.joker.starter.service.ColumnRule;
 import org.gxz.joker.starter.service.Rule;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -44,17 +45,10 @@ public class GardenerComposite implements Gardener, ApplicationContextAware {
     }
 
     @Override
-    public void clip(Sheet sheet, List<Rule> ruleList) {
+    public void clip(Sheet sheet, List<ColumnRule> ruleList) {
         for (Gardener gardener : this.gardeners) {
-            if (gardener.support(sheet, ruleList)) {
-                gardener.clip(sheet, ruleList);
-            }
+            gardener.clip(sheet, ruleList);
         }
-    }
-
-    @Override
-    public boolean support(Sheet sheet, List<Rule> ruleList) {
-        return true;
     }
 
 
