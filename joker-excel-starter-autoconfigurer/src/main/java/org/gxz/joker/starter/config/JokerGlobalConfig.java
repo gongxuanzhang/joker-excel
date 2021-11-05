@@ -10,5 +10,10 @@ import org.gxz.joker.starter.config.build.JokerBuilder;
 
 public interface JokerGlobalConfig {
 
+    /**
+     * 全局配置
+     *
+     * @param builder 配置内容建造者
+     **/
     void configure(JokerBuilder builder);
 }

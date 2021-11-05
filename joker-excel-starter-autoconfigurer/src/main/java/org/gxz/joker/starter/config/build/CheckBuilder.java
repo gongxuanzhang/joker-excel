@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 校验相关设置
  * @author gongxuanzhang
  */
 @Getter

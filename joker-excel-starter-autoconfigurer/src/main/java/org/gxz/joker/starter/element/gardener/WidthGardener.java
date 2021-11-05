@@ -2,7 +2,6 @@ package org.gxz.joker.starter.element.gardener;
 
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.gxz.joker.starter.service.ColumnRule;
-import org.gxz.joker.starter.service.Rule;
 
 import java.util.List;
 

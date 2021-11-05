@@ -24,7 +24,7 @@ public class UploadExcelReader<T> extends AbstractExcelReader<T> {
 
     @Override
     protected List<BaseUploadCheck> getUploadChecks() {
-        BaseUploadCheck baseUploadCheck = JokerConfigurationDelegate.uploadCheck(upload.value());
+        BaseUploadCheck baseUploadCheck = JokerConfigurationDelegate.getUploadChecker(upload.value());
         if (baseUploadCheck == null) {
             return null;
         }

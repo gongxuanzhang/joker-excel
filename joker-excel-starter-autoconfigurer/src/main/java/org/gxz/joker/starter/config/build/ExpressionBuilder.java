@@ -7,15 +7,17 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 表达式配置
  * @author gongxuanzhang
  */
 @Getter
 public class ExpressionBuilder extends JoinAbleBuilder {
 
-    private List<JokerExpressionParser> parserList = new ArrayList<>();
+    private List<JokerExpressionParser> parserList = new LinkedList<>();
 
     public ExpressionBuilder(JokerBuilder jokerBuilder) {
         super(jokerBuilder);

@@ -55,6 +55,11 @@ public @interface ExcelField {
      **/
     boolean require() default false;
 
+    /**
+     * 脱敏表达式
+     **/
+    String encrypt() default "";
+
 
     /**
      * 如果遇到异常报错 抛出异常消息内容。
@@ -65,6 +70,8 @@ public @interface ExcelField {
      * v% 解析错误的excel内容
      **/
     String errorMessage() default "";
+
+
 
 
 }

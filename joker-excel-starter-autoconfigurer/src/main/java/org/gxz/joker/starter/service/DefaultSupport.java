@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  *
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public final class DefaultSupport implements ExcelNameFactory, JokerConfiguration {
+public final class DefaultSupport implements ExcelNameFactory, JokerConfiguration{
 
     private DefaultSupport() {
 

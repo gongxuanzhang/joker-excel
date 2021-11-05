@@ -1,6 +1,5 @@
 package org.gxz.joker.starter.expression;
 
-import org.springframework.context.ApplicationContext;
 
 /**
  * jokerExpression 的解析器， 不遵守Spel的的parser 由${@link JokerExpressionParserAdapter}适配

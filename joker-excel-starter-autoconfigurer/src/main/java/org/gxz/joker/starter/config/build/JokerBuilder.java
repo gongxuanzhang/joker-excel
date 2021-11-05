@@ -1,9 +1,6 @@
 package org.gxz.joker.starter.config.build;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
 /**
  * Joker配置建造者，
  *
@@ -15,6 +12,8 @@ public class JokerBuilder {
     JokerExportBuilder jokerExportBuilder;
 
     HeadBuilder headBuilder;
+
+    BodyBuilder bodyBuilder;
 
     CheckBuilder checkBuilder;
 
@@ -55,5 +54,13 @@ public class JokerBuilder {
         }
         return expressionBuilder;
     }
+
+    public BodyBuilder body(){
+        if(this.bodyBuilder == null){
+            this.bodyBuilder = new BodyBuilder(this);
+        }
+        return this.bodyBuilder;
+    }
+
 
 }

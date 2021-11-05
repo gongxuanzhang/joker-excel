@@ -34,17 +34,26 @@ public class ExcelFieldDescription {
     @Setter
     private String fieldName;
 
+    /**
+     *
+     * 脱敏表达式
+     **/
+    @Setter
+    private String desensitizationExpression;
+
 
     public ExcelFieldDescription(ExcelField excelField) {
         this.isRequire = excelField.require();
         this.isUnique = excelField.unique();
         this.select = excelField.select();
+        this.desensitizationExpression = excelField.encrypt();
     }
 
     public ExcelFieldDescription() {
         this.isRequire = false;
         this.isUnique = false;
         this.select = new String[]{};
+        this.desensitizationExpression = "";
     }
 
 

@@ -72,9 +72,6 @@ public abstract class AbstractExcelCreator implements ExcelCreator {
             ColumnRule rule = rules.get(i);
             Cell cell = row.createCell(i);
             Class<?> clazz = object.getClass();
-            if (Checkable.class.isAssignableFrom(clazz)) {
-                ((Checkable) object).check();
-            }
             cell.setCellValue(getValueByRule(clazz, object, rule));
         }
     }

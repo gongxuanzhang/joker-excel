@@ -8,7 +8,6 @@ import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.exception.CheckValueException;
 import org.gxz.joker.starter.expression.JokerExpressionParser;
 import org.gxz.joker.starter.service.ColumnRule;
-import org.gxz.joker.starter.service.Rule;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,14 +50,17 @@ public class JokerConfigurationDelegate {
     }
 
 
+    /**
+     * 注册构建
+     **/
     public static void registerBuild(JokerBuilder jokerBuilder) {
-        HeadBuilder head = jokerBuilder.head();
-        registerPrefix(head);
-        registerSuffix(head);
-        registerParser(jokerBuilder.expressionBuilder);
+        registerHeadBuilder(jokerBuilder.head());
+        registerExpression(jokerBuilder.expressionBuilder);
     }
 
-
+    /**
+     * 构建校验信息
+     **/
     public static void registerCheck(BaseUploadCheck baseUploadCheck) {
         if (checkMap == null) {
             checkMap = new HashMap<>(16);
@@ -66,12 +68,28 @@ public class JokerConfigurationDelegate {
         checkMap.put(baseUploadCheck.getId(), baseUploadCheck);
     }
 
-
-    public static void registerParser(ExpressionBuilder expressionBuilder) {
+    /**
+     * 构建表达式信息
+     **/
+    private static void registerExpression(ExpressionBuilder expressionBuilder) {
         parserList = expressionBuilder.getParserList();
     }
 
 
+    /**
+     * 构建表头信息
+     **/
+    private static void registerHeadBuilder(HeadBuilder headBuilder) {
+        registerPrefix(headBuilder);
+        registerSuffix(headBuilder);
+
+    }
+
+
+
+    /**
+     * 构建前缀
+     **/
     private static void registerPrefix(HeadBuilder head) {
         if (head == null) {
             prefixSupplier = (d) -> "";
@@ -91,6 +109,9 @@ public class JokerConfigurationDelegate {
 
     }
 
+    /**
+     * 构建后缀
+     **/
     private static void registerSuffix(HeadBuilder head) {
         if (head == null) {
             suffixSupplier = (d) -> "";
@@ -125,17 +146,34 @@ public class JokerConfigurationDelegate {
     }
 
 
-    public static BaseUploadCheck uploadCheck(String checkId) {
+    /**
+     * 通过id拿到具体的校验类
+     *
+     * @param checkId id
+     * @return 校验类
+     **/
+    public static BaseUploadCheck getUploadChecker(String checkId) {
         if (checkMap == null) {
             return null;
         }
         return checkMap.get(checkId);
     }
 
+    /**
+     * 特殊样式的添加
+     *
+     * @param sheet    sheet
+     * @param ruleList 规则内容
+     **/
     public static void clip(Sheet sheet, List<ColumnRule> ruleList) {
         gardenerComposite.clip(sheet, ruleList);
     }
 
+    /**
+     * 支持的特殊表达式解析器
+     *
+     * @return 返回个啥
+     **/
     public static List<JokerExpressionParser> getParserList() {
         if (parserList == null) {
             parserList = Collections.emptyList();
