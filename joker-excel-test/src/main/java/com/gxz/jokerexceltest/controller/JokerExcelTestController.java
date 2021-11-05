@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -114,6 +115,7 @@ public class JokerExcelTestController {
             user.setAge(i);
             user.setBirthday(LocalDateTime.now().minusDays(i));
             user.setSex(i % 2 == 0 ? "男" : "女");
+            user.setEmail(UUID.randomUUID().toString().substring(8) +"@gmail.com");
             exportData.add(user);
         }
         exportData.add(new User().setName("张1"));

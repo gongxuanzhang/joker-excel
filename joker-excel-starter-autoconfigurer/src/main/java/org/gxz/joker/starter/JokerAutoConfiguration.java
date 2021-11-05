@@ -10,6 +10,7 @@ import org.gxz.joker.starter.component.UploadAnalysis;
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.element.check.CheckComposite;
 import org.gxz.joker.starter.element.check.RequireCheck;
+import org.gxz.joker.starter.element.gardener.DesensitizationGardener;
 import org.gxz.joker.starter.element.gardener.GardenerComposite;
 import org.gxz.joker.starter.element.gardener.SelectGardener;
 import org.gxz.joker.starter.element.gardener.WidthGardener;
@@ -44,6 +45,7 @@ public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAwar
         GardenerComposite gardenerComposite = new GardenerComposite();
         gardenerComposite.addResolver(new SelectGardener());
         gardenerComposite.addResolver(new WidthGardener());
+        gardenerComposite.addResolver(new DesensitizationGardener());
         JokerConfigurationDelegate.registerGardener(gardenerComposite);
         return gardenerComposite;
     }

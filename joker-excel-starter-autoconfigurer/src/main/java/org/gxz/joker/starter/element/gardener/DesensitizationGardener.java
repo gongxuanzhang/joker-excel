@@ -2,6 +2,7 @@ package org.gxz.joker.starter.element.gardener;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.gxz.joker.starter.config.ExcelFieldDescription;
@@ -83,10 +84,16 @@ public class DesensitizationGardener extends XSSFGardener {
 
     private Function<String, String> retainWall(int retainLeft, String wall) {
         return (str) -> {
+            if (StringUtils.isEmpty(str)) {
+                return str;
+            }
             int i = str.indexOf(wall);
             if (i == -1) {
+                if (retainLeft >= str.length()) {
+                    return str;
+                }
                 StringBuilder sb = new StringBuilder();
-                sb.append(str,0,retainLeft);
+                sb.append(str, 0, retainLeft);
                 for (int i1 = 0; i1 < str.length() - retainLeft; i1++) {
                     sb.append("*");
                 }
@@ -96,7 +103,7 @@ public class DesensitizationGardener extends XSSFGardener {
             } else {
                 StringBuilder sb = new StringBuilder();
                 sb.append(str, 0, retainLeft);
-                for (int i1 = 0; i1 < i - retainLeft -1; i1++) {
+                for (int i1 = 0; i1 < i - retainLeft - 1; i1++) {
                     sb.append("*");
                 }
                 sb.append(str, i, str.length());

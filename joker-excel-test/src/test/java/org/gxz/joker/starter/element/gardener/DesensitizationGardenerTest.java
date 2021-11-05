@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ class DesensitizationGardenerTest {
 
     @Test
     @DisplayName("脱敏测试")
-    public void desc() {
+    public void desc() throws NoSuchFieldException, IllegalAccessException {
         DesensitizationGardener desensitizationGardener = new DesensitizationGardener();
         XSSFWorkbook excel = ExportUtils.createEmptySheetExcel("sheet");
         XSSFSheet test = excel.createSheet("test");
@@ -42,9 +43,16 @@ class DesensitizationGardenerTest {
         }
         List<ColumnRule> columnRuleList = new ArrayList<>();
         DataRule nameRule = new DataRule();
-        nameRule.setExcelFieldDescription(new ExcelFieldDescription().setDesensitizationExpression("1_3"));
+        ExcelFieldDescription excelFieldDescription = new ExcelFieldDescription();
+        Field field = excelFieldDescription.getClass().getDeclaredField("desensitizationExpression");
+        field.setAccessible(true);
+        field.set(excelFieldDescription,"1_3");
+        nameRule.setExcelFieldDescription(excelFieldDescription);
+
+        ExcelFieldDescription excelFieldDescription1 = new ExcelFieldDescription();
+        field.set(excelFieldDescription1,"3~@");
         DataRule emailRule = new DataRule();
-        emailRule.setExcelFieldDescription(new ExcelFieldDescription().setDesensitizationExpression("3~@"));
+        emailRule.setExcelFieldDescription(excelFieldDescription1);
 
         columnRuleList.add(new ColumnRule().setDataRule(nameRule));
         columnRuleList.add(new ColumnRule().setDataRule(emailRule));

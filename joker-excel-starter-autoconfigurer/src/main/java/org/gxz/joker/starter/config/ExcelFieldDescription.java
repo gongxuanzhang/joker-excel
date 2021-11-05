@@ -38,8 +38,7 @@ public class ExcelFieldDescription {
      *
      * 脱敏表达式
      **/
-    @Setter
-    private String desensitizationExpression;
+     String desensitizationExpression;
 
 
     public ExcelFieldDescription(ExcelField excelField) {
