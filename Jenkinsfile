@@ -18,7 +18,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn clean package -s "/var/jenkins_home/appconfig/maven/settings.xml" -Dmaven.test.skip=true'
+                sh 'mvn clean install -s "/var/jenkins_home/appconfig/maven/settings.xml" -Dmaven.test.skip=true'
                 echo 'package finish'
             }
         }
