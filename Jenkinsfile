@@ -10,7 +10,7 @@ pipeline {
         }
 
         // 打包
-        stage('package') {
+        stage('package1') {
             agent {
                 docker {
                     image 'maven:3-alpine'
