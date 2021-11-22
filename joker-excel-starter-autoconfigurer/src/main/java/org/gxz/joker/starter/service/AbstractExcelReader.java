@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.gxz.joker.starter.component.BaseUploadCheck;
 import org.gxz.joker.starter.component.ReadHolder;
-import org.gxz.joker.starter.component.UploadCheck;
 import org.gxz.joker.starter.config.build.JokerCallBackCombination;
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.convert.Converter;
@@ -22,12 +21,10 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -161,17 +158,15 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
             // 自检
             if (bean != null) {
                 T t = bean.toJavaObject(beanType);
-                if (t instanceof Checkable) {
-                    try {
-                        ((Checkable) t).check();
-                        indexMap.add(data.size(), rowIndex);
-                        this.data.add(t);
-                    } catch (CheckValueException e) {
-                        addCandidate(e, rowIndex);
-                    }
-                }else{
-                    this.data.add(t);
+                try {
+                    checkDataSelf(t);
+                } catch (CheckValueException e) {
+                    addCandidate(e, rowIndex);
+                    continue;
                 }
+                indexMap.add(data.size(), rowIndex);
+                this.data.add(t);
+
             }
         }
 
@@ -206,6 +201,12 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
             JokerCallBackCombination.uploadFinish(data);
         } else {
             JokerCallBackCombination.uploadSuccess(data);
+        }
+    }
+
+    private void checkDataSelf(T t) throws CheckValueException {
+        if (t instanceof Checkable) {
+            ((Checkable) t).check();
         }
     }
 
