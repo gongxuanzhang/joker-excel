@@ -9,6 +9,7 @@ pipeline {
             }
         }
 
+
         // 打包
         stage('package1') {
             agent {
