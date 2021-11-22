@@ -169,6 +169,8 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
                     } catch (CheckValueException e) {
                         addCandidate(e, rowIndex);
                     }
+                }else{
+                    this.data.add(t);
                 }
             }
         }
