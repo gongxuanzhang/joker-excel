@@ -4,8 +4,6 @@ import org.gxz.joker.starter.component.JokerConfiguration;
 import org.gxz.joker.starter.element.DefaultValueConstant;
 import org.gxz.joker.starter.service.DefaultSupport;
 import org.gxz.joker.starter.service.ExcelNameFactory;
-import org.springframework.core.annotation.AliasFor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

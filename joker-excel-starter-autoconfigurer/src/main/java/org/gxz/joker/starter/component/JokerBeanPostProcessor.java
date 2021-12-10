@@ -1,9 +1,9 @@
 package org.gxz.joker.starter.component;
 
-import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
+import org.gxz.joker.starter.config.JokerGlobalConfig;
 import org.gxz.joker.starter.config.build.JokerBuilder;
 import org.gxz.joker.starter.config.build.JokerCallBackCombination;
-import org.gxz.joker.starter.config.JokerGlobalConfig;
+import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 

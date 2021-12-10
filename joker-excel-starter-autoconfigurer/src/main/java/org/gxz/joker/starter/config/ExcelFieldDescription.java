@@ -3,8 +3,6 @@ package org.gxz.joker.starter.config;
 import lombok.Getter;
 import lombok.Setter;
 import org.gxz.joker.starter.annotation.ExcelField;
-import org.gxz.joker.starter.element.DefaultValueConstant;
-import org.gxz.joker.starter.element.ExcelDescription;
 
 /**
  * 字段描述
@@ -30,6 +28,8 @@ public class ExcelFieldDescription {
      **/
     private final String[] select;
 
+    private String headName;
+
 
     @Setter
     private String fieldName;
@@ -46,12 +46,14 @@ public class ExcelFieldDescription {
         this.isUnique = excelField.unique();
         this.select = excelField.select();
         this.desensitizationExpression = excelField.encrypt();
+        this.headName = excelField.name();
     }
 
     public ExcelFieldDescription() {
         this.isRequire = false;
         this.isUnique = false;
         this.select = new String[]{};
+
         this.desensitizationExpression = "";
     }
 

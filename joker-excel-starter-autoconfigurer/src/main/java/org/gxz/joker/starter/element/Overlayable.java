@@ -1,8 +1,6 @@
 package org.gxz.joker.starter.element;
 
 
-import java.util.Comparator;
-
 /**
  * 实现这个接口的子类 会获得可以和同样实现此接口的子类合并，
  * 合并之后有优先级，且会覆盖默认值

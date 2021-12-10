@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.tool.FuseUtils;
-import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;

@@ -22,7 +22,11 @@ public class RequireCheck implements RuleCheck {
                         .map(ExcelFieldDescription::isRequire)
                         .orElse(false);
         if (require && isNull(value)) {
-            throw new CheckValueException(rule.getDataRule().getFieldName() + "为空");
+            String headHead = Optional.of(rule.getDataRule().getExcelFieldDescription().getHeadName()).orElse(null);
+            if(!StringUtils.hasText(headHead)){
+                headHead = rule.getDataRule().getFieldName();
+            }
+            throw new CheckValueException(headHead + "为空");
         }
     }
 

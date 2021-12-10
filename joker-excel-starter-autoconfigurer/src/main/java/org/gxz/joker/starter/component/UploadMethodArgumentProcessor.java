@@ -1,7 +1,7 @@
 package org.gxz.joker.starter.component;
 
-import org.gxz.joker.starter.annotation.Upload;
 import lombok.extern.slf4j.Slf4j;
+import org.gxz.joker.starter.annotation.Upload;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
