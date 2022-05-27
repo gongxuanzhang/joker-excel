@@ -1,6 +1,7 @@
 package org.gxz.joker.starter;
 
 
+import org.gxz.joker.starter.component.DynamicSelectSheetAppender;
 import org.gxz.joker.starter.component.ErrorRowsArgumentProcessor;
 import org.gxz.joker.starter.component.ExportAspect;
 import org.gxz.joker.starter.component.JokerBeanPostProcessor;
@@ -48,6 +49,12 @@ public class JokerAutoConfiguration implements WebMvcConfigurer, EnvironmentAwar
         gardenerComposite.addResolver(new DesensitizationGardener());
         JokerConfigurationDelegate.registerGardener(gardenerComposite);
         return gardenerComposite;
+    }
+
+
+    @Bean
+    public DynamicSelectSheetAppender dynamicSelectSheetAppender(){
+        return new DynamicSelectSheetAppender();
     }
 
     @Bean

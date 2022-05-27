@@ -99,4 +99,7 @@ public abstract class AbstractExcelCreator implements ExcelCreator {
     }
 
 
+    public List<ColumnRule> getRules() {
+        return rules;
+    }
 }

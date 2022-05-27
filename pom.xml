@@ -4,15 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tincery</groupId>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>org.gxz</groupId>
     <artifactId>joker-excel-all</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.1</version>
     <packaging>pom</packaging>
 
 
     <modules>
         <module>joker-excel-starter</module>
-        <module>joker-excel-starter-autoconfigurer</module>
+        <module>joker-excel-starter-autoconfigure</module>
         <module>joker-excel-test</module>
     </modules>
 

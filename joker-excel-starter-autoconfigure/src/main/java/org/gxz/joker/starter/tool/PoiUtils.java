@@ -3,6 +3,7 @@ package org.gxz.joker.starter.tool;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com
@@ -65,4 +66,20 @@ public class PoiUtils {
         }
     }
 
+
+    public static Cell getCellOrCreate(Row row, int cellIndex) {
+        Cell cell = row.getCell(cellIndex);
+        if (cell != null) {
+            return cell;
+        }
+        return row.createCell(cellIndex);
+    }
+
+    public static Row getRowOrCreate(Sheet sheet, int rowIndex) {
+        Row row = sheet.getRow(rowIndex);
+        if (row != null) {
+            return row;
+        }
+        return sheet.createRow(rowIndex);
+    }
 }

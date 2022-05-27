@@ -47,6 +47,8 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
     private JokerExpressionParserComposite parserComposite;
 
+    private DynamicSelectSheetAppender dynamicSelectSheetAppender;
+
 
     @Around(value = "@annotation(org.gxz.joker.starter.annotation.Export)")
     public Object exportAspect(ProceedingJoinPoint pjp) throws Throwable {
@@ -71,9 +73,10 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
                 beanType = result.iterator().next().getClass();
             }
             ExcelDescription excelDescription = analysisExcelDesc(pjp, beanType);
-            ExcelCreator excelCreator = new SimpleExcelCreator(result, excelDescription);
+            SimpleExcelCreator excelCreator = new SimpleExcelCreator(result, excelDescription);
             Workbook workbook = excelCreator.create();
             workbook.setSheetName(0, excelDescription.getSheetName());
+            dynamicSelectSheetAppender.append(workbook,beanType,excelCreator.getRules());
             ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
         } finally {
             ThreadMethodHolder.clear();
@@ -99,6 +102,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         this.parserComposite = new JokerExpressionParserComposite(applicationContext);
+        dynamicSelectSheetAppender = applicationContext.getBean(DynamicSelectSheetAppender.class);
 
     }
 

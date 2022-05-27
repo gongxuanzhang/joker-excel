@@ -28,6 +28,9 @@ public class SelectGardener extends XSSFGardener {
                 CellRangeAddressList typeList = new CellRangeAddressList(1, sheet.getLastRowNum(), i, i);
                 XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(assetTypeConstraint,
                         typeList);
+                validation.createErrorBox("错误", "请选择下拉框的内容");
+                validation.setShowErrorBox(true);
+                validation.setSuppressDropDownArrow(true);
                 sheet.addValidationData(validation);
             }
         }

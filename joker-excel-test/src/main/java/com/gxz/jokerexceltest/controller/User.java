@@ -1,5 +1,6 @@
 package com.gxz.jokerexceltest.controller;
 
+import org.gxz.joker.starter.annotation.DynamicSelect;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
 import org.gxz.joker.starter.element.Checkable;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @ExcelData
+@DynamicSelect(name = "东汉末年",selector = UserSelector.class)
 public class User implements Checkable {
 
 

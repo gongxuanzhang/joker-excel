@@ -4,9 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gxz</groupId>
+    <parent>
+        <groupId>org.gxz</groupId>
+        <artifactId>joker-excel-all</artifactId>
+        <version>1.1.1</version>
+    </parent>
+
     <artifactId>joker-excel-starter</artifactId>
-    <version>1.0.1</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -15,9 +19,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gxz</groupId>
-            <artifactId>joker-excel-starter-autoConfigurer</artifactId>
-            <version>1.0.1</version>
+            <groupId>org.gxz</groupId>
+            <artifactId>joker-excel-starter-autoconfigure</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
