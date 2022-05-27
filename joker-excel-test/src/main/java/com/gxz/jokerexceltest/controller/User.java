@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  **/
 @ExcelData
 @DynamicSelect(name = "东汉末年", selector = UserSelector.class)
-@TextBox(User.a)
+@TextBox(value = User.a,height = 10)
 public class User implements Checkable {
     public static final String a = "sdfsld fjlskdflkasj ldfk jlsadkf jlsakd flkasjflkasd f\nsadlf jsaldf \nasldf " +
             "kjlasd f";

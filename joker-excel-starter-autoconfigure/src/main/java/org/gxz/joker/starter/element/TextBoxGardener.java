@@ -29,7 +29,7 @@ public class TextBoxGardener implements Gardener {
     public void clip(Sheet sheet, List<ColumnRule> ruleList) {
         XSSFDrawing draw = ((XSSFSheet) sheet).createDrawingPatriarch();
         int index = ruleList.size();
-        XSSFClientAnchor createAnchor = draw.createAnchor(0, 0, 0, 0, index + 1, 11, index + 7, 11 + 7);
+        XSSFClientAnchor createAnchor = draw.createAnchor(0, 0, 0, 0, index + 1, 3, index + 1+ textBox.width(), 3 + textBox.height());
 
         //创建文本框
         XSSFTextBox tb1 = draw.createTextbox(createAnchor);
