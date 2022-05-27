@@ -21,7 +21,7 @@ public @interface DynamicSelect {
     /**
      * 动态生成的sheet是否隐藏
      **/
-    boolean sheetHide() default false;
+    boolean sheetHide() default true;
 
     /**
      * 生成的sheet名字，如果 {@link #sheetHide()} 是true 将失效

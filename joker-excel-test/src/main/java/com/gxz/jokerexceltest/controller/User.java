@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @ExcelData
-@DynamicSelect(name = "东汉末年", selector = UserSelector.class)
+@DynamicSelect(name = "东汉末年", selector = UserSelector.class )
 public class User implements Checkable {
 
 
