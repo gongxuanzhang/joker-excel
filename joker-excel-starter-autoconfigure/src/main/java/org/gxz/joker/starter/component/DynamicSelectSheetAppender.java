@@ -68,7 +68,7 @@ public class DynamicSelectSheetAppender implements ApplicationContextAware {
                 int infoIndex = independentDynamic.findInfoIndex(infos);
                 rowChecker.check(infoIndex);
                 String exportColumnName = infos[infoIndex].getExportColumnName();
-                independentDynamic.fillCol(exportColumnName,cellIndex,dataSheet);
+                independentDynamic.fillCol(exportColumnName,cellIndex,hideSheet);
                 //  设置数据校验
                 String formula = FormulaUtils.columnNameFormula(hideSheet, cellIndex, independentDynamic.getItems().size());
                 DataValidation validation = createColValidationFormula(dataSheet, infoIndex, formula);
@@ -109,7 +109,7 @@ public class DynamicSelectSheetAppender implements ApplicationContextAware {
                 //  子列的数据校验
                 for (int i = 1; i < 2000; i++) {
                     String parentColName = CellReference.convertNumToColString(parentIndex);
-                    String childFormula = String.format("INDIRECT(%s%s)", parentColName, i + 1);
+                    String childFormula = String.format("INDIRECT(%s%s)", parentColName, (i + 2));
                     validation = createColValidationFormula(dataSheet, childIndex, childFormula);
                     dataSheet.addValidationData(validation);
                 }
