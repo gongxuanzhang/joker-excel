@@ -30,7 +30,7 @@ public abstract class ValidationUtils {
      **/
     public static DataValidation createColValidationFormula(XSSFSheet sheet, int colIndex, String formula) {
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
-        CellRangeAddressList provRangeAddressList = new CellRangeAddressList(2, VALIDATION_ROW, colIndex, colIndex);
+        CellRangeAddressList provRangeAddressList = new CellRangeAddressList(1, VALIDATION_ROW, colIndex, colIndex);
         DataValidationConstraint formulaListConstraint = dvHelper.createFormulaListConstraint(formula);
         DataValidation validation = dvHelper.createValidation(formulaListConstraint, provRangeAddressList);
         validationAddAlarm(validation);

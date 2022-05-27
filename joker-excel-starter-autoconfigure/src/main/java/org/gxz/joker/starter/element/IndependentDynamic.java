@@ -50,8 +50,6 @@ public class IndependentDynamic {
             Cell itemCell = getCellOrCreate(row, colIndex);
             itemCell.setCellValue(items.get(i));
         }
-
-
     }
 
 

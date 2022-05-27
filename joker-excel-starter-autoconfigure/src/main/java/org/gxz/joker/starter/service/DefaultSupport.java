@@ -2,10 +2,11 @@ package org.gxz.joker.starter.service;
 
 import org.gxz.joker.starter.component.DynamicReport;
 import org.gxz.joker.starter.component.DynamicSelector;
-import org.gxz.joker.starter.element.FieldInfo;
 import org.gxz.joker.starter.component.JokerConfiguration;
+import org.gxz.joker.starter.element.FieldInfo;
 
 import java.lang.reflect.Method;
+import java.util.function.Supplier;
 
 /**
  * 这是一个适配器，适配于所有注解Class的默认值
@@ -13,12 +14,11 @@ import java.lang.reflect.Method;
  *
  * @author gxz gongxuanzhang@foxmail.com
  **/
-public final class DefaultSupport implements ExcelNameFactory, JokerConfiguration , DynamicSelector {
+public final class DefaultSupport implements ExcelNameFactory, JokerConfiguration, DynamicSelector {
 
     private DefaultSupport() {
 
     }
-
 
 
     @Override

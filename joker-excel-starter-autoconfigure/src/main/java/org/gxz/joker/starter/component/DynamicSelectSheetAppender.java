@@ -53,7 +53,6 @@ public class DynamicSelectSheetAppender implements ApplicationContextAware {
         XSSFSheet dataSheet = (XSSFSheet) excel.getSheetAt(0);
 
         ColChecker rowChecker = new ColChecker();
-
         Sheet hideSheet = excel.createSheet(dynamicSelect.name());
         if (dynamicSelect.sheetHide()) {
             excel.setSheetHidden(excel.getSheetIndex(hideSheet), true);

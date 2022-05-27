@@ -3,6 +3,7 @@ package com.gxz.jokerexceltest.controller;
 import org.gxz.joker.starter.annotation.DynamicSelect;
 import org.gxz.joker.starter.annotation.ExcelData;
 import org.gxz.joker.starter.annotation.ExcelField;
+import org.gxz.joker.starter.annotation.TextBox;
 import org.gxz.joker.starter.element.Checkable;
 import org.gxz.joker.starter.exception.CheckValueException;
 
@@ -12,9 +13,11 @@ import java.time.LocalDateTime;
  * @author gxz gongxuanzhang@foxmail.com
  **/
 @ExcelData
-@DynamicSelect(name = "东汉末年", selector = UserSelector.class )
+@DynamicSelect(name = "东汉末年", selector = UserSelector.class)
+@TextBox(User.a)
 public class User implements Checkable {
-
+    public static final String a = "sdfsld fjlskdflkasj ldfk jlsadkf jlsakd flkasjflkasd f\nsadlf jsaldf \nasldf " +
+            "kjlasd f";
 
     @ExcelField(name = "姓名", unique = true, width = 7000)
     private String name;

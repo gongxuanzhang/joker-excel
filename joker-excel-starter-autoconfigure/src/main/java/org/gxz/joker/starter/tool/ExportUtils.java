@@ -15,6 +15,7 @@ import org.gxz.joker.starter.service.ColumnRuleFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -50,6 +51,8 @@ public class ExportUtils {
      **/
     private static Set<String> getMustField(Class<?> clazz, boolean allField) {
         Stream<Field> stream = Arrays.stream(clazz.getDeclaredFields());
+        //  过滤掉静态属性
+        stream = stream.filter(field -> !Modifier.isStatic(field.getModifiers()));
         if (!allField) {
             stream = stream.filter(field -> field.isAnnotationPresent(ExcelField.class));
         }

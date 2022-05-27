@@ -5,8 +5,6 @@ import org.gxz.joker.starter.component.DynamicSelector;
 import org.gxz.joker.starter.element.FieldInfo;
 import org.gxz.joker.starter.element.IndependentDynamic;
 import org.gxz.joker.starter.element.MultiDynamic;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 

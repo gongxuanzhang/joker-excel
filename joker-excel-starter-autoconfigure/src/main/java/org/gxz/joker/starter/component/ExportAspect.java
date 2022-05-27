@@ -7,7 +7,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.gxz.joker.starter.annotation.Export;
+import org.gxz.joker.starter.annotation.TextBox;
 import org.gxz.joker.starter.element.ExcelDescription;
+import org.gxz.joker.starter.element.TextBoxGardener;
 import org.gxz.joker.starter.exception.ExportReturnException;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.expression.JokerExpressionParserAdapter;
@@ -28,6 +30,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.core.env.Environment;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -55,7 +58,8 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
         // 校验环境内容
         try {
             MethodSignature sig = (MethodSignature) pjp.getSignature();
-            ThreadMethodHolder.setMethod(sig.getMethod());
+            Method method = sig.getMethod();
+            ThreadMethodHolder.setMethod(method);
             Class<?> returnType = sig.getReturnType();
             if (!(Iterable.class.isAssignableFrom(returnType))) {
                 throw new ExportReturnException("导出的方法返回值必须是能迭代的！");
@@ -68,7 +72,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
             Class<?> beanType;
             Iterable<?> result = (Iterable<?>) pjp.proceed();
             if (IterableUtils.isEmpty(result)) {
-                beanType = ReflectUtil.getMethodResultGenericity(sig.getMethod());
+                beanType = ReflectUtil.getMethodResultGenericity(method);
             } else {
                 beanType = result.iterator().next().getClass();
             }
@@ -77,9 +81,23 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
             Workbook workbook = excelCreator.create();
             workbook.setSheetName(0, excelDescription.getSheetName());
             dynamicSelectSheetAppender.append(workbook,beanType,excelCreator.getRules());
+            TextBox textBox  = findTextBox(method,beanType);
+            if(textBox!=null){
+                new TextBoxGardener(textBox).clip(workbook.getSheetAt(0),excelCreator.getRules());
+            }
             ExportUtils.downLoadExcel(excelDescription.getExcelName(), response, workbook);
         } finally {
             ThreadMethodHolder.clear();
+        }
+        return null;
+    }
+
+    private TextBox findTextBox(Method method, Class<?> beanType) {
+        if(method.isAnnotationPresent(TextBox.class)){
+            return method.getAnnotation(TextBox.class);
+        }
+        if(beanType.isAnnotationPresent(TextBox.class)){
+            return beanType.getAnnotation(TextBox.class);
         }
         return null;
     }
