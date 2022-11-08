@@ -24,7 +24,7 @@ public class ConcatPropertyResolver {
 
     private final ExpressionParser[] concat;
 
-    private ParserContext parserContext = new ParserContext() {
+    private final ParserContext parserContext = new ParserContext() {
         @Override
         public boolean isTemplate() {
             return true;

@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public abstract class MethodIsolationExpressionParser extends JokerArgumentExpressionParser {
 
-    private Map<Method, JokerArgumentExpression> cache = new ConcurrentHashMap<>();
+    private final Map<Method, JokerArgumentExpression> cache = new ConcurrentHashMap<>();
 
     @Override
     public JokerArgumentExpression resolve(@NotNull String[] args) {

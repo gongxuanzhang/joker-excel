@@ -16,6 +16,31 @@
     <version>1.1.1</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
+    </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://172.16.1.10:8084/repository/gaea/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://172.16.1.10:8084/repository/gaea/</url>
+        </repository>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <name>gxz</name>
+            <email>gongxuanzhang@foxmail.com</email>
+            <roles>
+                <role>owner</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
 
     <modules>
         <module>joker-excel-starter</module>
@@ -23,4 +48,25 @@
         <module>joker-excel-test</module>
     </modules>
 
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

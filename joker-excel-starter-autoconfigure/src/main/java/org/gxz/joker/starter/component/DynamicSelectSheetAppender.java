@@ -9,17 +9,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.gxz.joker.starter.annotation.DynamicSelect;
+import org.gxz.joker.starter.element.ColChecker;
 import org.gxz.joker.starter.element.FieldInfo;
 import org.gxz.joker.starter.element.IndependentDynamic;
 import org.gxz.joker.starter.element.MultiDynamic;
-import org.gxz.joker.starter.element.ColChecker;
 import org.gxz.joker.starter.exception.JokerRuntimeException;
 import org.gxz.joker.starter.service.ColumnRule;
 import org.gxz.joker.starter.tool.FormulaUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
