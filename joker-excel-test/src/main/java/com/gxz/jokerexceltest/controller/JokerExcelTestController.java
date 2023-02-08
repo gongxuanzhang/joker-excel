@@ -121,7 +121,7 @@ public class JokerExcelTestController {
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@Upload("123") List<User> users,
+    public Map<String, Object> upload(@Upload(value = "123",limit = 1) List<User> users,
                                       @ErrorRows List<Row> rows,
                                       @ErrorRows List<ErrorRow> errorRows,
                                       @ErrorRows List<String> errorMessage,

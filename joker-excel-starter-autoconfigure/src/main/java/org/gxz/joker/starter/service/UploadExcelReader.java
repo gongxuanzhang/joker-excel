@@ -1,9 +1,8 @@
 package org.gxz.joker.starter.service;
 
-import org.gxz.joker.starter.annotation.Upload;
 import org.gxz.joker.starter.component.BaseUploadCheck;
+import org.gxz.joker.starter.config.ReadConfig;
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
-import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,18 +12,15 @@ import java.util.List;
  **/
 public class UploadExcelReader<T> extends AbstractExcelReader<T> {
 
-    private final Upload upload;
 
-    public UploadExcelReader(Class<T> beanType, Upload upload) {
-        super(beanType);
-        Assert.notNull(upload, "无法解析upload");
-        this.upload = upload;
+    public UploadExcelReader(Class<T> beanType, ReadConfig readConfig) {
+        super(beanType,readConfig);
     }
 
 
     @Override
     protected List<BaseUploadCheck> getUploadChecks() {
-        BaseUploadCheck baseUploadCheck = JokerConfigurationDelegate.getUploadChecker(upload.value());
+        BaseUploadCheck baseUploadCheck = JokerConfigurationDelegate.getUploadChecker(getReadConfig().getCheckValue());
         if (baseUploadCheck == null) {
             return null;
         }

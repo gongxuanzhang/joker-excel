@@ -15,4 +15,9 @@ public @interface Upload {
 
     String value() default "";
 
+    /**
+     * 表示只读取前limit行的数据
+     **/
+    int limit() default -1;
+
 }

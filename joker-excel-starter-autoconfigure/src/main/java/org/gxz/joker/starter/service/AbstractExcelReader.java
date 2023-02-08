@@ -8,12 +8,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.gxz.joker.starter.component.BaseUploadCheck;
 import org.gxz.joker.starter.component.ReadHolder;
+import org.gxz.joker.starter.config.ReadConfig;
 import org.gxz.joker.starter.config.build.JokerCallBackCombination;
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.convert.Converter;
 import org.gxz.joker.starter.element.Checkable;
 import org.gxz.joker.starter.exception.CheckValueException;
 import org.gxz.joker.starter.exception.ConvertException;
+import org.gxz.joker.starter.exception.RowExceedException;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.tool.PoiUtils;
 import org.springframework.util.CollectionUtils;
@@ -54,8 +56,11 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
      **/
     protected Row head;
 
-    public AbstractExcelReader(Class<T> beanType) {
+    private final ReadConfig readConfig;
+
+    public AbstractExcelReader(Class<T> beanType, ReadConfig readConfig) {
         this.beanType = beanType;
+        this.readConfig = readConfig;
     }
 
 
@@ -133,16 +138,25 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
             if (row == null) {
                 continue;
             }
+            int limit = getReadConfig().getLimit();
+            if (limit != -1 && rowIndex > limit) {
+                haveError = true;
+                RowExceedException e = new RowExceedException("超过了限定行数" + limit);
+                this.errorRows.add(new ErrorRow(row, e.getMessage()));
+                JokerCallBackCombination.uploadRowError(row, e);
+                continue;
+            }
             JSONObject bean = new JSONObject();
             for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
-                // 如果拿到的规则是null  说明此列是不需要解析的列  直接跳过即可
-                ColumnRule columnRule = sortRules.get(cellIndex);
-                if (columnRule == null) {
-                    continue;
-                }
-                DataRule dataRule = columnRule.getDataRule();
-                Cell cell = row.getCell(cellIndex);
                 try {
+                    // 如果拿到的规则是null  说明此列是不需要解析的列  直接跳过即可
+                    ColumnRule columnRule = sortRules.get(cellIndex);
+                    if (columnRule == null) {
+                        continue;
+                    }
+                    DataRule dataRule = columnRule.getDataRule();
+                    Cell cell = row.getCell(cellIndex);
+
                     Object filedValue = calcFieldValue(cell, dataRule);
                     JokerConfigurationDelegate.check(columnRule, filedValue);
                     bean.put(dataRule.getFieldName(), filedValue);
@@ -245,5 +259,9 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
 
     }
 
+
+    public ReadConfig getReadConfig() {
+        return readConfig;
+    }
 
 }
