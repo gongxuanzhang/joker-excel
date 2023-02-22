@@ -7,6 +7,7 @@ import org.gxz.joker.starter.component.ExportAspect;
 import org.gxz.joker.starter.component.JokerBeanPostProcessor;
 import org.gxz.joker.starter.component.JokerSpelFunction;
 import org.gxz.joker.starter.component.UploadAnalysis;
+import org.gxz.joker.starter.component.UploadAspect;
 import org.gxz.joker.starter.component.UploadMethodArgumentProcessor;
 import org.gxz.joker.starter.config.build.JokerConfigurationDelegate;
 import org.gxz.joker.starter.element.check.CheckComposite;
@@ -32,6 +33,7 @@ import java.util.List;
 
 @Import({JokerBeanPostProcessor.class,
         ExportAspect.class,
+        UploadAspect.class,
         UploadAnalysis.class,
         UploadMethodArgumentProcessor.class,
         JokerSpelFunction.class

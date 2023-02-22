@@ -41,7 +41,6 @@ public class UploadMethodArgumentProcessor implements HandlerMethodArgumentResol
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        System.out.println(Thread.currentThread().getName() + "upload解析器开始");
         MultipartRequest request = webRequest.getNativeRequest(MultipartRequest.class);
         if (request == null) {
             log.warn("非上传请求 Upload注解无法解析 将赋值{}为null", parameter.getParameterName());

@@ -2,7 +2,6 @@ package org.gxz.joker.starter.expression;
 
 import org.gxz.joker.starter.tool.ThreadMethodHolder;
 
-import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +17,7 @@ public abstract class MethodIsolationExpressionParser extends JokerArgumentExpre
     private final Map<Method, JokerArgumentExpression> cache = new ConcurrentHashMap<>();
 
     @Override
-    public JokerArgumentExpression resolve(@NotNull String[] args) {
+    public JokerArgumentExpression resolve(String[] args) {
         Method currentMethod = ThreadMethodHolder.getCurrentMethod();
         return cache.computeIfAbsent(currentMethod, k -> isolationResolve(args));
     }

@@ -4,7 +4,6 @@ package org.gxz.joker.starter.expression;
 import org.gxz.joker.starter.element.ApplicationContextInject;
 import org.springframework.context.ApplicationContext;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * 抽象的 解析参数的表达式模板
@@ -26,7 +25,7 @@ public abstract class JokerArgumentExpressionParser implements JokerExpressionPa
      * @param args 如果参数为空 将会给一个空数组
      * @return 返回真正表达式
      */
-    public abstract JokerArgumentExpression resolve(@NotNull String[] args);
+    public abstract JokerArgumentExpression resolve(String[] args);
 
     @Override
     public JokerArgumentExpression parseExpression(String expression) {
@@ -42,7 +41,7 @@ public abstract class JokerArgumentExpressionParser implements JokerExpressionPa
     public abstract String getMain();
 
     @Override
-    public boolean support(@NotNull String expression) {
+    public boolean support(String expression) {
         return expression.startsWith(getMain());
     }
 
