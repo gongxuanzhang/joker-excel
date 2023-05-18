@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.gxz</groupId>
         <artifactId>joker-excel-all-jakarta</artifactId>
-        <version>1.2.0.jakarta</version>
+        <version>1.2.1.jakarta</version>
     </parent>
     <artifactId>joker-excel-test-jakarta</artifactId>
     <name>joker-excel-test-jakarta</name>

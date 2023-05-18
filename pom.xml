@@ -13,7 +13,7 @@
 
     <groupId>org.gxz</groupId>
     <artifactId>joker-excel-all-jakarta</artifactId>
-    <version>1.2.0.jakarta</version>
+    <version>1.2.1.jakarta</version>
     <packaging>pom</packaging>
 
     <properties>
