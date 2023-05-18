@@ -35,18 +35,18 @@ public class ConverterRegistry {
      * @return 转换器实例
      **/
     public Converter<?> getConverterByType(Type type) {
-        Converter<?> defaultConvert = defaultConverterMap.getOrDefault(type, null);
-        if (defaultConvert != null) {
-            return defaultConvert;
+        Converter<?> candidate = defaultConverterMap.getOrDefault(type, null);
+        if (candidate != null) {
+            return candidate;
         }
-        if (customConverterMap == null) {
-            return null;
+
+        if (customConverterMap != null) {
+            candidate = customConverterMap.getOrDefault(type, null);
         }
-        Converter<?> finalConverter = customConverterMap.getOrDefault(type, null);
-        if (finalConverter == null) {
-            return DEFAULT_CONVERTER;
+        if (candidate != null) {
+            return candidate;
         }
-        return finalConverter;
+        return DEFAULT_CONVERTER;
     }
 
     /**
