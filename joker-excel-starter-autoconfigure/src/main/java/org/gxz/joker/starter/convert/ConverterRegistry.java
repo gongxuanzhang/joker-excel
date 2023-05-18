@@ -35,9 +35,6 @@ public class ConverterRegistry {
      * @return 转换器实例
      **/
     public Converter<?> getConverterByType(Type type) {
-        if (type == null) {
-            return DEFAULT_CONVERTER;
-        }
         Converter<?> defaultConvert = defaultConverterMap.getOrDefault(type, null);
         if (defaultConvert != null) {
             return defaultConvert;
@@ -45,7 +42,11 @@ public class ConverterRegistry {
         if (customConverterMap == null) {
             return null;
         }
-        return customConverterMap.getOrDefault(type, null);
+        Converter<?> finalConverter = customConverterMap.getOrDefault(type, null);
+        if (finalConverter == null) {
+            return DEFAULT_CONVERTER;
+        }
+        return finalConverter;
     }
 
     /**
