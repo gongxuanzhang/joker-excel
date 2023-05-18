@@ -1,6 +1,7 @@
 package org.gxz.joker.starter.tool;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,7 +17,7 @@ public class PoiUtils {
             if (sourceCell != null) {
                 Cell targetCell = target.createCell(i);
                 Object cellValue = getCellValue(sourceCell);
-                CellType cellTypeEnum = sourceCell.getCellTypeEnum();
+                CellType cellTypeEnum = sourceCell.getCellType();
                 switch (cellTypeEnum) {
                     case STRING:
                         targetCell.setCellValue((String) cellValue);
@@ -48,7 +49,7 @@ public class PoiUtils {
         if (cell == null) {
             return null;
         }
-        CellType cellTypeEnum = cell.getCellTypeEnum();
+        CellType cellTypeEnum = cell.getCellType();
         switch (cellTypeEnum) {
             case STRING:
                 return cell.getStringCellValue();
@@ -57,8 +58,8 @@ public class PoiUtils {
             case FORMULA:
                 return cell.getCellFormula();
             case NUMERIC:
-                cell.setCellType(CellType.STRING);
-                return cell.getStringCellValue();
+                double numericCellValue = cell.getNumericCellValue();
+                return Double.toString(numericCellValue);
             case BLANK:
                 return "";
             default:

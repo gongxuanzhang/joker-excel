@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.gxz</groupId>
-        <artifactId>joker-excel-all</artifactId>
+        <artifactId>joker-excel-all-jakarta</artifactId>
         <version>1.2.0</version>
     </parent>
-    <artifactId>joker-excel-test</artifactId>
-    <name>joker-excel-test</name>
+    <artifactId>joker-excel-test-jakarta</artifactId>
+    <name>joker-excel-test-jakarta</name>
 
 
-    <description>joker-excel的测试</description>
+    <description>joker-excel-jakarta的测试</description>
     <dependencies>
 
         <dependency>

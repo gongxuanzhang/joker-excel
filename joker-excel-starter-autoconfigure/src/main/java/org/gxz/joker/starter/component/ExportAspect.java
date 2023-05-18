@@ -42,6 +42,10 @@ import java.util.Objects;
 @Aspect
 public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
 
+    public ExportAspect(){
+        System.out.println(1);
+    }
+
     private ApplicationContext applicationContext;
 
     private ConfigurablePropertyResolver environmentResolver;

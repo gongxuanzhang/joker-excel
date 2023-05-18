@@ -12,12 +12,15 @@
     </parent>
 
     <groupId>org.gxz</groupId>
-    <artifactId>joker-excel-all</artifactId>
+    <artifactId>joker-excel-all-jakarta</artifactId>
     <version>1.2.0</version>
     <packaging>pom</packaging>
 
     <properties>
         <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
+        <fastjson.version>2.0.31</fastjson.version>
+        <guava.version>30.1-jre</guava.version>
+        <poi.version>5.2.3</poi.version>
     </properties>
 
     <distributionManagement>
@@ -48,6 +51,22 @@
         <module>joker-excel-test</module>
     </modules>
 
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

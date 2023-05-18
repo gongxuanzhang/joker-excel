@@ -30,6 +30,10 @@ import java.util.Set;
  */
 public class JokerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
+    public JokerRegistrar(){
+        System.out.println(2);
+    }
+
     private ResourceLoader resourceLoader;
 
     Class<?>[] scanClass = new Class[]{JokerGlobalConfig.class, BaseUploadCheck.class};

@@ -41,7 +41,7 @@ public class ExportUtils {
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             workbook.write(response.getOutputStream());
         } catch (IOException e) {
-            // throw new NormalException(e.getMessage());
+            e.printStackTrace();
         }
     }
 

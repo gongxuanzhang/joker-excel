@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>org.gxz</groupId>
-        <artifactId>joker-excel-all</artifactId>
+        <artifactId>joker-excel-all-jakarta</artifactId>
         <version>1.2.0</version>
     </parent>
 
-    <artifactId>joker-excel-starter-autoconfigure</artifactId>
+    <artifactId>joker-excel-starter-autoconfigure-jakarta</artifactId>
 
     <properties>
         <java.version>17</java.version>
@@ -34,17 +34,15 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.75</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.17</version>
+            <version>${poi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.1-jre</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -54,12 +52,12 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.17</version>
+            <version>${poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
-            <version>3.17</version>
+            <version>4.1.2</version>
         </dependency>
 
     </dependencies>

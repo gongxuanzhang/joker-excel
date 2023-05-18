@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.gxz</groupId>
-        <artifactId>joker-excel-all</artifactId>
+        <artifactId>joker-excel-all-jakarta</artifactId>
         <version>1.2.0</version>
     </parent>
 
@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>org.gxz</groupId>
-            <artifactId>joker-excel-starter-autoconfigure</artifactId>
+            <artifactId>joker-excel-starter-autoconfigure-jakarta</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -34,7 +34,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
             </plugin>
         </plugins>
     </build>
