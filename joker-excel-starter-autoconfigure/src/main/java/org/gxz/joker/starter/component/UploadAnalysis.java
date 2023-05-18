@@ -1,5 +1,6 @@
 package org.gxz.joker.starter.component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gxz.joker.starter.annotation.Upload;
 import org.gxz.joker.starter.config.ReadConfig;
 import org.gxz.joker.starter.service.UploadExcelReader;
@@ -16,6 +17,11 @@ import java.io.InputStream;
  **/
 public class UploadAnalysis {
 
+    private final ObjectMapper objectMapper;
+
+    public UploadAnalysis(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     public ReadHolder<?> analysisData(MultipartFile file, MethodParameter parameter) {
         Class<?> genericClass = ReflectUtil.getOnlyGenericity(parameter);
@@ -25,7 +31,7 @@ public class UploadAnalysis {
         try (InputStream fileInputStream = file.getInputStream()) {
             Upload upload = parameter.getParameterAnnotation(Upload.class);
             ReadConfig readConfig = uploadToConfig(upload);
-            UploadExcelReader<?> uploadExcelReader = new UploadExcelReader<>(genericClass, readConfig);
+            UploadExcelReader<?> uploadExcelReader = new UploadExcelReader<>(genericClass, readConfig, objectMapper);
             return uploadExcelReader.read(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,7 +39,7 @@ public class UploadAnalysis {
         return null;
     }
 
-    private ReadConfig uploadToConfig(Upload upload){
+    private ReadConfig uploadToConfig(Upload upload) {
         ReadConfig readConfig = new ReadConfig();
         readConfig.setLimit(upload.limit());
         readConfig.setCheckValue(upload.value());

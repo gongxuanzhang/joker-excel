@@ -1,6 +1,6 @@
 package org.gxz.joker.starter.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -58,9 +58,12 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
 
     private final ReadConfig readConfig;
 
-    public AbstractExcelReader(Class<T> beanType, ReadConfig readConfig) {
+    private final ObjectMapper objectMapper;
+
+    public AbstractExcelReader(Class<T> beanType, ReadConfig readConfig, ObjectMapper objectMapper) {
         this.beanType = beanType;
         this.readConfig = readConfig;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -146,7 +149,7 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
                 JokerCallBackCombination.uploadRowError(row, e);
                 continue;
             }
-            JSONObject bean = new JSONObject();
+            Map<String, Object> bean = new HashMap<>(row.getLastCellNum());
             for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
                 try {
                     // 如果拿到的规则是null  说明此列是不需要解析的列  直接跳过即可
@@ -171,7 +174,7 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
             }
             // 自检
             if (bean != null) {
-                T t = bean.toJavaObject(beanType);
+                T t = objectMapper.convertValue(bean, beanType);
                 try {
                     checkDataSelf(t);
                 } catch (CheckValueException e) {
@@ -180,7 +183,6 @@ public class AbstractExcelReader<T> implements ExcelReader<T> {
                 }
                 indexMap.add(data.size(), rowIndex);
                 this.data.add(t);
-
             }
         }
 
