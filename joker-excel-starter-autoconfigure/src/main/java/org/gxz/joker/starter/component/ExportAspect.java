@@ -1,5 +1,6 @@
 package org.gxz.joker.starter.component;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +15,6 @@ import org.gxz.joker.starter.exception.ExportReturnException;
 import org.gxz.joker.starter.expression.ConcatPropertyResolver;
 import org.gxz.joker.starter.expression.JokerExpressionParserAdapter;
 import org.gxz.joker.starter.expression.JokerExpressionParserComposite;
-import org.gxz.joker.starter.service.ExcelCreator;
 import org.gxz.joker.starter.service.SimpleExcelCreator;
 import org.gxz.joker.starter.tool.ExportUtils;
 import org.gxz.joker.starter.tool.ReflectUtil;
@@ -30,11 +30,9 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.ConfigurablePropertyResolver;
 import org.springframework.core.env.Environment;
 import org.springframework.expression.ExpressionParser;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -64,6 +62,7 @@ public class ExportAspect implements ApplicationContextAware, EnvironmentAware {
             if (!(Iterable.class.isAssignableFrom(returnType))) {
                 throw new ExportReturnException("导出的方法返回值必须是能迭代的！");
             }
+
             HttpServletResponse response =
                     ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getResponse();
             if (Objects.isNull(response)) {

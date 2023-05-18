@@ -8,6 +8,7 @@ import org.gxz.joker.starter.element.OrderConstant;
 import org.gxz.joker.starter.service.ExcelNameFactory;
 import org.springframework.context.ApplicationContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,7 +74,7 @@ public class ExportNameWrapper implements ExcelNameOverlayable {
             if (instance == null) {
                 instance = singletonCache.get(factoryClass);
                 if (instance == null) {
-                    instance = factoryClass.newInstance();
+                    instance = factoryClass.getDeclaredConstructor().newInstance();
                     if (instance.singleton()) {
                         singletonCache.put(factoryClass, instance);
                     } else {
@@ -85,6 +86,8 @@ public class ExportNameWrapper implements ExcelNameOverlayable {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return export.value();
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
 
     }

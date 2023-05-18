@@ -12,9 +12,6 @@
 
 
     <description>joker-excel的测试</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
     <dependencies>
 
         <dependency>
@@ -27,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.gxz</groupId>
-            <artifactId>joker-excel-starter</artifactId>
+            <artifactId>joker-excel-starter-jakarta</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -1,9 +1,9 @@
 package com.gxz.jokerexceltest.controller.expression;
 
+import jakarta.validation.constraints.NotNull;
 import org.gxz.joker.starter.expression.JokerArgumentExpression;
 import org.gxz.joker.starter.expression.JokerArgumentExpressionParser;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * @author gxz gongxuanzhang@foxmail.com

@@ -1,5 +1,6 @@
 package org.gxz.joker.starter.component;
 
+import jakarta.servlet.ServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.gxz.joker.starter.annotation.Upload;
 import org.springframework.core.MethodParameter;
@@ -14,7 +15,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
-import javax.servlet.ServletRequest;
 import java.util.Map;
 
 
